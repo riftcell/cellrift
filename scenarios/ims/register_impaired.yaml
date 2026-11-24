@@ -1,0 +1,100 @@
+# Network-impairment demonstration — SIP REGISTER under injected latency.
+# PROVEN AGAINST: Asterisk (non-IMS SIP) — the sip-interop CI job runs this
+# file against a digest-pinned Asterisk 22.10.1 container on every push, and
+# the peer's own log is collected as the evidence. Asterisk is a plain SIP
+# server, NOT a P-CSCF: this proves a real third-party SIP stack answers these
+# REGISTERs, and nothing about IMS semantics.
+#
+# Step 1 declares a 300ms fixed latency plus 50ms of jitter, applied before
+# the REGISTER reaches the wire and once more before the first inbound read.
+# Step 2 declares nothing and proves the impairment does not carry over to
+# the next step. Step 3 declares delay_ms, the third and different timing
+# key: it holds a COMPLETE, already-parsed 200 OK for 200ms before the step
+# completes. Nothing about step 3 is slower on the wire, and delay_ms is
+# deliberately not bounded by the step's timeout_ms.
+#
+# What this scenario demonstrates: declared impairments reach the wire, are
+# reported, and do not carry over between steps.
+#
+# What it does NOT demonstrate — and an earlier version of this header
+# claimed it did — is anything about the peer's retransmission or timer
+# behaviour. The peer receives three single, ordinary REGISTERs; a REGISTER
+# 200 OK is not retransmitted, so there is nothing on the peer's side to
+# observe. impair_delay_ms is Cellrift's own self-reported sleep total and is
+# independent of how fast the peer answers.
+#
+# Every impaired step reports response.impair_delay_ms, the total time
+# Cellrift inflicted on itself (latency, jitter and delay_ms together), so
+# an assertion can prove the impairment was actually applied.
+# SYNTHETIC DATA: subscriber identifier uses the Ofcom test range
+# (447700900xxx) and a fictional .lab.local domain. Never use a real
+# subscriber MSISDN or SIP identity in a scenario file.
+#
+# References:
+#   - RFC 3261 §10 (SIP Registration)
+
+name: "SIP REGISTER under injected latency"
+version: "1.0"
+description: >
+  Demonstrates the impair: scenario key. The first REGISTER declares a
+  300ms fixed latency plus 50ms of jitter and is measurably delayed; the
+  second REGISTER declares no impair: block and completes at its normal
+  speed, proving the impairment does not carry over between steps; the
+  third holds its already-received answer for 200ms via delay_ms.
+
+protocols:
+  sip:
+    transport: udp
+
+variables:
+  subscriber_msisdn: "447700900123"
+  pcscf_host: "pcscf.lab.local"
+
+steps:
+  # Step 1: REGISTER under injected latency + jitter.
+  - id: register_impaired
+    protocol: sip
+    action: send
+    target: "{{ pcscf_host }}:5060"
+    message: REGISTER
+    impair:
+      latency_ms: 300
+      jitter_ms: 50
+    fields:
+      From: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      To: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      Contact: "<sip:{{ subscriber_msisdn }}@10.0.0.1:5060>"
+    assert:
+      - response.status_code == 200
+      - response.impair_delay_ms >= 300
+
+  # Step 2: REGISTER with no impair: block — must not inherit step 1's delay.
+  - id: register_normal
+    protocol: sip
+    action: send
+    target: "{{ pcscf_host }}:5060"
+    message: REGISTER
+    fields:
+      From: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      To: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      Contact: "<sip:{{ subscriber_msisdn }}@10.0.0.1:5060>"
+    assert:
+      - response.status_code == 200
+
+  # Step 3: REGISTER answered normally, then the answer is held for 200ms
+  # before the step completes. The hold is entirely client-side and is
+  # measured by Cellrift's own impair_delay_ms counter.
+  - id: register_held_answer
+    protocol: sip
+    action: send
+    target: "{{ pcscf_host }}:5060"
+    message: REGISTER
+    impair:
+      delay_ms: 200
+    fields:
+      From: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      To: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      Contact: "<sip:{{ subscriber_msisdn }}@10.0.0.1:5060>"
+    assert:
+      - response.status_code == 200
+      - response.impair_delay_ms >= 200

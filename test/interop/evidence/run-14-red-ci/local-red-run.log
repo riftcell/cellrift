@@ -1,0 +1,227 @@
+SIP RIG REFUSED: the real peer did not pass register_digest_auth (exit 1); this is a result about the peer, not the rig
+--- /tmp/cellrift-sip/basic_call.json.stdout ---
+--- /tmp/cellrift-sip/basic_call.stdout ---
+Scenario: VoLTE basic call
+  ✓ [sip] send send_invite (1003ms)
+  ✓ [sip] send send_bye (0ms)
+2/2 steps passed in 1004ms
+--- /tmp/cellrift-sip/register_digest_auth.json.stdout ---
+exit status 1
+--- /tmp/cellrift-sip/register_digest_auth.stdout ---
+Scenario: SIP REGISTER with digest authentication
+  ✗ [sip] send register_md5 (1ms)
+    Error: SIP 401 Unauthorized (expected 2xx); credentials rejected after one digest retry (realm="cellrift.interop", algorithm=MD5); assertion failed: response.status_code == 200 (actual: 401)
+  ✓ [sip] send register_sha256 (0ms)
+  ✓ [sip] send register_both_offered (11ms)
+2/3 steps passed in 13ms
+exit status 1
+--- /tmp/cellrift-sip/register_impaired.json.stdout ---
+--- /tmp/cellrift-sip/register_impaired.stdout ---
+Scenario: SIP REGISTER under injected latency
+  ✓ [sip] send register_impaired (623ms) (impaired +622ms)
+  ✓ [sip] send register_normal (0ms)
+  ✓ [sip] send register_held_answer (200ms) (impaired +200ms)
+3/3 steps passed in 825ms
+--- /tmp/cellrift-sip/basic_call.json ---
+{
+  "scenario": "VoLTE basic call",
+  "status": "passed",
+  "duration_ms": 1003,
+  "steps": [
+    {
+      "id": "send_invite",
+      "protocol": "sip",
+      "status": "passed",
+      "duration_ms": 1003,
+      "error": null
+    },
+    {
+      "id": "send_bye",
+      "protocol": "sip",
+      "status": "passed",
+      "duration_ms": 0,
+      "error": null
+    }
+  ]
+}
+--- /tmp/cellrift-sip/register_digest_auth.json ---
+{
+  "scenario": "SIP REGISTER with digest authentication",
+  "status": "failed",
+  "duration_ms": 1,
+  "steps": [
+    {
+      "id": "register_md5",
+      "protocol": "sip",
+      "status": "failed",
+      "duration_ms": 0,
+      "error": "SIP 401 Unauthorized (expected 2xx); credentials rejected after one digest retry (realm=\"cellrift.interop\", algorithm=MD5); assertion failed: response.status_code == 200 (actual: 401)"
+    },
+    {
+      "id": "register_sha256",
+      "protocol": "sip",
+      "status": "passed",
+      "duration_ms": 0,
+      "error": null
+    },
+    {
+      "id": "register_both_offered",
+      "protocol": "sip",
+      "status": "passed",
+      "duration_ms": 0,
+      "error": null
+    }
+  ]
+}
+--- /tmp/cellrift-sip/register_impaired.json ---
+{
+  "scenario": "SIP REGISTER under injected latency",
+  "status": "passed",
+  "duration_ms": 853,
+  "steps": [
+    {
+      "id": "register_impaired",
+      "protocol": "sip",
+      "status": "passed",
+      "duration_ms": 652,
+      "impair_delay_ms": 651,
+      "error": null
+    },
+    {
+      "id": "register_normal",
+      "protocol": "sip",
+      "status": "passed",
+      "duration_ms": 0,
+      "error": null
+    },
+    {
+      "id": "register_held_answer",
+      "protocol": "sip",
+      "status": "passed",
+      "duration_ms": 200,
+      "impair_delay_ms": 200,
+      "error": null
+    }
+  ]
+}
+--- asterisk logs (tail 120) ---
+[Oct  2 18:10:23] 
+[Oct  2 18:10:23] 
+[Oct  2 18:10:23] NOTICE[62]: res_pjsip/pjsip_distributor.c:688 log_failed_request: Request 'REGISTER' from '<sip:447700900201@ims.lab.local>' failed for '127.0.0.1:39874' (callid: cellrift-2973744992737347228@localhost) - Failed to authenticate
+[Oct  2 18:10:23] <--- Transmitting SIP response (502 bytes) to UDP:127.0.0.1:39874 --->
+[Oct  2 18:10:23] SIP/2.0 401 Unauthorized
+[Oct  2 18:10:23] Via: SIP/2.0/UDP [::]:39874;rport=39874;received=127.0.0.1;branch=z9hG4bK3966762230329346137
+[Oct  2 18:10:23] Call-ID: cellrift-2973744992737347228@localhost
+[Oct  2 18:10:23] From: <sip:447700900201@ims.lab.local>
+[Oct  2 18:10:23] To: <sip:447700900201@ims.lab.local>;tag=z9hG4bK3966762230329346137
+[Oct  2 18:10:23] CSeq: 2 REGISTER
+[Oct  2 18:10:23] WWW-Authenticate: Digest realm="cellrift.interop",nonce="1790964623/5f5af29b597590fd6d9be63b584ba736",opaque="120cf82e3a78deec",algorithm=MD5,qop="auth"
+[Oct  2 18:10:23] Server: Asterisk PBX 22.10.1
+[Oct  2 18:10:23] Content-Length:  0
+[Oct  2 18:10:23] 
+[Oct  2 18:10:23] 
+[Oct  2 18:10:23] <--- Received SIP request (364 bytes) from UDP:127.0.0.1:39874 --->
+[Oct  2 18:10:23] REGISTER sip:447700900202@127.0.0.1:15060 SIP/2.0
+[Oct  2 18:10:23] Via: SIP/2.0/UDP [::]:39874;branch=z9hG4bK4909072518684358231
+[Oct  2 18:10:23] Max-Forwards: 70
+[Oct  2 18:10:23] From: sip:447700900202@ims.lab.local
+[Oct  2 18:10:23] To: sip:447700900202@ims.lab.local
+[Oct  2 18:10:23] Call-ID: cellrift-234734438074464486@localhost
+[Oct  2 18:10:23] CSeq: 1 REGISTER
+[Oct  2 18:10:23] Contact: <sip:447700900202@10.0.0.1:5060>
+[Oct  2 18:10:23] Content-Length: 0
+[Oct  2 18:10:23] User-Agent: cellrift/0.1.0
+[Oct  2 18:10:23] 
+[Oct  2 18:10:23] 
+[Oct  2 18:10:23] <--- Transmitting SIP response (505 bytes) to UDP:127.0.0.1:39874 --->
+[Oct  2 18:10:23] SIP/2.0 401 Unauthorized
+[Oct  2 18:10:23] Via: SIP/2.0/UDP [::]:39874;rport=39874;received=127.0.0.1;branch=z9hG4bK4909072518684358231
+[Oct  2 18:10:23] Call-ID: cellrift-234734438074464486@localhost
+[Oct  2 18:10:23] From: <sip:447700900202@ims.lab.local>
+[Oct  2 18:10:23] To: <sip:447700900202@ims.lab.local>;tag=z9hG4bK4909072518684358231
+[Oct  2 18:10:23] CSeq: 1 REGISTER
+[Oct  2 18:10:23] WWW-Authenticate: Digest realm="cellrift.interop",nonce="1790964623/5f5af29b597590fd6d9be63b584ba736",opaque="3dac83c33c0425cc",algorithm=SHA-256,qop="auth"
+[Oct  2 18:10:23] Server: Asterisk PBX 22.10.1
+[Oct  2 18:10:23] Content-Length:  0
+[Oct  2 18:10:23] 
+[Oct  2 18:10:23] 
+[Oct  2 18:10:23] <--- Received SIP request (697 bytes) from UDP:127.0.0.1:39874 --->
+[Oct  2 18:10:23] REGISTER sip:447700900202@127.0.0.1:15060 SIP/2.0
+[Oct  2 18:10:23] Via: SIP/2.0/UDP [::]:39874;branch=z9hG4bK8965569790573852
+[Oct  2 18:10:23] Max-Forwards: 70
+[Oct  2 18:10:23] From: sip:447700900202@ims.lab.local
+[Oct  2 18:10:23] To: sip:447700900202@ims.lab.local
+[Oct  2 18:10:23] Call-ID: cellrift-234734438074464486@localhost
+[Oct  2 18:10:23] CSeq: 2 REGISTER
+[Oct  2 18:10:23] Contact: <sip:447700900202@10.0.0.1:5060>
+[Oct  2 18:10:23] Authorization: Digest username="impi-user", realm="cellrift.interop", nonce="1790964623/5f5af29b597590fd6d9be63b584ba736", uri="sip:447700900202@127.0.0.1:15060", response="8418f5f322485498a40299c93e39b5df9f94f34043302a71bbc6aca36efc1cba", algorithm=SHA-256, cnonce="caf9442da89818b0", opaque="3dac83c33c0425cc", qop=auth, nc=00000001
+[Oct  2 18:10:23] Content-Length: 0
+[Oct  2 18:10:23] User-Agent: cellrift/0.1.0
+[Oct  2 18:10:23] 
+[Oct  2 18:10:23] 
+[Oct  2 18:10:23] <--- Transmitting SIP response (424 bytes) to UDP:127.0.0.1:39874 --->
+[Oct  2 18:10:23] SIP/2.0 200 OK
+[Oct  2 18:10:23] Via: SIP/2.0/UDP [::]:39874;rport=39874;received=127.0.0.1;branch=z9hG4bK8965569790573852
+[Oct  2 18:10:23] Call-ID: cellrift-234734438074464486@localhost
+[Oct  2 18:10:23] From: <sip:447700900202@ims.lab.local>
+[Oct  2 18:10:23] To: <sip:447700900202@ims.lab.local>;tag=z9hG4bK8965569790573852
+[Oct  2 18:10:23] CSeq: 2 REGISTER
+[Oct  2 18:10:23] Date: Fri, 02 Oct 2026 18:10:23 GMT
+[Oct  2 18:10:23] Contact: <sip:447700900202@10.0.0.1:5060>;expires=3599
+[Oct  2 18:10:23] Server: Asterisk PBX 22.10.1
+[Oct  2 18:10:23] Content-Length:  0
+[Oct  2 18:10:23] 
+[Oct  2 18:10:23] 
+[Oct  2 18:10:23] <--- Received SIP request (365 bytes) from UDP:127.0.0.1:39874 --->
+[Oct  2 18:10:23] REGISTER sip:447700900203@127.0.0.1:15060 SIP/2.0
+[Oct  2 18:10:23] Via: SIP/2.0/UDP [::]:39874;branch=z9hG4bK5165496658960033815
+[Oct  2 18:10:23] Max-Forwards: 70
+[Oct  2 18:10:23] From: sip:447700900203@ims.lab.local
+[Oct  2 18:10:23] To: sip:447700900203@ims.lab.local
+[Oct  2 18:10:23] Call-ID: cellrift-4960254869741204122@localhost
+[Oct  2 18:10:23] CSeq: 1 REGISTER
+[Oct  2 18:10:23] Contact: <sip:447700900203@10.0.0.1:5060>
+[Oct  2 18:10:23] Content-Length: 0
+[Oct  2 18:10:23] User-Agent: cellrift/0.1.0
+[Oct  2 18:10:23] 
+[Oct  2 18:10:23] 
+[Oct  2 18:10:23] <--- Transmitting SIP response (660 bytes) to UDP:127.0.0.1:39874 --->
+[Oct  2 18:10:23] SIP/2.0 401 Unauthorized
+[Oct  2 18:10:23] Via: SIP/2.0/UDP [::]:39874;rport=39874;received=127.0.0.1;branch=z9hG4bK5165496658960033815
+[Oct  2 18:10:23] Call-ID: cellrift-4960254869741204122@localhost
+[Oct  2 18:10:23] From: <sip:447700900203@ims.lab.local>
+[Oct  2 18:10:23] To: <sip:447700900203@ims.lab.local>;tag=z9hG4bK5165496658960033815
+[Oct  2 18:10:23] CSeq: 1 REGISTER
+[Oct  2 18:10:23] WWW-Authenticate: Digest realm="cellrift.interop",nonce="1790964623/5f5af29b597590fd6d9be63b584ba736",opaque="34ea92cd73daedad",algorithm=SHA-256,qop="auth"
+[Oct  2 18:10:23] WWW-Authenticate: Digest realm="cellrift.interop",nonce="1790964623/5f5af29b597590fd6d9be63b584ba736",opaque="3c9629f1305142e1",algorithm=MD5,qop="auth"
+[Oct  2 18:10:23] Server: Asterisk PBX 22.10.1
+[Oct  2 18:10:23] Content-Length:  0
+[Oct  2 18:10:23] 
+[Oct  2 18:10:23] 
+[Oct  2 18:10:23] <--- Received SIP request (701 bytes) from UDP:127.0.0.1:39874 --->
+[Oct  2 18:10:23] REGISTER sip:447700900203@127.0.0.1:15060 SIP/2.0
+[Oct  2 18:10:23] Via: SIP/2.0/UDP [::]:39874;branch=z9hG4bK5297659073485105286
+[Oct  2 18:10:23] Max-Forwards: 70
+[Oct  2 18:10:23] From: sip:447700900203@ims.lab.local
+[Oct  2 18:10:23] To: sip:447700900203@ims.lab.local
+[Oct  2 18:10:23] Call-ID: cellrift-4960254869741204122@localhost
+[Oct  2 18:10:23] CSeq: 2 REGISTER
+[Oct  2 18:10:23] Contact: <sip:447700900203@10.0.0.1:5060>
+[Oct  2 18:10:23] Authorization: Digest username="impi-user", realm="cellrift.interop", nonce="1790964623/5f5af29b597590fd6d9be63b584ba736", uri="sip:447700900203@127.0.0.1:15060", response="a14fd471d8178fb99336901bbdd7b1ff6ae53ecb1ec397c7876fd9b374f8917b", algorithm=SHA-256, cnonce="f112f33c4b5f39e0", opaque="34ea92cd73daedad", qop=auth, nc=00000001
+[Oct  2 18:10:23] Content-Length: 0
+[Oct  2 18:10:23] User-Agent: cellrift/0.1.0
+[Oct  2 18:10:23] 
+[Oct  2 18:10:23] 
+[Oct  2 18:10:23] <--- Transmitting SIP response (431 bytes) to UDP:127.0.0.1:39874 --->
+[Oct  2 18:10:23] SIP/2.0 200 OK
+[Oct  2 18:10:23] Via: SIP/2.0/UDP [::]:39874;rport=39874;received=127.0.0.1;branch=z9hG4bK5297659073485105286
+[Oct  2 18:10:23] Call-ID: cellrift-4960254869741204122@localhost
+[Oct  2 18:10:23] From: <sip:447700900203@ims.lab.local>
+[Oct  2 18:10:23] To: <sip:447700900203@ims.lab.local>;tag=z9hG4bK5297659073485105286
+[Oct  2 18:10:23] CSeq: 2 REGISTER
+[Oct  2 18:10:23] Date: Fri, 02 Oct 2026 18:10:23 GMT
+[Oct  2 18:10:23] Contact: <sip:447700900203@10.0.0.1:5060>;expires=3599
+[Oct  2 18:10:23] Server: Asterisk PBX 22.10.1
+[Oct  2 18:10:23] Content-Length:  0
+[Oct  2 18:10:23] 
+[Oct  2 18:10:23] 

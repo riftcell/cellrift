@@ -1,0 +1,152 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  build:
+    name: Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Build
+        run: go build ./...
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Test
+        run: go test -race -coverprofile=coverage.txt ./...
+
+      # A second pass pinned to one OS thread. A runner is small enough that
+      # it already exposes tests which assert on a mock peer's observation
+      # without waiting for it (four did, on the first push); pinning makes
+      # that deterministic rather than dependent on how loaded the runner is.
+      - name: Test (single-threaded scheduling)
+        run: GOMAXPROCS=1 go test -race -count=1 ./internal/protocols/... ./cmd/...
+
+      - name: Check coverage threshold
+        run: |
+          COVERAGE=$(go tool cover -func=coverage.txt | grep '^total:' | awk '{print $3}' | tr -d '%')
+          echo "Total coverage: ${COVERAGE}%"
+          echo "### Test Coverage" >> "$GITHUB_STEP_SUMMARY"
+          echo "${COVERAGE}%" >> "$GITHUB_STEP_SUMMARY"
+          THRESHOLD=70
+          if [ "$(echo "$COVERAGE < $THRESHOLD" | bc -l)" -eq 1 ]; then
+            echo "FAIL: coverage ${COVERAGE}% is below ${THRESHOLD}%"
+            exit 1
+          fi
+
+      - name: Staticcheck
+        run: go tool staticcheck ./...
+
+      - name: Vulnerability scan
+        run: go tool govulncheck ./...
+
+      - name: Legal files
+        run: |
+          test -f TERMS.md  || { echo "FAIL: TERMS.md is missing";  exit 1; }
+          test -f LICENSE   || { echo "FAIL: LICENSE is missing";    exit 1; }
+
+      - name: Validate scenarios
+        run: go run ./cmd/cellrift validate scenarios/**/*.yaml
+
+  cross-build:
+    name: Non-Linux Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      # The SCTP library ships a !linux stub whose calls return an
+      # "unsupported" error at runtime, which is why Cellrift detects SCTP
+      # availability at runtime instead of adding its own build tags. This job
+      # proves that stub path keeps compiling.
+      #
+      # Build and vet only. There is no macOS or Windows runner in this
+      # repository, so `go test` execution on those platforms is NOT verified
+      # here. `go vet` type-checks _test.go files without running them, so the
+      # test code is proven to compile — not to pass.
+      - name: darwin/arm64
+        run: |
+          GOOS=darwin GOARCH=arm64 go build ./...
+          GOOS=darwin GOARCH=arm64 go vet ./...
+
+      - name: windows/amd64
+        run: |
+          GOOS=windows GOARCH=amd64 go build ./...
+          GOOS=windows GOARCH=amd64 go vet ./...
+
+  policy:
+    name: Policy Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history required for changelog and dep diffs
+
+      - name: Every internal package has test files
+        run: bash scripts/check-tests.sh
+
+      - name: Changelog updated
+        if: github.event_name == 'pull_request'
+        env:
+          SKIP_CHANGELOG: ${{ contains(github.event.pull_request.labels.*.name, 'skip-changelog') && 'true' || 'false' }}
+        run: bash scripts/check-changelog.sh ${{ github.event.pull_request.base.sha }}
+
+      - name: No new direct dependencies
+        if: github.event_name == 'pull_request'
+        env:
+          ALLOW_NEW_DEPS: ${{ contains(github.event.pull_request.labels.*.name, 'allow-new-deps') && 'true' || 'false' }}
+        run: bash scripts/check-no-new-deps.sh ${{ github.event.pull_request.base.sha }}
+
+      - name: Synthetic data — no real phone numbers in scenarios
+        run: bash scripts/check-synthetic-data.sh
+
+      - name: Scenario labels match what each peer actually proves
+        run: bash scripts/check-scenario-labels.sh
+
+  docker:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    needs: [build, policy]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t cellrift:ci .
+
+      - name: Print version
+        run: docker run --rm cellrift:ci --version
+
+      - name: Validate scenarios in container
+        run: docker run --rm cellrift:ci validate /scenarios/ims/register_basic.yaml
+
+      - name: Check image size
+        run: |
+          SIZE=$(docker image inspect cellrift:ci --format='{{.Size}}')
+          SIZE_MB=$((SIZE / 1024 / 1024))
+          echo "Image size: ${SIZE_MB} MB"
+          echo "### Docker Image Size" >> "$GITHUB_STEP_SUMMARY"
+          echo "${SIZE_MB} MB" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$SIZE_MB" -gt 50 ]; then
+            echo "FAIL: image size ${SIZE_MB} MB exceeds 50 MB limit"
+            exit 1
+          fi

@@ -1,0 +1,23 @@
+2026-10-02T18:13:30.7695592Z Complete job name: SIP Real-Peer Interop (Asterisk)
+2026-10-02T18:13:31.0875494Z [command]/usr/bin/git fetch ... origin +eb211bae1364265bcf8ba3c6ea64c5495ff6d6d1:refs/remotes/origin/probe/peer-02-deliberate-red
+2026-10-02T18:13:32.1971033Z eb211bae1364265bcf8ba3c6ea64c5495ff6d6d1
+2026-10-02T18:13:45.0401312Z ##[group]Run bash test/interop/up-sip.sh
+2026-10-02T18:13:45.2237688Z shell: /usr/bin/bash -e {0}
+2026-10-02T18:14:07.9234102Z sip interop harness ready: asterisk on udp/15060 and tls/15061, certs in /tmp/cellrift-sip-certs, digest auth wiring verified (auth-md5, auth-sha256, auth-both), sip logger on
+2026-10-02T18:14:07.9268932Z ##[group]Run bash test/interop/run-sip-scenario.sh
+2026-10-02T18:14:07.9325443Z shell: /usr/bin/bash -e {0}
+2026-10-02T18:14:31.4472684Z SIP RIG REFUSED: the real peer did not pass register_digest_auth (exit 1); this is a result about the peer, not the rig
+2026-10-02T18:14:31.4514366Z Scenario: SIP REGISTER with digest authentication
+2026-10-02T18:14:31.4515139Z   [FAIL] [sip] send register_md5 (1ms)
+2026-10-02T18:14:31.4521879Z     Error: SIP 401 Unauthorized (expected 2xx); credentials rejected after one digest retry (realm="cellrift.interop", algorithm=MD5); assertion failed: response.status_code == 200 (actual: 401)
+2026-10-02T18:14:31.4523291Z   [ok] [sip] send register_sha256 (1ms)
+2026-10-02T18:14:31.4524281Z   [ok] [sip] send register_both_offered (1ms)
+2026-10-02T18:14:31.4524831Z 2/3 steps passed in 4ms
+2026-10-02T18:14:31.4702467Z [Oct  2 18:14:31] NOTICE[63]: res_pjsip/pjsip_distributor.c:688 log_failed_request: Request 'REGISTER' from '<sip:447700900201@ims.lab.local>' failed for '127.0.0.1:33091' (callid: cellrift-3981537034295580874@localhost) - Failed to authenticate
+2026-10-02T18:14:31.4746487Z [Oct  2 18:14:31] WWW-Authenticate: Digest realm="cellrift.interop",nonce="1790964871/edf1fdf58069ef81c3bfa71013a1ff44",opaque="532f278724ea1f04",algorithm=SHA-256,qop="auth"
+2026-10-02T18:14:31.4747363Z [Oct  2 18:14:31] WWW-Authenticate: Digest realm="cellrift.interop",nonce="1790964871/edf1fdf58069ef81c3bfa71013a1ff44",opaque="2ac4b7b019227273",algorithm=MD5,qop="auth"
+2026-10-02T18:14:31.4752461Z [Oct  2 18:14:31] Authorization: Digest username="impi-user", realm="cellrift.interop", nonce="1790964871/edf1fdf58069ef81c3bfa71013a1ff44", uri="sip:447700900203@127.0.0.1:15060", response="50c601d8526922492a1ba9450ebb115ed68a80ade5954c36472b28cbf287260e", algorithm=SHA-256, cnonce="a0fd70029e56e471", opaque="532f278724ea1f04", qop=auth, nc=00000001
+2026-10-02T18:14:31.4769034Z ##[error]Process completed with exit code 1.
+2026-10-02T18:14:31.6765470Z With the provided path, there will be 26 files uploaded
+2026-10-02T18:14:32.6550611Z Artifact download URL: https://github.com/riftcell/cellrift/actions/runs/37045975976/artifacts/11244620893
+2026-10-02T18:14:32.6668231Z ##[group]Run bash test/interop/down-sip.sh

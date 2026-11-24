@@ -1,0 +1,115 @@
+# SIP REGISTER with digest authentication.
+# PROVEN AGAINST: Asterisk (non-IMS SIP) — the sip-interop harness runs this
+# file against a digest-pinned Asterisk 22.10.1 container, on endpoints that
+# REQUIRE digest, and the peer's own log is collected as the evidence. Asterisk
+# is a plain SIP server, NOT a P-CSCF: a pass proves that a real third-party SIP
+# stack challenges and accepts the digest ARITHMETIC Cellrift computes, and
+# nothing about IMS semantics or the header's grammar.
+#
+# Three REGISTERs, one credential pair, three endpoints that differ only in the
+# algorithms they offer: MD5 only, SHA-256 only, and both. Each is ONE step:
+# the 401 and the re-send happen inside it, and the step's own result is the
+# final 200. The both-offered endpoint sends SHA-256 first and MD5 second, and
+# RFC 8760 section 2.4 says to use the topmost supported one, so the third
+# step asserting SHA-256 is what shows the selection rule running against a
+# real peer's ordering rather than against a fixture.
+#
+# What this proves and what it does not: the peer validates the digest
+# ARITHMETIC. It was measured accepting an unpadded nc, an uppercase-hex nc, a
+# quoted qop, the wrong challenge's opaque, a uri differing from the request
+# line, and an omitted algorithm, returning 200 for each. So a green run here
+# is not evidence that the Authorization header is well formed. The header
+# grammar is pinned by unit tests in internal/protocols/sip, against an
+# in-process verifier with expected digests computed outside production code.
+#
+# response.auth.challenged == true is asserted on every step so the challenge
+# is proven from both ends: Cellrift saw it here, and the harness separately
+# requires the peer's own log to show it sent one.
+#
+# SYNTHETIC DATA: subscriber identifiers use the Ofcom test range
+# (447700900xxx) and a fictional .lab.local domain. The password is a synthetic
+# lab value, not a secret. Never use a real subscriber MSISDN or SIP identity
+# in a scenario file.
+#
+# References:
+#   - RFC 3261 section 22 (SIP digest authentication)
+#   - RFC 7616 (HTTP Digest, SHA-256)
+#   - RFC 8760 section 2.4 (selecting among several challenges)
+
+name: "SIP REGISTER with digest authentication"
+version: "1.0"
+description: >
+  Three authenticated REGISTERs against endpoints that differ only in which
+  digest algorithms they offer: MD5 only, SHA-256 only, and both. One credential
+  pair drives all three. Each step is a single step: the 401 and the re-send are
+  internal to it, and the step's own result is the final 200.
+
+protocols:
+  sip:
+    transport: udp
+    # The digest username is NOT the From user. impi-user is the IMS IMPI shape
+    # (the private identity differs from the public one in the From header). The
+    # rig was verified to require exactly this: the digest username impi-user
+    # gets a 200, the From user gets a 401. Do not "simplify" them to match.
+    username: impi-user
+    # A {{ }} reference rather than a literal, so a real run also exercises the
+    # scenario-variable path for credentials. The value below is a synthetic lab
+    # password, not a secret.
+    password: "{{ sip_password }}"
+
+variables:
+  pcscf_host: "pcscf.lab.local"
+  sip_password: "shared-pw"
+
+steps:
+  - id: register_md5
+    protocol: sip
+    action: send
+    target: "{{ pcscf_host }}:5060"
+    message: REGISTER
+    fields:
+      From: "sip:447700900201@ims.lab.local"
+      To: "sip:447700900201@ims.lab.local"
+      Contact: "<sip:447700900201@10.0.0.1:5060>"
+    assert:
+      - response.status_code == 200
+      - response.auth.challenged == true
+      - response.auth.retried == true
+      - response.auth.algorithm == MD5
+      - response.auth.realm == cellrift.interop
+      - response.auth.nonce != null
+
+  - id: register_sha256
+    protocol: sip
+    action: send
+    target: "{{ pcscf_host }}:5060"
+    message: REGISTER
+    fields:
+      From: "sip:447700900202@ims.lab.local"
+      To: "sip:447700900202@ims.lab.local"
+      Contact: "<sip:447700900202@10.0.0.1:5060>"
+    assert:
+      - response.status_code == 200
+      - response.auth.challenged == true
+      - response.auth.retried == true
+      - response.auth.algorithm == SHA-256
+      - response.auth.realm == cellrift.interop
+      - response.auth.nonce != null
+
+  - id: register_both_offered
+    # Offered: SHA-256 first, MD5 second. The topmost supported is chosen.
+    protocol: sip
+    action: send
+    target: "{{ pcscf_host }}:5060"
+    message: REGISTER
+    fields:
+      From: "sip:447700900203@ims.lab.local"
+      To: "sip:447700900203@ims.lab.local"
+      Contact: "<sip:447700900203@10.0.0.1:5060>"
+    assert:
+      - response.status_code == 200
+      - response.auth.challenged == true
+      - response.auth.retried == true
+      - response.auth.algorithm == SHA-256
+      - response.auth.realm == cellrift.interop
+      - response.auth.nonce != null

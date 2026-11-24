@@ -1,0 +1,342 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://cellrift.dev/schema/scenario/v1",
+  "title": "Cellrift Scenario",
+  "description": "Schema for Cellrift YAML scenario files. Use synthetic test data only — see TERMS.md.",
+  "type": "object",
+  "required": ["name", "version", "steps"],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Human-readable scenario name used in CI reports.",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string",
+      "description": "Scenario schema version for compatibility checks.",
+      "pattern": "^\\d+\\.\\d+$",
+      "examples": ["1.0"]
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional multi-line description of what the scenario tests."
+    },
+    "protocols": {
+      "type": "object",
+      "description": "Transport and identity configuration keyed by protocol name.",
+      "additionalProperties": false,
+      "properties": {
+        "sip": { "$ref": "#/$defs/protocolConfig" },
+        "diameter": { "$ref": "#/$defs/diameterProtocolConfig" }
+      }
+    },
+    "variables": {
+      "type": "object",
+      "description": "Input variables that can be overridden at runtime with --var. Use synthetic values only.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "steps": {
+      "type": "array",
+      "description": "Ordered list of test steps. Executed sequentially unless action is 'parallel'.",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/step" }
+    }
+  },
+  "$defs": {
+    "protocolConfig": {
+      "type": "object",
+      "description": "SIP protocol configuration.",
+      "additionalProperties": false,
+      "properties": {
+        "transport": {
+          "type": "string",
+          "description": "Transport protocol for SIP messages.",
+          "enum": ["udp", "tcp", "tls"],
+          "default": "udp"
+        },
+        "local_port": {
+          "type": "integer",
+          "description": "Accepted and validated, but not currently used to bind: the local port is ephemeral whatever this is set to.",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "cert_file": {
+          "type": "string",
+          "description": "Path to the client certificate (PEM). Used when transport is \"tls\"; omit for server-authenticated TLS.",
+          "examples": ["certs/client.crt"]
+        },
+        "key_file": {
+          "type": "string",
+          "description": "Path to the client private key (PEM). Required when cert_file is set.",
+          "examples": ["certs/client.key"]
+        },
+        "ca_file": {
+          "type": "string",
+          "description": "Path to the CA bundle (PEM) used to verify the server certificate. When omitted, the system root pool is used. Server verification is always on unless insecure_skip_verify is set.",
+          "examples": ["certs/ca.crt"]
+        },
+        "insecure_skip_verify": {
+          "type": "boolean",
+          "description": "Disable TLS server certificate verification. Explicit opt-out for lab gear with self-signed certificates; the run reports a warning when set. Never use against production infrastructure.",
+          "default": false
+        },
+        "username": {
+          "type": "string",
+          "description": "SIP digest authentication username. This is the digest username and need not equal the From header's user — in IMS the IMPI differs from the IMPU. May be a {{ var }} template. There is no default and no ambient fallback: a challenge arriving with no username configured fails the step.",
+          "examples": ["impi-user", "{{ sip_username }}"]
+        },
+        "password": {
+          "type": "string",
+          "description": "SIP digest authentication password. Precedence, most explicit first: (1) this field, a literal or a {{ var }} template resolved from --var or CELLRIFT_VAR_<KEY>; (2) the password in the file named by credentials_file; (3) the CELLRIFT_SIP_PASSWORD environment variable. A {{ var }} here that cannot be resolved fails the step and does NOT fall through to a lower layer, so a typo cannot quietly authenticate with the ambient credential. The value is removed from terminal, JSON and JUnit output, including under --no-mask.",
+          "examples": ["{{ sip_password }}"]
+        },
+        "credentials_file": {
+          "type": "string",
+          "description": "Path to a YAML file with top-level username and password keys, relative to the working directory like ca_file. Precedence layer 2: consulted only for fields this block did not supply, and only when a challenge actually arrives. A named file that cannot be read, or that carries an unknown key, is an error rather than a fall-through to CELLRIFT_SIP_PASSWORD.",
+          "examples": ["certs/sip-credentials.yaml"]
+        }
+      }
+    },
+    "diameterProtocolConfig": {
+      "type": "object",
+      "description": "Diameter protocol configuration.",
+      "additionalProperties": false,
+      "properties": {
+        "transport": {
+          "type": "string",
+          "description": "Transport protocol for Diameter messages. sctp is a real RFC 4960 SCTP transport, proven against a live Diameter peer. It needs Linux with SCTP kernel support (the vendored library builds it on linux only, and not on 386); anywhere else, or on a kernel without SCTP, it falls back to TCP and records a warning in the run report. tcp forces TCP directly, with no SCTP attempt and no warning.",
+          "enum": ["sctp", "tcp"],
+          "default": "sctp"
+        },
+        "local_port": {
+          "type": "integer",
+          "description": "Accepted and validated, but not currently used to bind: the local port is ephemeral whatever this is set to.",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "origin_host": {
+          "type": "string",
+          "description": "Diameter Origin-Host AVP value (FQDN of the test agent).",
+          "examples": ["test.cellrift.local"]
+        },
+        "origin_realm": {
+          "type": "string",
+          "description": "Diameter Origin-Realm AVP value.",
+          "examples": ["cellrift.local"]
+        }
+      }
+    },
+    "step": {
+      "type": "object",
+      "description": "A single test step.",
+      "required": ["id", "action"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique step identifier. Referenced in later steps via {{ step_id.captured_key }}.",
+          "minLength": 1,
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "protocol": {
+          "type": "string",
+          "description": "Protocol adapter to use. Required for all actions except 'parallel' and 'wait'.",
+          "enum": ["sip", "diameter"]
+        },
+        "action": {
+          "type": "string",
+          "description": "Step action type.",
+          "enum": ["send", "assert_state", "wait", "parallel", "reorder", "raw"]
+        },
+        "target": {
+          "type": "string",
+          "description": "Target address in host:port format. Supports {{ variable }} substitution.",
+          "examples": ["{{ hss_host }}:3868", "pcscf.lab.local:5060"]
+        },
+        "message": {
+          "type": "string",
+          "description": "Protocol message type to send or receive.",
+          "examples": ["REGISTER", "INVITE", "UAR", "CCR"]
+        },
+        "fields": {
+          "type": "object",
+          "description": "Message field values. Supports {{ variable }} substitution in values. A nested object expresses a Diameter Grouped AVP's members (one level deep). This schema checks shape only: for Diameter steps, AVP and member names are validated by `cellrift validate` against the built-in AVP dictionary, which is the authoritative source for name correctness.",
+          "additionalProperties": {
+            "oneOf": [
+              { "type": ["string", "number", "boolean"] },
+              { "type": "object", "additionalProperties": { "type": ["string", "number", "boolean"] } }
+            ]
+          }
+        },
+        "body": {
+          "type": "object",
+          "description": "Optional message body. Exactly one of 'template' or 'content' must be set.",
+          "required": ["content_type"],
+          "additionalProperties": false,
+          "properties": {
+            "content_type": {
+              "type": "string",
+              "description": "MIME type of the body.",
+              "examples": ["application/sdp"]
+            },
+            "template": {
+              "type": "string",
+              "description": "Built-in body template name.",
+              "enum": ["basic_audio_offer"]
+            },
+            "content": {
+              "type": "string",
+              "description": "Raw body content. Mutually exclusive with 'template'."
+            }
+          }
+        },
+        "impair": {
+          "type": "object",
+          "description": "Deliberate network-level impairment for this step, in three independent families: timing (latency_ms, jitter_ms, delay_ms), delivery (drop, duplicate), and connection-level faults (reset, truncate, abrupt_close, sctp_abort). Valid on 'send' steps only — `cellrift validate` rejects it on any other action. At most one of the six boolean keys may be set on one step.",
+          "additionalProperties": false,
+          "properties": {
+            "latency_ms": { "type": "integer", "minimum": 0, "description": "Fixed delay applied before the message is sent, and once before the step's first inbound read." },
+            "jitter_ms":  { "type": "integer", "minimum": 0, "description": "Additional random delay in [0, jitter_ms], added to latency_ms. Sampled once per step per direction." },
+            "delay_ms":   { "type": "integer", "minimum": 0, "description": "Delay applied strictly after the response is received and parsed, before the adapter acts on it — tests the peer's own timeout/retry behaviour. Not bounded by the step timeout." },
+            "drop":      { "type": "boolean", "description": "Build the message in full but deliberately never write it to the wire, and never wait for a response. The step passes and reports response.dropped == true; the run continues. Mutually exclusive with duplicate." },
+            "duplicate": { "type": "boolean", "description": "Write the step's already-built bytes to the wire twice, then complete exactly one normal receive cycle. The step reports response.duplicated == true. A boolean, not a count. Mutually exclusive with drop." },
+            "reset":        { "type": "boolean", "description": "After the step's message has been sent, perform a real hard reset of the connection (SO_LINGER 0 then close, so a genuine TCP RST reaches the peer) before reading any response. The step fails and reports response.connection_state == \"reset\". At most one delivery or connection-fault key per step." },
+            "truncate":     { "type": "boolean", "description": "Write only the first few bytes of the step's already-encoded message to the wire — too few to frame or parse — instead of the whole message. The byte count is a fixed internal constant. The step fails and reports response.connection_state == \"truncated\". At most one delivery or connection-fault key per step." },
+            "abrupt_close": { "type": "boolean", "description": "Close the connection immediately after the step's message has been sent and before any response is read, with no clean shutdown. Differs from reset only in the wire signal (FIN, not RST). The step fails and reports response.connection_state == \"closed\". At most one delivery or connection-fault key per step." },
+            "sctp_abort":   { "type": "boolean", "description": "Send a real RFC 4960 ABORT chunk on the step's SCTP association after its message has been sent — not the graceful SHUTDOWN a bare close produces. Rejected by `cellrift validate` unless the step's protocol runs over SCTP. The step fails and reports response.connection_state == \"aborted\". At most one delivery or connection-fault key per step." }
+          }
+        },
+        "malform": {
+          "type": "object",
+          "description": "Deliberate, post-encode corruption of this step's already-correctly-encoded message — never a parallel encoder, only a targeted overwrite of the real encoder's output. Valid on 'send' steps only — `cellrift validate` rejects it on any other action. avp_length and msg_length are Diameter-only; sip_header is SIP-only. Every other field is left exactly as the real encoder produced it.",
+          "additionalProperties": false,
+          "properties": {
+            "avp_length": {
+              "type": "object",
+              "description": "Overwrite one AVP's already-correctly-encoded 3-byte Length field with a declared, likely-wrong value. Diameter steps only.",
+              "additionalProperties": false,
+              "required": ["name", "value"],
+              "properties": {
+                "name": { "type": "string", "minLength": 1, "description": "AVP name, looked up against the built-in AVP dictionary — `cellrift validate` rejects an unknown name." },
+                "value": { "type": "integer", "minimum": 0, "maximum": 16777215, "description": "Declared Length field value. The AVP Length field is 3 bytes wide, so this must fit 0..16777215." }
+              }
+            },
+            "msg_length": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 16777215,
+              "description": "Overwrite the message's already-correctly-encoded 3-byte Message Length header field with a declared, likely-wrong value. Diameter steps only. The field is 3 bytes wide, so this must fit 0..16777215; 0 is a legitimate, deliberately-wrong declaration, distinct from leaving msg_length unset."
+            },
+            "sip_header": {
+              "type": "object",
+              "description": "Corrupt one already-serialised SIP header line. SIP steps only.",
+              "additionalProperties": false,
+              "required": ["name", "op"],
+              "properties": {
+                "name": { "type": "string", "minLength": 1, "description": "SIP header name to corrupt, e.g. \"Via\"." },
+                "op": { "type": "string", "enum": ["missing", "duplicate", "overwrite"], "description": "missing: drop the header entirely. duplicate: append a second copy of the header. overwrite: replace the header's value with an arbitrary string. Required when op is overwrite." },
+                "value": { "type": "string", "description": "New header value. Required when op is overwrite; ignored for missing." }
+              }
+            }
+          }
+        },
+        "raw": {
+          "type": "object",
+          "description": "The byte source for an action: raw step, which sends one protocol's raw wire bytes over another protocol's connection, bypassing that protocol's own encoder entirely. Exactly one of hex or ref is required: hex is a literal wire payload (hand-written hex, decoded once), ref is a {{ }} reference — typically to a prior step's response.__raw capture. The bytes are written to the step's protocol connection verbatim, with no encoding and no response parsing.",
+          "additionalProperties": false,
+          "properties": {
+            "hex": {
+              "type": "string",
+              "pattern": "^([0-9a-fA-F]{2})+$",
+              "description": "A literal wire payload as hex-encoded bytes, e.g. a hand-crafted cross-protocol message."
+            },
+            "ref": {
+              "type": "string",
+              "description": "A {{ }} template reference, typically to a prior step's response.__raw capture, resolved through the same variable-substitution machinery every other templated step field uses."
+            }
+          }
+        },
+        "capture": {
+          "type": "object",
+          "description": "Variables to extract from the response. Keys become variable names in subsequent steps.",
+          "additionalProperties": {
+            "type": "string",
+            "description": "Response field path to extract (e.g. 'response.Result-Code')."
+          }
+        },
+        "assert": {
+          "type": "array",
+          "description": "Assertions evaluated after the step. Any failure terminates the scenario.",
+          "items": {
+            "type": "string",
+            "description": "Expression of the form 'lhs operator rhs'. Operators: ==, !=, >, <, >=, <=.",
+            "pattern": "^\\s*\\S+\\s+(==|!=|>=|<=|>|<)\\s+\\S+\\s*$",
+            "examples": [
+              "result_code == 2001",
+              "server_name != null",
+              "response.status_code == 200"
+            ]
+          }
+        },
+        "check": {
+          "type": "string",
+          "description": "State to check for 'assert_state' action.",
+          "enum": ["registered", "established", "terminated"]
+        },
+        "timeout_ms": {
+          "type": "integer",
+          "description": "Maximum time to wait for a response in milliseconds. Default: 3000.",
+          "minimum": 1,
+          "default": 3000
+        },
+        "duration_ms": {
+          "type": "integer",
+          "description": "Pause length in milliseconds for the 'wait' action. Required for 'wait'. No default: a wait with no duration is a validation error, not a silent no-op.",
+          "minimum": 1
+        },
+        "send_order": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Wire-send position of this sub-step within an 'reorder' group, counted from 1 and distinct from its position in the YAML list. The group's send_order values must form a permutation of 1..N. Valid only on a reorder group's sub-steps."
+        },
+        "steps": {
+          "type": "array",
+          "description": "Sub-steps for 'parallel' or 'reorder' action. Parallel sub-steps all run concurrently. Reorder sub-steps are all 'send' steps on one protocol, built up front and written to the wire in send_order sequence.",
+          "minItems": 2,
+          "items": { "$ref": "#/$defs/step" }
+        }
+      },
+      "if": {
+        "properties": { "action": { "enum": ["parallel", "reorder"] } },
+        "required": ["action"]
+      },
+      "then": {
+        "required": ["id", "action", "steps"]
+      },
+      "else": {
+        "if": {
+          "properties": { "action": { "const": "wait" } },
+          "required": ["action"]
+        },
+        "then": {
+          "required": ["id", "action", "duration_ms"]
+        },
+        "else": {
+          "if": {
+            "properties": { "action": { "const": "raw" } },
+            "required": ["action"]
+          },
+          "then": {
+            "required": ["id", "action", "protocol", "raw"]
+          },
+          "else": {
+            "required": ["id", "action", "protocol"]
+          }
+        }
+      }
+    }
+  }
+}

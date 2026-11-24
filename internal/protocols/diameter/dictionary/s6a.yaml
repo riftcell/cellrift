@@ -1,0 +1,1410 @@
+# 3GPP TS 29.272 (S6a/S6d interface) AVP dictionary.
+# AVP code/name/type/flag data transcribed from the public 3GPP TS 29.272
+# specification for product-design purposes (3GPP terms of use). No text or
+# structure copied from any third-party dictionary implementation.
+#
+# Every entry below is spec-only unless noted: its code/name/type were
+# transcribed directly from TS 29.272 V13.6.0 Table 7.3.1/1 and the
+# per-AVP "AVP format" clauses in clause 7.3. go-diameter's
+# diam/dict/testdata/tgpp_s6a.xml (BSD-3-Clause) was consulted only as an
+# independent cross-check on name/code/type for the ~109 elements it
+# happens to cover, never as the source of the data itself.
+#
+# Grouped members that the source AVP format lists but that are reused from
+# a different specification (e.g. Service-Selection, MIP6-Agent-Info,
+# 3GPP-Charging-Characteristics, MSISDN, ProSe-Subscription-Data) are omitted
+# per the transcription contract rather than declared a second time; each
+# omission is called out on the entry that would otherwise carry it.
+# Confidentiality-Key, Integrity-Key and Visited-Network-Identifier are the
+# exception: they are 3GPP TS 29.229 (Cx) AVPs, declared in cx.yaml and
+# referenced by name below from UTRAN-Vector, APN-Configuration,
+# Specific-APN-Info and Active-APN. Grouped members that TS 29.272 does
+# define, but that land in a later chunk of this same phase, are still
+# listed by name (forward reference) -- that is the expected, provisional
+# shape until the self-consistency gate runs unfiltered.
+#
+# Chunk 1: table start (Subscription-Data, 1400) through APN-Configuration-
+# Profile (1429) -- 30 entries, TS 29.272 V13.6.0 Table 7.3.1/1 order: the
+# table is printed in AVP-code order, not alphabetical, contrary to an
+# earlier chunk-boundary guess made before the table itself was read row by
+# row.
+application: S6a
+spec: "3GPP TS 29.272"
+avps:
+  # RAT-Type is defined in 3GPP TS 29.212 and only reused by TS 29.272
+  # §7.3.13 -- the same "reused from a different specification" case this
+  # file's own header already describes for other AVPs, so it sits outside
+  # Table 7.3.1/1's own 1400-1493 transcribed range. This codebase's
+  # scenarios use the value EUTRAN (1004).
+  - name: RAT-Type
+    code: 1032
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: true, vendor: true }
+
+  # TS 29.272 Table 7.3.1/1
+  - name: Subscription-Data
+    code: 1400
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: Subscriber-Status, required: false, max: 1 }
+      # MSISDN omitted: reused from 3GPP TS 29.329 (Cx-adjacent), out of
+      # this dictionary's scope.
+      - { name: A-MSISDN, required: false, max: 1 }
+      - { name: STN-SR, required: false, max: 1 }
+      - { name: ICS-Indicator, required: false, max: 1 }
+      - { name: Network-Access-Mode, required: false, max: 1 }
+      - { name: Operator-Determined-Barring, required: false, max: 1 }
+      - { name: HPLMN-ODB, required: false, max: 1 }
+      - { name: Regional-Subscription-Zone-Code, required: false, max: 10 }
+      - { name: Access-Restriction-Data, required: false, max: 1 }
+      - { name: APN-OI-Replacement, required: false, max: 1 }
+      - { name: LCS-Info, required: false, max: 1 }
+      - { name: Teleservice-List, required: false, max: 1 }
+      - { name: Call-Barring-Info, required: false, max: 0 }
+      # 3GPP-Charging-Characteristics omitted: reused from 3GPP TS 29.061,
+      # out of this dictionary's scope.
+      - { name: AMBR, required: false, max: 1 }
+      - { name: APN-Configuration-Profile, required: false, max: 1 }
+      - { name: RAT-Frequency-Selection-Priority-ID, required: false, max: 1 }
+      - { name: Trace-Data, required: false, max: 1 }
+      - { name: GPRS-Subscription-Data, required: false, max: 1 }
+      - { name: CSG-Subscription-Data, required: false, max: 0 }
+      - { name: Roaming-Restricted-Due-To-Unsupported-Feature, required: false, max: 1 }
+      - { name: Subscribed-Periodic-RAU-TAU-Timer, required: false, max: 1 }
+      - { name: MPS-Priority, required: false, max: 1 }
+      - { name: VPLMN-LIPA-Allowed, required: false, max: 1 }
+      - { name: Relay-Node-Indicator, required: false, max: 1 }
+      - { name: MDT-User-Consent, required: false, max: 1 }
+      - { name: Subscribed-VSRVCC, required: false, max: 1 }
+      # ProSe-Subscription-Data omitted: reused from 3GPP TS 29.344, not a
+      # Table 7.3.1/1 entry in this release, out of this dictionary's scope.
+      - { name: Subscription-Data-Flags, required: false, max: 1 }
+      - { name: Adjacent-Access-Restriction-Data, required: false, max: 0 }
+      - { name: DL-Buffering-Suggested-Packet-Count, required: false, max: 1 }
+      - { name: IMSI-Group-Id, required: false, max: 0 }
+      - { name: UE-Usage-Type, required: false, max: 1 }
+      # AESE-Communication-Pattern and Monitoring-Event-Configuration
+      # omitted: not present in TS 29.272 V13.6.0 Table 7.3.1/1 (later
+      # release additions, reused from 3GPP TS 29.336), out of scope.
+
+  - name: Terminal-Information
+    code: 1401
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: IMEI, required: false, max: 1 }
+      - { name: 3GPP2-MEID, required: false, max: 1 }
+      - { name: Software-Version, required: false, max: 1 }
+
+  - name: IMEI
+    code: 1402
+    vendor-id: 10415
+    type: UTF8String
+    flags: { mandatory: true, vendor: true }
+
+  - name: Software-Version
+    code: 1403
+    vendor-id: 10415
+    type: UTF8String
+    flags: { mandatory: true, vendor: true }
+
+  - name: QoS-Subscribed
+    code: 1404
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  - name: ULR-Flags
+    code: 1405
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: true, vendor: true }
+
+  - name: ULA-Flags
+    code: 1406
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: true, vendor: true }
+
+  - name: Visited-PLMN-Id
+    code: 1407
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  - name: Requested-EUTRAN-Authentication-Info
+    code: 1408
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: Number-Of-Requested-Vectors, required: false, max: 1 }
+      - { name: Immediate-Response-Preferred, required: false, max: 1 }
+      - { name: Re-Synchronization-Info, required: false, max: 1 }
+
+  - name: Requested-UTRAN-GERAN-Authentication-Info
+    code: 1409
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: Number-Of-Requested-Vectors, required: false, max: 1 }
+      - { name: Immediate-Response-Preferred, required: false, max: 1 }
+      - { name: Re-Synchronization-Info, required: false, max: 1 }
+
+  - name: Number-Of-Requested-Vectors
+    code: 1410
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: true, vendor: true }
+
+  - name: Re-Synchronization-Info
+    code: 1411
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  - name: Immediate-Response-Preferred
+    code: 1412
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: true, vendor: true }
+
+  - name: Authentication-Info
+    code: 1413
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: E-UTRAN-Vector, required: false, max: 0 }
+      - { name: UTRAN-Vector, required: false, max: 0 }
+      - { name: GERAN-Vector, required: false, max: 0 }
+
+  - name: E-UTRAN-Vector
+    code: 1414
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: Item-Number, required: false, max: 1 }
+      - { name: RAND, required: true, max: 1 }
+      - { name: XRES, required: true, max: 1 }
+      - { name: AUTN, required: true, max: 1 }
+      - { name: KASME, required: true, max: 1 }
+
+  - name: UTRAN-Vector
+    code: 1415
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: Item-Number, required: false, max: 1 }
+      - { name: RAND, required: true, max: 1 }
+      - { name: XRES, required: true, max: 1 }
+      - { name: AUTN, required: true, max: 1 }
+      - { name: Confidentiality-Key, required: true, max: 1 } # cx.yaml, 3GPP TS 29.229 code 625
+      - { name: Integrity-Key, required: true, max: 1 } # cx.yaml, 3GPP TS 29.229 code 626
+
+  - name: GERAN-Vector
+    code: 1416
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: Item-Number, required: false, max: 1 }
+      - { name: RAND, required: true, max: 1 }
+      - { name: SRES, required: true, max: 1 }
+      - { name: Kc, required: true, max: 1 }
+
+  - name: Network-Access-Mode
+    code: 1417
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: true, vendor: true }
+
+  - name: HPLMN-ODB
+    code: 1418
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: true, vendor: true }
+
+  - name: Item-Number
+    code: 1419
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: true, vendor: true }
+
+  - name: Cancellation-Type
+    code: 1420
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: true, vendor: true }
+
+  - name: DSR-Flags
+    code: 1421
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: true, vendor: true }
+
+  - name: DSA-Flags
+    code: 1422
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: true, vendor: true }
+
+  - name: Context-Identifier
+    code: 1423
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: true, vendor: true }
+
+  - name: Subscriber-Status
+    code: 1424
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: true, vendor: true }
+
+  - name: Operator-Determined-Barring
+    code: 1425
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: true, vendor: true }
+
+  - name: Access-Restriction-Data
+    code: 1426
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: true, vendor: true }
+
+  - name: APN-OI-Replacement
+    code: 1427
+    vendor-id: 10415
+    type: UTF8String
+    flags: { mandatory: true, vendor: true }
+
+  - name: All-APN-Configurations-Included-Indicator
+    code: 1428
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: true, vendor: true }
+
+  - name: APN-Configuration-Profile
+    code: 1429
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: Context-Identifier, required: true, max: 1 }
+      # Spec prose (clause 7.3.34) calls this member
+      # "Additional-Context-Identifier"; the AVP is actually catalogued in
+      # Table 7.3.1/1 as "Additional-Context-ID" (code 1683, a later
+      # chunk) -- referenced here by its table name so the forward
+      # reference resolves once that chunk lands.
+      - { name: Additional-Context-ID, required: false, max: 1 }
+      - { name: All-APN-Configurations-Included-Indicator, required: true, max: 1 }
+      - { name: APN-Configuration, required: true, max: 0 }
+
+  # Chunk 2: APN-Configuration (1430) through Trace-NE-Type-List (1463) --
+  # 30 entries, continuing in TS 29.272 V13.6.0 Table 7.3.1/1 order.
+  - name: APN-Configuration
+    code: 1430
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: Context-Identifier, required: true, max: 1 }
+      # Served-Party-IP-Address omitted: reused from 3GPP TS 32.299, out of
+      # this dictionary's scope.
+      - { name: PDN-Type, required: true, max: 1 }
+      # Service-Selection omitted: reused from IETF RFC 5778, out of this
+      # phase's scope.
+      - { name: EPS-Subscribed-QoS-Profile, required: false, max: 1 }
+      - { name: VPLMN-Dynamic-Address-Allowed, required: false, max: 1 }
+      # MIP6-Agent-Info omitted: reused from IETF RFC 5447, out of scope.
+      - { name: Visited-Network-Identifier, required: false, max: 1 } # cx.yaml, 3GPP TS 29.229 code 600
+      - { name: PDN-GW-Allocation-Type, required: false, max: 1 }
+      # 3GPP-Charging-Characteristics omitted: reused from 3GPP TS 29.061.
+      - { name: AMBR, required: false, max: 1 }
+      - { name: Specific-APN-Info, required: false, max: 0 }
+      - { name: APN-OI-Replacement, required: false, max: 1 }
+      - { name: SIPTO-Permission, required: false, max: 1 }
+      - { name: LIPA-Permission, required: false, max: 1 }
+      - { name: Restoration-Priority, required: false, max: 1 }
+      - { name: SIPTO-Local-Network-Permission, required: false, max: 1 }
+      - { name: WLAN-offloadability, required: false, max: 1 }
+      - { name: Non-IP-PDN-Type-Indicator, required: false, max: 1 }
+      - { name: Non-IP-Data-Delivery-Mechanism, required: false, max: 1 }
+      # SCEF-ID omitted: reused from 3GPP TS 29.336, out of scope.
+      - { name: SCEF-Realm, required: false, max: 1 }
+
+  - name: EPS-Subscribed-QoS-Profile
+    code: 1431
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    # members omitted entirely: QoS-Class-Identifier and
+    # Allocation-Retention-Priority are both reused from 3GPP TS 29.212,
+    # entirely outside this dictionary's scope.
+
+  - name: VPLMN-Dynamic-Address-Allowed
+    code: 1432
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: true, vendor: true }
+
+  - name: STN-SR
+    code: 1433
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  - name: Alert-Reason
+    code: 1434
+    vendor-id: 10415
+    # Table 7.3.1/1 prints this row's Value Type as "Enumerate", a spec
+    # typo; clause 7.3.83 confirms the type is Enumerated.
+    type: Enumerated
+    flags: { mandatory: true, vendor: true }
+
+  - name: AMBR
+    code: 1435
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    # members omitted entirely: Max-Requested-Bandwidth-UL and
+    # Max-Requested-Bandwidth-DL are both reused from 3GPP TS 29.214,
+    # entirely outside this dictionary's scope.
+
+  - name: CSG-Subscription-Data
+    code: 1436
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: CSG-Id, required: true, max: 1 }
+      - { name: Expiration-Date, required: false, max: 1 }
+      # Service-Selection omitted: reused from IETF RFC 5778, out of scope.
+      - { name: Visited-PLMN-Id, required: false, max: 1 }
+
+  - name: CSG-Id
+    code: 1437
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: true, vendor: true }
+
+  - name: PDN-GW-Allocation-Type
+    code: 1438
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: true, vendor: true }
+
+  - name: Expiration-Date
+    code: 1439
+    vendor-id: 10415
+    type: Time
+    flags: { mandatory: true, vendor: true }
+
+  - name: RAT-Frequency-Selection-Priority-ID
+    code: 1440
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: true, vendor: true }
+
+  - name: IDA-Flags
+    code: 1441
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: true, vendor: true }
+
+  - name: PUA-Flags
+    code: 1442
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: true, vendor: true }
+
+  - name: NOR-Flags
+    code: 1443
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: true, vendor: true }
+
+  - name: User-Id
+    code: 1444
+    vendor-id: 10415
+    type: UTF8String
+    # Table 7.3.1/1's Must column for this row is "V" with Must-not "M":
+    # the vendor bit is mandatory, the M-bit must NOT be set.
+    flags: { mandatory: false, vendor: true }
+
+  - name: Equipment-Status
+    code: 1445
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: true, vendor: true }
+
+  - name: Regional-Subscription-Zone-Code
+    code: 1446
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  - name: RAND
+    code: 1447
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  - name: XRES
+    code: 1448
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  - name: AUTN
+    code: 1449
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  - name: KASME
+    code: 1450
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  - name: Trace-Collection-Entity
+    code: 1452
+    vendor-id: 10415
+    type: Address
+    flags: { mandatory: true, vendor: true }
+
+  - name: Kc
+    code: 1453
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  - name: SRES
+    code: 1454
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  - name: PDN-Type
+    code: 1456
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: true, vendor: true }
+
+  - name: Roaming-Restricted-Due-To-Unsupported-Feature
+    code: 1457
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: true, vendor: true }
+
+  - name: Trace-Data
+    code: 1458
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: Trace-Reference, required: true, max: 1 }
+      - { name: Trace-Depth, required: true, max: 1 }
+      - { name: Trace-NE-Type-List, required: true, max: 1 }
+      - { name: Trace-Interface-List, required: false, max: 1 }
+      - { name: Trace-Event-List, required: true, max: 1 }
+      - { name: OMC-Id, required: false, max: 1 }
+      - { name: Trace-Collection-Entity, required: true, max: 1 }
+      - { name: MDT-Configuration, required: false, max: 1 }
+
+  - name: Trace-Reference
+    code: 1459
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  - name: Trace-Depth
+    code: 1462
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: true, vendor: true }
+
+  - name: Trace-NE-Type-List
+    code: 1463
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  # Chunk 3: Trace-Interface-List (1464) through Homogeneous-Support-of-
+  # IMS-Voice-Over-PS-Sessions (1493) -- 30 entries, continuing in TS
+  # 29.272 V13.6.0 Table 7.3.1/1 order. This chunk ends here; the next
+  # chunk resumes at Last-UE-Activity-Time (code 1494), the next row in the
+  # table after this boundary.
+  - name: Trace-Interface-List
+    code: 1464
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  - name: Trace-Event-List
+    code: 1465
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  - name: OMC-Id
+    code: 1466
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  - name: GPRS-Subscription-Data
+    code: 1467
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: Complete-Data-List-Included-Indicator, required: true, max: 1 }
+      - { name: PDP-Context, required: true, max: 50 }
+
+  - name: Complete-Data-List-Included-Indicator
+    code: 1468
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: true, vendor: true }
+
+  - name: PDP-Context
+    code: 1469
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: Context-Identifier, required: true, max: 1 }
+      - { name: PDP-Type, required: true, max: 1 }
+      # PDP-Address omitted: reused from 3GPP TS 32.299, out of scope.
+      - { name: QoS-Subscribed, required: true, max: 1 }
+      - { name: VPLMN-Dynamic-Address-Allowed, required: false, max: 1 }
+      # Service-Selection omitted: reused from IETF RFC 5778, out of scope.
+      # 3GPP-Charging-Characteristics omitted: reused from 3GPP TS 29.061.
+      - { name: Ext-PDP-Type, required: false, max: 1 }
+      - { name: Ext-PDP-Address, required: false, max: 1 }
+      - { name: AMBR, required: false, max: 1 }
+      - { name: APN-OI-Replacement, required: false, max: 1 }
+      - { name: SIPTO-Permission, required: false, max: 1 }
+      - { name: LIPA-Permission, required: false, max: 1 }
+      - { name: Restoration-Priority, required: false, max: 1 }
+      - { name: SIPTO-Local-Network-Permission, required: false, max: 1 }
+
+  - name: PDP-Type
+    code: 1470
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  - name: 3GPP2-MEID
+    code: 1471
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  - name: Specific-APN-Info
+    code: 1472
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      # Service-Selection omitted: reused from IETF RFC 5778, out of scope.
+      # MIP6-Agent-Info omitted: reused from IETF RFC 5447, out of scope.
+      - { name: Visited-Network-Identifier, required: false, max: 1 } # cx.yaml, 3GPP TS 29.229 code 600
+
+  - name: LCS-Info
+    code: 1473
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: GMLC-Number, required: false, max: 0 }
+      - { name: LCS-PrivacyException, required: false, max: 0 }
+      - { name: MO-LR, required: false, max: 0 }
+
+  - name: GMLC-Number
+    code: 1474
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  - name: LCS-PrivacyException
+    code: 1475
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: SS-Code, required: true, max: 1 }
+      - { name: SS-Status, required: true, max: 1 }
+      - { name: Notification-To-UE-User, required: false, max: 1 }
+      - { name: External-Client, required: false, max: 0 }
+      - { name: PLMN-Client, required: false, max: 0 }
+      - { name: Service-Type, required: false, max: 0 }
+
+  - name: SS-Code
+    code: 1476
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  - name: SS-Status
+    code: 1477
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  - name: Notification-To-UE-User
+    code: 1478
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: true, vendor: true }
+
+  - name: External-Client
+    code: 1479
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: Client-Identity, required: true, max: 1 }
+      - { name: GMLC-Restriction, required: false, max: 1 }
+      - { name: Notification-To-UE-User, required: false, max: 1 }
+
+  - name: Client-Identity
+    code: 1480
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  - name: GMLC-Restriction
+    code: 1481
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: true, vendor: true }
+
+  - name: PLMN-Client
+    code: 1482
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: true, vendor: true }
+
+  - name: Service-Type
+    code: 1483
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: ServiceTypeIdentity, required: true, max: 1 }
+      - { name: GMLC-Restriction, required: false, max: 1 }
+      - { name: Notification-To-UE-User, required: false, max: 1 }
+
+  - name: ServiceTypeIdentity
+    code: 1484
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: true, vendor: true }
+
+  - name: MO-LR
+    code: 1485
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: SS-Code, required: true, max: 1 }
+      - { name: SS-Status, required: true, max: 1 }
+
+  - name: Teleservice-List
+    code: 1486
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: TS-Code, required: true, max: 0 }
+
+  - name: TS-Code
+    code: 1487
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  - name: Call-Barring-Info
+    code: 1488
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: SS-Code, required: true, max: 1 }
+      - { name: SS-Status, required: true, max: 1 }
+
+  - name: SGSN-Number
+    code: 1489
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  - name: IDR-Flags
+    code: 1490
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: true, vendor: true }
+
+  - name: ICS-Indicator
+    code: 1491
+    vendor-id: 10415
+    type: Enumerated
+    # Table 7.3.1/1 Must="V", Must-not="M" for this row: V mandatory, M
+    # bit must not be set.
+    flags: { mandatory: false, vendor: true }
+
+  - name: IMS-Voice-Over-PS-Sessions-Supported
+    code: 1492
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  - name: Homogeneous-Support-of-IMS-Voice-Over-PS-Sessions
+    code: 1493
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  # Chunk 4: Last-UE-Activity-Time (1494) through Job-Type (1623) -- 30
+  # entries, continuing in TS 29.272 V13.6.0 Table 7.3.1/1 order. An
+  # earlier guess put alphabetical "M through P" boundaries on this chunk;
+  # the real table is in AVP-code order, not alphabetical, so this chunk (and chunks 5 and 6
+  # below) resume in the table's actual row order from the code immediately
+  # following the previous chunk's last entry (1493). go-diameter's tgpp_s6a.xml has no coverage at all for codes
+  # 1494-1611 (its next covered code after 1493 is 1612) or for Job-Type
+  # (1623) -- those entries are spec-only. Active-APN (1612) through
+  # MDT-Configuration (1622) are corroborated by go-diameter's XML.
+  - name: Last-UE-Activity-Time
+    code: 1494
+    vendor-id: 10415
+    type: Time
+    flags: { mandatory: false, vendor: true }
+
+  - name: EPS-User-State
+    code: 1495
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: false, vendor: true }
+    members:
+      - { name: MME-User-State, required: false, max: 1 }
+      - { name: SGSN-User-State, required: false, max: 1 }
+
+  - name: EPS-Location-Information
+    code: 1496
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: false, vendor: true }
+    members:
+      - { name: MME-Location-Information, required: false, max: 1 }
+      - { name: SGSN-Location-Information, required: false, max: 1 }
+
+  - name: MME-User-State
+    code: 1497
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: false, vendor: true }
+    members:
+      - { name: User-State, required: false, max: 1 }
+
+  - name: SGSN-User-State
+    code: 1498
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: false, vendor: true }
+    members:
+      - { name: User-State, required: false, max: 1 }
+
+  - name: User-State
+    code: 1499
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  - name: MME-Location-Information
+    code: 1600
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: false, vendor: true }
+    members:
+      - { name: E-UTRAN-Cell-Global-Identity, required: false, max: 1 }
+      - { name: Tracking-Area-Identity, required: false, max: 1 }
+      - { name: Geographical-Information, required: false, max: 1 }
+      - { name: Geodetic-Information, required: false, max: 1 }
+      - { name: Current-Location-Retrieved, required: false, max: 1 }
+      - { name: Age-Of-Location-Information, required: false, max: 1 }
+      # User-CSG-Information omitted: reused from 3GPP TS 32.299, out of this
+      # dictionary's scope. eNodeB-ID omitted: reused from 3GPP TS 29.217, out of
+      # this dictionary's scope; both confirmed via Table 7.3.1/2 (re-used AVPs).
+
+  - name: SGSN-Location-Information
+    code: 1601
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: false, vendor: true }
+    members:
+      - { name: Cell-Global-Identity, required: false, max: 1 }
+      - { name: Location-Area-Identity, required: false, max: 1 }
+      - { name: Service-Area-Identity, required: false, max: 1 }
+      - { name: Routing-Area-Identity, required: false, max: 1 }
+      - { name: Geographical-Information, required: false, max: 1 }
+      - { name: Geodetic-Information, required: false, max: 1 }
+      - { name: Current-Location-Retrieved, required: false, max: 1 }
+      - { name: Age-Of-Location-Information, required: false, max: 1 }
+      # User-CSG-Information omitted: reused from 3GPP TS 32.299, out of
+      # this dictionary's scope (same reference as MME-Location-Information).
+
+  - name: E-UTRAN-Cell-Global-Identity
+    code: 1602
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: false, vendor: true }
+
+  - name: Tracking-Area-Identity
+    code: 1603
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: false, vendor: true }
+
+  - name: Cell-Global-Identity
+    code: 1604
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: false, vendor: true }
+
+  - name: Routing-Area-Identity
+    code: 1605
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: false, vendor: true }
+
+  - name: Location-Area-Identity
+    code: 1606
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: false, vendor: true }
+
+  - name: Service-Area-Identity
+    code: 1607
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: false, vendor: true }
+
+  - name: Geographical-Information
+    code: 1608
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: false, vendor: true }
+
+  - name: Geodetic-Information
+    code: 1609
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: false, vendor: true }
+
+  - name: Current-Location-Retrieved
+    code: 1610
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  - name: Age-Of-Location-Information
+    code: 1611
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }
+
+  - name: Active-APN
+    code: 1612
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: false, vendor: true }
+    members:
+      - { name: Context-Identifier, required: true, max: 1 }
+      # Service-Selection omitted: reused from IETF RFC 5778, out of scope.
+      # MIP6-Agent-Info omitted: reused from IETF RFC 5447, out of scope.
+      - { name: Visited-Network-Identifier, required: false, max: 1 } # cx.yaml, 3GPP TS 29.229 code 600
+      - { name: Specific-APN-Info, required: false, max: 0 }
+
+  - name: Error-Diagnostic
+    code: 1614
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  - name: Ext-PDP-Address
+    code: 1621
+    vendor-id: 10415
+    type: Address
+    flags: { mandatory: false, vendor: true }
+
+  - name: UE-SRVCC-Capability
+    code: 1615
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  - name: MPS-Priority
+    code: 1616
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }
+
+  - name: VPLMN-LIPA-Allowed
+    code: 1617
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  - name: LIPA-Permission
+    code: 1618
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  - name: Subscribed-Periodic-RAU-TAU-Timer
+    code: 1619
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }
+
+  - name: Ext-PDP-Type
+    code: 1620
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: false, vendor: true }
+
+  - name: SIPTO-Permission
+    code: 1613
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  - name: MDT-Configuration
+    code: 1622
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: false, vendor: true }
+    members:
+      - { name: Job-Type, required: true, max: 1 }
+      - { name: Area-Scope, required: false, max: 1 }
+      - { name: List-Of-Measurements, required: false, max: 1 }
+      - { name: Reporting-Trigger, required: false, max: 1 }
+      - { name: Report-Interval, required: false, max: 1 }
+      - { name: Report-Amount, required: false, max: 1 }
+      - { name: Event-Threshold-RSRP, required: false, max: 1 }
+      - { name: Event-Threshold-RSRQ, required: false, max: 1 }
+      - { name: Logging-Interval, required: false, max: 1 }
+      - { name: Logging-Duration, required: false, max: 1 }
+      - { name: Measurement-Period-LTE, required: false, max: 1 }
+      - { name: Measurement-Period-UMTS, required: false, max: 1 }
+      # Spec clause 7.3.136 prints "Collection-Period-RMM-LTE" (transposed
+      # letters); Table 7.3.1/1 lists the AVP itself as
+      # "Collection-Period-RRM-LTE" (code 1657, clause 7.3.168). Used the
+      # table/clause-title spelling, consistent with the earlier handling of a
+      # similar clause-vs-table naming mismatch (Additional-Context-ID).
+      - { name: Collection-Period-RRM-LTE, required: false, max: 1 }
+      - { name: Collection-Period-RRM-UMTS, required: false, max: 1 }
+      - { name: Positioning-Method, required: false, max: 1 }
+      - { name: Measurement-Quantity, required: false, max: 1 }
+      - { name: Event-Threshold-Event-1F, required: false, max: 1 }
+      - { name: Event-Threshold-Event-1I, required: false, max: 1 }
+      - { name: MDT-Allowed-PLMN-Id, required: false, max: 0 }
+
+  - name: Job-Type
+    code: 1623
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  # Chunk 5: Area-Scope (1624) through Positioning-Method (1659) -- 30
+  # entries, continuing in TS 29.272 V13.6.0 Table 7.3.1/1 order. An
+  # earlier guess put alphabetical "Q through S" boundaries on this chunk
+  # (naming Subscription-Data as its endpoint) but Subscription-Data (code
+  # 1400) was already transcribed in chunk 1, since the real table starts with
+  # it -- the alphabetical guess does not apply once the table's real code
+  # order is used, same as chunk 4. go-diameter's tgpp_s6a.xml corroborates only
+  # Relay-Node-Indicator (1633), MDT-User-Consent (1634), PUR-Flags (1635),
+  # Subscribed-VSRVCC (1636) and CLR-Flags (1638) in this range; every other
+  # entry in this chunk is spec-only.
+  - name: Area-Scope
+    code: 1624
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: false, vendor: true }
+    members:
+      - { name: Cell-Global-Identity, required: false, max: 0 }
+      - { name: E-UTRAN-Cell-Global-Identity, required: false, max: 0 }
+      - { name: Routing-Area-Identity, required: false, max: 0 }
+      - { name: Location-Area-Identity, required: false, max: 0 }
+      - { name: Tracking-Area-Identity, required: false, max: 0 }
+
+  - name: List-Of-Measurements
+    code: 1625
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }
+
+  - name: Reporting-Trigger
+    code: 1626
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }
+
+  - name: Report-Interval
+    code: 1627
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  - name: Report-Amount
+    code: 1628
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  - name: Event-Threshold-RSRP
+    code: 1629
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }
+
+  - name: Event-Threshold-RSRQ
+    code: 1630
+    vendor-id: 10415
+    # Table 7.3.1/1 prints this row's Must flag as lowercase "v", a spec
+    # formatting inconsistency; clause 7.3.144 and every neighbouring row
+    # confirm the vendor bit is intended, transcribed as V like the rest.
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }
+
+  - name: Logging-Interval
+    code: 1631
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  - name: Logging-Duration
+    code: 1632
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  - name: Relay-Node-Indicator
+    code: 1633
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  - name: MDT-User-Consent
+    code: 1634
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  - name: PUR-Flags
+    code: 1635
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }
+
+  - name: Subscribed-VSRVCC
+    code: 1636
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  - name: Equivalent-PLMN-List
+    code: 1637
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: false, vendor: true }
+    members:
+      - { name: Visited-PLMN-Id, required: true, max: 0 }
+
+  - name: CLR-Flags
+    code: 1638
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }
+
+  - name: UVR-Flags
+    code: 1639
+    vendor-id: 10415
+    type: Unsigned32
+    # Table 7.3.1/1 lists Must="M, V" for this row (unlike its neighbours,
+    # which are V-only/M-must-not) -- both bits mandatory.
+    flags: { mandatory: true, vendor: true }
+
+  - name: UVA-Flags
+    code: 1640
+    vendor-id: 10415
+    type: Unsigned32
+    # Same M, V exception as UVR-Flags above.
+    flags: { mandatory: true, vendor: true }
+
+  - name: VPLMN-CSG-Subscription-Data
+    code: 1641
+    vendor-id: 10415
+    type: Grouped
+    # Same M, V exception as UVR-Flags/UVA-Flags above.
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: CSG-Id, required: true, max: 1 }
+      - { name: Expiration-Date, required: false, max: 1 }
+
+  - name: Time-Zone
+    code: 1642
+    vendor-id: 10415
+    type: UTF8String
+    flags: { mandatory: false, vendor: true }
+
+  - name: A-MSISDN
+    code: 1643
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: false, vendor: true }
+
+  - name: MME-Number-for-MT-SMS
+    code: 1645
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: false, vendor: true }
+
+  - name: SMS-Register-Request
+    code: 1648
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  - name: Local-Time-Zone
+    code: 1649
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: false, vendor: true }
+    members:
+      - { name: Time-Zone, required: true, max: 1 }
+      - { name: Daylight-Saving-Time, required: true, max: 1 }
+
+  - name: Daylight-Saving-Time
+    code: 1650
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  - name: Subscription-Data-Flags
+    code: 1654
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }
+
+  - name: Measurement-Period-LTE
+    code: 1655
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  - name: Measurement-Period-UMTS
+    code: 1656
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  - name: Collection-Period-RRM-LTE
+    code: 1657
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  - name: Collection-Period-RRM-UMTS
+    code: 1658
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  - name: Positioning-Method
+    code: 1659
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: false, vendor: true }
+
+  # Chunk 6: Measurement-Quantity (1660) through SCEF-Realm (1684) -- 25
+  # entries, the last chunk in TS 29.272 V13.6.0 Table 7.3.1/1. An earlier
+  # guess named this chunk after "Supported-Services / TS-Code" (another
+  # alphabetical-guess artifact); TS-Code (1487) was already transcribed by
+  # chunk 3, and Table 7.3.1/1 has no "Supported-Services" row at
+  # all -- this chunk instead completes the table's real remaining rows.
+  # None of these 25 entries appear in go-diameter's tgpp_s6a.xml (its
+  # highest covered code is 1638, landed in chunk 5); every entry below is
+  # spec-only.
+  - name: Measurement-Quantity
+    code: 1660
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: false, vendor: true }
+
+  - name: Event-Threshold-Event-1F
+    code: 1661
+    vendor-id: 10415
+    type: Integer32
+    flags: { mandatory: false, vendor: true }
+
+  - name: Event-Threshold-Event-1I
+    code: 1662
+    vendor-id: 10415
+    type: Integer32
+    flags: { mandatory: false, vendor: true }
+
+  - name: Restoration-Priority
+    code: 1663
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }
+
+  - name: SGs-MME-Identity
+    code: 1664
+    vendor-id: 10415
+    type: UTF8String
+    flags: { mandatory: false, vendor: true }
+
+  - name: SIPTO-Local-Network-Permission
+    code: 1665
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }
+
+  - name: Coupled-Node-Diameter-ID
+    code: 1666
+    vendor-id: 10415
+    type: DiameterIdentity
+    flags: { mandatory: false, vendor: true }
+
+  - name: WLAN-offloadability
+    code: 1667
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: false, vendor: true }
+    members:
+      - { name: WLAN-offloadability-EUTRAN, required: false, max: 1 }
+      - { name: WLAN-offloadability-UTRAN, required: false, max: 1 }
+
+  - name: WLAN-offloadability-EUTRAN
+    code: 1668
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }
+
+  - name: WLAN-offloadability-UTRAN
+    code: 1669
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }
+
+  - name: Reset-ID
+    code: 1670
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: false, vendor: true }
+
+  - name: MDT-Allowed-PLMN-Id
+    code: 1671
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: false, vendor: true }
+
+  - name: Adjacent-PLMNs
+    code: 1672
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: false, vendor: true }
+    members:
+      - { name: Visited-PLMN-Id, required: true, max: 0 }
+
+  - name: Adjacent-Access-Restriction-Data
+    code: 1673
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: false, vendor: true }
+    members:
+      - { name: Visited-PLMN-Id, required: true, max: 1 }
+      - { name: Access-Restriction-Data, required: true, max: 1 }
+
+  - name: DL-Buffering-Suggested-Packet-Count
+    code: 1674
+    vendor-id: 10415
+    type: Integer32
+    flags: { mandatory: false, vendor: true }
+
+  - name: IMSI-Group-Id
+    code: 1675
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: false, vendor: true }
+    members:
+      - { name: Group-Service-Id, required: true, max: 1 }
+      - { name: Group-PLMN-Id, required: true, max: 1 }
+      - { name: Local-Group-Id, required: true, max: 1 }
+
+  - name: Group-Service-Id
+    code: 1676
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }
+
+  - name: Group-PLMN-Id
+    code: 1677
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: false, vendor: true }
+
+  - name: Local-Group-Id
+    code: 1678
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: false, vendor: true }
+
+  - name: AIR-Flags
+    code: 1679
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }
+
+  - name: UE-Usage-Type
+    code: 1680
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }
+
+  - name: Non-IP-PDN-Type-Indicator
+    code: 1681
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  - name: Non-IP-Data-Delivery-Mechanism
+    code: 1682
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }
+
+  - name: Additional-Context-ID
+    code: 1683
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }
+
+  - name: SCEF-Realm
+    code: 1684
+    vendor-id: 10415
+    type: DiameterIdentity
+    flags: { mandatory: false, vendor: true }

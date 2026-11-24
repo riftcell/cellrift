@@ -1,0 +1,30 @@
+{
+  "scenario": "SIP REGISTER under injected latency",
+  "status": "passed",
+  "duration_ms": 893,
+  "steps": [
+    {
+      "id": "register_impaired",
+      "protocol": "sip",
+      "status": "passed",
+      "duration_ms": 691,
+      "impair_delay_ms": 691,
+      "error": null
+    },
+    {
+      "id": "register_normal",
+      "protocol": "sip",
+      "status": "passed",
+      "duration_ms": 1,
+      "error": null
+    },
+    {
+      "id": "register_held_answer",
+      "protocol": "sip",
+      "status": "passed",
+      "duration_ms": 201,
+      "impair_delay_ms": 200,
+      "error": null
+    }
+  ]
+}

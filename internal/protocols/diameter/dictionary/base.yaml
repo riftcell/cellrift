@@ -1,0 +1,199 @@
+# RFC 6733 / RFC 4006 base Diameter AVP dictionary.
+# AVP code/name/type/flag data transcribed from the public RFC 6733 and RFC
+# 4006 specifications for product-design purposes. No text or structure
+# copied from any third-party dictionary implementation.
+application: Base
+spec: "RFC 6733 / RFC 4006"
+avps:
+  - name: Session-Id
+    code: 263
+    vendor-id: 0
+    type: UTF8String
+    flags: { mandatory: true, vendor: false }
+
+  - name: Origin-Host
+    code: 264
+    vendor-id: 0
+    type: DiameterIdentity
+    flags: { mandatory: true, vendor: false }
+
+  - name: Origin-Realm
+    code: 296
+    vendor-id: 0
+    type: DiameterIdentity
+    flags: { mandatory: true, vendor: false }
+
+  - name: Destination-Realm
+    code: 283
+    vendor-id: 0
+    type: DiameterIdentity
+    flags: { mandatory: true, vendor: false }
+
+  - name: Result-Code
+    code: 268
+    vendor-id: 0
+    type: Unsigned32
+    flags: { mandatory: true, vendor: false }
+
+  - name: User-Name
+    code: 1
+    vendor-id: 0
+    type: UTF8String
+    flags: { mandatory: true, vendor: false }
+
+  - name: Host-IP-Address
+    code: 257
+    vendor-id: 0
+    type: Address
+    flags: { mandatory: true, vendor: false }
+
+  - name: Auth-Application-Id
+    code: 258
+    vendor-id: 0
+    type: Unsigned32
+    flags: { mandatory: true, vendor: false }
+
+  - name: Acct-Application-Id
+    code: 259
+    vendor-id: 0
+    type: Unsigned32
+    flags: { mandatory: true, vendor: false }
+
+  - name: Vendor-Specific-Application-Id
+    code: 260
+    vendor-id: 0
+    type: Grouped
+    flags: { mandatory: true, vendor: false }
+    members:
+      - name: Vendor-Id
+        required: true
+        max: 0
+      - name: Auth-Application-Id
+        required: false
+        max: 1
+      - name: Acct-Application-Id
+        required: false
+        max: 1
+
+  - name: Supported-Vendor-Id
+    code: 265
+    vendor-id: 0
+    type: Unsigned32
+    flags: { mandatory: true, vendor: false }
+
+  - name: Vendor-Id
+    code: 266
+    vendor-id: 0
+    type: Unsigned32
+    flags: { mandatory: true, vendor: false }
+
+  - name: Firmware-Revision
+    code: 267
+    vendor-id: 0
+    type: Unsigned32
+    flags: { mandatory: false, vendor: false }
+
+  - name: Product-Name
+    code: 269
+    vendor-id: 0
+    type: UTF8String
+    flags: { mandatory: false, vendor: false }
+
+  - name: Origin-State-Id
+    code: 278
+    vendor-id: 0
+    type: Unsigned32
+    flags: { mandatory: true, vendor: false }
+
+  # RFC 6733 §7.6 — how an application reports a result in its OWN namespace
+  # rather than the base protocol's. 3GPP uses it heavily: a Cx UAA answers a
+  # successful User-Authorization-Request with Experimental-Result-Code
+  # DIAMETER_FIRST_REGISTRATION (2001) and NO base Result-Code at all,
+  # captured from a real Open5GS HSS in test/interop/EVIDENCE.md. Without
+  # these two entries an answer's only verdict decoded as an unnamed
+  # "AVP-297" that no scenario could assert on.
+  - name: Experimental-Result
+    code: 297
+    vendor-id: 0
+    type: Grouped
+    flags: { mandatory: true, vendor: false }
+    members:
+      - name: Vendor-Id
+        required: true
+        max: 0
+      - name: Experimental-Result-Code
+        required: true
+        max: 0
+
+  # RFC 6733 §7.7. The value is scoped by the Vendor-Id beside it, so 2001
+  # here is 3GPP's DIAMETER_FIRST_REGISTRATION, not the base protocol's
+  # DIAMETER_SUCCESS. The 2xxx CLASS still means success, per §7.1.
+  - name: Experimental-Result-Code
+    code: 298
+    vendor-id: 0
+    type: Unsigned32
+    flags: { mandatory: true, vendor: false }
+
+  # RFC 6733 §8.11 — indicates whether state is maintained for a given
+  # session. STATE_MAINTAINED (0), NO_STATE_MAINTAINED (1).
+  - name: Auth-Session-State
+    code: 277
+    vendor-id: 0
+    type: Enumerated
+    flags: { mandatory: true, vendor: false }
+
+  - name: CC-Request-Type
+    code: 416
+    vendor-id: 0
+    type: Enumerated
+    flags: { mandatory: true, vendor: false }
+
+  - name: CC-Request-Number
+    code: 415
+    vendor-id: 0
+    type: Unsigned32
+    flags: { mandatory: true, vendor: false }
+
+  - name: Requested-Service-Unit
+    code: 437
+    vendor-id: 0
+    type: Grouped
+    flags: { mandatory: true, vendor: false }
+
+  - name: Granted-Service-Unit
+    code: 431
+    vendor-id: 0
+    type: Grouped
+    flags: { mandatory: true, vendor: false }
+
+  - name: Rating-Group
+    code: 432
+    vendor-id: 0
+    type: Unsigned32
+    flags: { mandatory: true, vendor: false }
+
+  # RFC 4006 §8.42. Mandatory in the CCR, and it is service data rather than
+  # anything a client can derive: it names the service context the charging
+  # applies to (3GPP TS 32.299 uses forms like "32251@3gpp.org" for PS). A
+  # real SigScale OCS answers 5005 DIAMETER_MISSING_AVP without it.
+  - name: Service-Context-Id
+    code: 461
+    vendor-id: 0
+    type: UTF8String
+    flags: { mandatory: true, vendor: false }
+
+  # RFC 4006 §8.16. The group Rating-Group and Requested-Service-Unit belong
+  # inside — a real OCS answers 5001 DIAMETER_AVP_UNSUPPORTED for a
+  # Rating-Group sent at the top level of a CCR.
+  - name: Multiple-Services-Credit-Control
+    code: 456
+    vendor-id: 0
+    type: Grouped
+    flags: { mandatory: true, vendor: false }
+    members:
+      - name: Requested-Service-Unit
+        required: false
+        max: 1
+      - name: Rating-Group
+        required: false
+        max: 1

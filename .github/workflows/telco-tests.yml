@@ -1,0 +1,64 @@
+name: Telco Tests (Example)
+
+# An example of running Cellrift scenarios against a SIP target from CI.
+#
+# It has no automatic trigger on purpose: it dials whatever host you give it,
+# so it runs only when a human asks it to, from the Actions tab. That is also
+# why it shows no runs in this repository — there is nothing here for it to
+# dial. Cellrift's own CI is ci.yml (unit suite) and interop.yml (a real
+# Open5GS HSS in Docker).
+#
+# Copying this into your own repository means copying
+# .github/actions/run-scenarios/ with it, and replacing that action's build
+# step with a download of a released binary.
+#
+# The scenario list below is deliberately short. Many shipped scenarios must
+# NOT be aimed at a real target: seven carry a MOCK-ONLY marker (some send
+# deliberately malformed traffic), and two more (call_rejected.yaml and
+# register_conn_fault.yaml) fail by design to show what a fault looks like in
+# a report. The action refuses MOCK-ONLY files unless
+# you explicitly opt in. See scenarios/README.md, which says per file which
+# is which and what exit code each one promises.
+
+on:
+  workflow_dispatch:
+    inputs:
+      target-host:
+        description: "SIP target as host:port (e.g. 10.0.0.1:5060)"
+        required: true
+        default: "ims.example.com:5060"
+      scenarios:
+        description: "Scenario files to run (glob or space-separated)"
+        required: true
+        default: "scenarios/ims/basic_call.yaml scenarios/ims/register_impaired.yaml"
+
+jobs:
+  volte-tests:
+    name: IMS Scenario Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Cellrift scenarios
+        uses: ./.github/actions/run-scenarios
+        with:
+          scenarios: ${{ github.event.inputs.scenarios }}
+          target-host: ${{ github.event.inputs.target-host }}
+          format: junit
+          output: results.xml
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cellrift-results
+          path: results.xml
+
+      - name: Publish test report
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Cellrift Results
+          path: results.xml
+          reporter: java-junit

@@ -1,0 +1,115 @@
+stages:
+  - build
+  - test
+  - docker
+
+variables:
+  GO_VERSION: "1.26.6"   # must be >= the go directive in go.mod
+  IMAGE_TAG: cellrift:ci
+
+default:
+  image: golang:${GO_VERSION}-alpine
+  before_script:
+    - go version
+
+build:
+  stage: build
+  script:
+    - go build ./...
+  artifacts:
+    paths:
+      - cellrift
+    expire_in: 1 hour
+
+vet:
+  stage: test
+  script:
+    - go vet ./...
+
+test:
+  stage: test
+  script:
+    - go test -race -coverprofile=coverage.txt ./...
+    - |
+      COVERAGE=$(go tool cover -func=coverage.txt | grep '^total:' | awk '{print $3}' | tr -d '%')
+      echo "Total coverage: ${COVERAGE}%"
+      THRESHOLD=70
+      if [ "$(echo "$COVERAGE < $THRESHOLD" | bc -l)" -eq 1 ]; then
+        echo "FAIL: coverage ${COVERAGE}% is below ${THRESHOLD}%"
+        exit 1
+      fi
+  coverage: '/coverage: \d+\.\d+% of statements/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.txt
+    expire_in: 1 week
+
+staticcheck:
+  stage: test
+  script:
+    - go tool staticcheck ./...
+
+vulncheck:
+  stage: test
+  script:
+    - go tool govulncheck ./...
+
+sctp-smoke:
+  stage: test
+  # Answers one question: does this runner's kernel provide SCTP? GitLab uses a
+  # container executor, unlike GitHub Actions' bare VM where real SCTP is
+  # already known to work, so the answer is genuinely unknown and worth
+  # measuring rather than assuming.
+  #
+  # This job deliberately never fails on a negative answer. Cellrift already
+  # falls back to TCP when SCTP is unavailable, so a runner without sctp.ko is
+  # a supported configuration, not a defect. Turning this into a gate would
+  # redden the pipeline over a kernel nobody here controls.
+  allow_failure: true
+  script:
+    - |
+      set -o pipefail
+      go test -count=1 -v -run 'TestSCTPTransport_LoopbackSendReceive' \
+        ./internal/protocols/common/... 2>&1 | tee sctp-smoke.log
+    - |
+      if grep -q -- "--- SKIP: TestSCTPTransport_LoopbackSendReceive" sctp-smoke.log; then
+        echo "RESULT: this GitLab runner does NOT provide kernel SCTP — Cellrift falls back to TCP here."
+      elif grep -q -- "--- PASS: TestSCTPTransport_LoopbackSendReceive" sctp-smoke.log; then
+        echo "RESULT: this GitLab runner DOES provide kernel SCTP — a real loopback association completed."
+      else
+        echo "RESULT: inconclusive — the loopback test neither passed nor skipped; see sctp-smoke.log."
+        exit 1
+      fi
+  artifacts:
+    paths:
+      - sctp-smoke.log
+    expire_in: 1 week
+    when: always
+
+validate-scenarios:
+  stage: test
+  script:
+    - go run ./cmd/cellrift validate scenarios/**/*.yaml
+
+docker:
+  stage: docker
+  image: docker:24
+  services:
+    - docker:24-dind
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  script:
+    - docker build -t $IMAGE_TAG .
+    - docker run --rm $IMAGE_TAG --version
+    - docker run --rm $IMAGE_TAG validate /scenarios/ims/register_basic.yaml
+    - |
+      SIZE=$(docker image inspect $IMAGE_TAG --format='{{.Size}}')
+      SIZE_MB=$((SIZE / 1024 / 1024))
+      echo "Image size: ${SIZE_MB} MB"
+      if [ "$SIZE_MB" -gt 50 ]; then
+        echo "FAIL: image size ${SIZE_MB} MB exceeds 50 MB limit"
+        exit 1
+      fi
+  dependencies: []

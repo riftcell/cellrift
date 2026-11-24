@@ -1,0 +1,219 @@
+# Guard D mutation record: register_digest_auth.yaml
+
+Date: 2026-10-02
+Run against commit: 5bccb73 (scripts/check-scenario-labels.sh with Guard D enumerating register_digest_auth.yaml)
+
+A guard nobody has seen fail is indistinguishable from no guard. Each section below applies one
+mutation to a committed file, records the guard's verbatim stdout and exit code, then reverts with
+`git checkout`. Mutations 1 to 5 must be red and the control green. Mutation 5b is one more than
+run 12's table carried: a name left in a trailing comment on the SAME line as the AUTH_SCENARIO
+assignment was an evasion that once passed, and it is shown red here.
+
+A first attempt at mutation 5 used a sed expression whose delimiter clashed with the replacement
+text; sed rejected it, the file was unchanged, and the guard (correctly) stayed green. That attempt
+is not recorded as a result. The section below is the re-run with a working expression, and the file
+was inspected (the `grep -n -A1` line) to show the mutation was in place.
+
+## Mutation 1: the PROVEN AGAINST header is deleted from register_digest_auth.yaml
+
+```sh
+sed -i '/^# PROVEN AGAINST/d' scenarios/ims/register_digest_auth.yaml
+bash scripts/check-scenario-labels.sh; echo "exit=$?"
+```
+
+Expected: red, missing header
+
+```
+OK: scenarios/diameter/s6a_air_ulr.yaml keeps MOCK-ONLY
+OK: scenarios/diameter/cx_mar_sar.yaml keeps MOCK-ONLY
+OK: scenarios/ims/register_basic.yaml keeps MOCK-ONLY
+OK: scenarios/ims/register_deregister.yaml keeps MOCK-ONLY
+OK: scenarios/ims/register_assert_liveness.yaml keeps MOCK-ONLY
+OK: scenarios/ims/malformed_sip_headers.yaml declares malform:/action: raw and keeps MOCK-ONLY
+OK: scenarios/diameter/malformed_diameter.yaml declares malform:/action: raw and keeps MOCK-ONLY
+OK: scenarios/diameter/uar_uaa.yaml is proven against a real peer and carries no mock-only marker
+OK: scenarios/diameter/credit_control.yaml is proven against a real peer and carries no mock-only marker
+OK: scenarios/ims/register_impaired.yaml carries PROVEN AGAINST: Asterisk (non-IMS SIP), carries no mock-only marker, declares no adversarial step, and is run by the sip-interop harness
+OK: scenarios/ims/basic_call.yaml carries PROVEN AGAINST: Asterisk (non-IMS SIP), carries no mock-only marker, declares no adversarial step, and is run by the sip-interop harness
+OK: scenarios/ims/basic_call_tls.yaml carries PROVEN AGAINST: Asterisk (non-IMS SIP), carries no mock-only marker, declares no adversarial step, and is run by the sip-interop harness
+FAIL: scenarios/ims/register_digest_auth.yaml is missing the 'PROVEN AGAINST: Asterisk (non-IMS SIP)' header — the sip-interop job runs it against a real Asterisk container on every push, and an unenforced label drifts
+```
+exit=1
+tree after revert: []
+
+## Mutation 2: the marker appears only in the description (anchoring proof)
+
+```sh
+sed -i '/^# PROVEN AGAINST/d' scenarios/ims/register_digest_auth.yaml; sed -i 's/^  pair drives all three. Each step is a single step: the 401 and the re-send are$/&\n  PROVEN AGAINST: Asterisk (non-IMS SIP)./' scenarios/ims/register_digest_auth.yaml; grep -c 'PROVEN AGAINST' scenarios/ims/register_digest_auth.yaml
+bash scripts/check-scenario-labels.sh; echo "exit=$?"
+```
+
+Expected: red, missing header
+
+```
+OK: scenarios/diameter/s6a_air_ulr.yaml keeps MOCK-ONLY
+OK: scenarios/diameter/cx_mar_sar.yaml keeps MOCK-ONLY
+OK: scenarios/ims/register_basic.yaml keeps MOCK-ONLY
+OK: scenarios/ims/register_deregister.yaml keeps MOCK-ONLY
+OK: scenarios/ims/register_assert_liveness.yaml keeps MOCK-ONLY
+OK: scenarios/ims/malformed_sip_headers.yaml declares malform:/action: raw and keeps MOCK-ONLY
+OK: scenarios/diameter/malformed_diameter.yaml declares malform:/action: raw and keeps MOCK-ONLY
+OK: scenarios/diameter/uar_uaa.yaml is proven against a real peer and carries no mock-only marker
+OK: scenarios/diameter/credit_control.yaml is proven against a real peer and carries no mock-only marker
+OK: scenarios/ims/register_impaired.yaml carries PROVEN AGAINST: Asterisk (non-IMS SIP), carries no mock-only marker, declares no adversarial step, and is run by the sip-interop harness
+OK: scenarios/ims/basic_call.yaml carries PROVEN AGAINST: Asterisk (non-IMS SIP), carries no mock-only marker, declares no adversarial step, and is run by the sip-interop harness
+OK: scenarios/ims/basic_call_tls.yaml carries PROVEN AGAINST: Asterisk (non-IMS SIP), carries no mock-only marker, declares no adversarial step, and is run by the sip-interop harness
+FAIL: scenarios/ims/register_digest_auth.yaml is missing the 'PROVEN AGAINST: Asterisk (non-IMS SIP)' header — the sip-interop job runs it against a real Asterisk container on every push, and an unenforced label drifts
+```
+exit=1
+tree after revert: []
+
+## Mutation 3: an action: raw step is appended
+
+```sh
+printf '  - id: raw_probe\n    protocol: sip\n    action: raw\n' >> scenarios/ims/register_digest_auth.yaml
+bash scripts/check-scenario-labels.sh; echo "exit=$?"
+```
+
+Expected: red, an adversarial step and a missing mock-only header (two FAIL lines)
+
+```
+OK: scenarios/diameter/s6a_air_ulr.yaml keeps MOCK-ONLY
+OK: scenarios/diameter/cx_mar_sar.yaml keeps MOCK-ONLY
+OK: scenarios/ims/register_basic.yaml keeps MOCK-ONLY
+OK: scenarios/ims/register_deregister.yaml keeps MOCK-ONLY
+OK: scenarios/ims/register_assert_liveness.yaml keeps MOCK-ONLY
+FAIL: scenarios/ims/register_digest_auth.yaml declares malform: or action: raw but is missing the MOCK-ONLY SCENARIO header — malformed and cross-protocol traffic must never be pointed at a real peer
+OK: scenarios/ims/malformed_sip_headers.yaml declares malform:/action: raw and keeps MOCK-ONLY
+OK: scenarios/diameter/malformed_diameter.yaml declares malform:/action: raw and keeps MOCK-ONLY
+OK: scenarios/diameter/uar_uaa.yaml is proven against a real peer and carries no mock-only marker
+OK: scenarios/diameter/credit_control.yaml is proven against a real peer and carries no mock-only marker
+OK: scenarios/ims/register_impaired.yaml carries PROVEN AGAINST: Asterisk (non-IMS SIP), carries no mock-only marker, declares no adversarial step, and is run by the sip-interop harness
+OK: scenarios/ims/basic_call.yaml carries PROVEN AGAINST: Asterisk (non-IMS SIP), carries no mock-only marker, declares no adversarial step, and is run by the sip-interop harness
+OK: scenarios/ims/basic_call_tls.yaml carries PROVEN AGAINST: Asterisk (non-IMS SIP), carries no mock-only marker, declares no adversarial step, and is run by the sip-interop harness
+FAIL: scenarios/ims/register_digest_auth.yaml declares malform: or action: raw AND is aimed at a real container by the sip-interop job — malformed and cross-protocol traffic must never be pointed at a real, unconsented peer, and that requirement has no opt-out
+```
+exit=1
+tree after revert: []
+
+## Mutation 4: the same raw step, with a MOCK-ONLY SCENARIO header added to silence Guard B
+
+```sh
+printf '  - id: raw_probe\n    protocol: sip\n    action: raw\n' >> scenarios/ims/register_digest_auth.yaml; sed -i '1i # ⚠️ MOCK-ONLY SCENARIO — probe' scenarios/ims/register_digest_auth.yaml
+bash scripts/check-scenario-labels.sh; echo "exit=$?"
+```
+
+Expected: red, a file cannot carry both markers
+
+```
+OK: scenarios/diameter/s6a_air_ulr.yaml keeps MOCK-ONLY
+OK: scenarios/diameter/cx_mar_sar.yaml keeps MOCK-ONLY
+OK: scenarios/ims/register_basic.yaml keeps MOCK-ONLY
+OK: scenarios/ims/register_deregister.yaml keeps MOCK-ONLY
+OK: scenarios/ims/register_assert_liveness.yaml keeps MOCK-ONLY
+OK: scenarios/ims/register_digest_auth.yaml declares malform:/action: raw and keeps MOCK-ONLY
+OK: scenarios/ims/malformed_sip_headers.yaml declares malform:/action: raw and keeps MOCK-ONLY
+OK: scenarios/diameter/malformed_diameter.yaml declares malform:/action: raw and keeps MOCK-ONLY
+OK: scenarios/diameter/uar_uaa.yaml is proven against a real peer and carries no mock-only marker
+OK: scenarios/diameter/credit_control.yaml is proven against a real peer and carries no mock-only marker
+OK: scenarios/ims/register_impaired.yaml carries PROVEN AGAINST: Asterisk (non-IMS SIP), carries no mock-only marker, declares no adversarial step, and is run by the sip-interop harness
+OK: scenarios/ims/basic_call.yaml carries PROVEN AGAINST: Asterisk (non-IMS SIP), carries no mock-only marker, declares no adversarial step, and is run by the sip-interop harness
+OK: scenarios/ims/basic_call_tls.yaml carries PROVEN AGAINST: Asterisk (non-IMS SIP), carries no mock-only marker, declares no adversarial step, and is run by the sip-interop harness
+FAIL: scenarios/ims/register_digest_auth.yaml carries both 'MOCK-ONLY SCENARIO' and 'PROVEN AGAINST: Asterisk (non-IMS SIP)' — a file cannot be both, and the mock-only marker would satisfy Guard B while a real peer answers the file
+```
+exit=1
+tree after revert: []
+
+## Mutation 5: AUTH_SCENARIO points at another file; the name survives on a separate comment line
+
+```sh
+sed -i 's|^AUTH_SCENARIO=.*|AUTH_SCENARIO="${AUTH_SCENARIO:-scenarios/ims/basic_call.yaml}"\n# register_digest_auth.yaml|' test/interop/run-sip-scenario.sh; grep -n -A1 '^AUTH_SCENARIO=' test/interop/run-sip-scenario.sh
+bash scripts/check-scenario-labels.sh; echo "exit=$?"
+```
+
+Expected: red, marker and harness list diverge
+
+```
+OK: scenarios/diameter/s6a_air_ulr.yaml keeps MOCK-ONLY
+OK: scenarios/diameter/cx_mar_sar.yaml keeps MOCK-ONLY
+OK: scenarios/ims/register_basic.yaml keeps MOCK-ONLY
+OK: scenarios/ims/register_deregister.yaml keeps MOCK-ONLY
+OK: scenarios/ims/register_assert_liveness.yaml keeps MOCK-ONLY
+OK: scenarios/ims/malformed_sip_headers.yaml declares malform:/action: raw and keeps MOCK-ONLY
+OK: scenarios/diameter/malformed_diameter.yaml declares malform:/action: raw and keeps MOCK-ONLY
+OK: scenarios/diameter/uar_uaa.yaml is proven against a real peer and carries no mock-only marker
+OK: scenarios/diameter/credit_control.yaml is proven against a real peer and carries no mock-only marker
+OK: scenarios/ims/register_impaired.yaml carries PROVEN AGAINST: Asterisk (non-IMS SIP), carries no mock-only marker, declares no adversarial step, and is run by the sip-interop harness
+OK: scenarios/ims/basic_call.yaml carries PROVEN AGAINST: Asterisk (non-IMS SIP), carries no mock-only marker, declares no adversarial step, and is run by the sip-interop harness
+OK: scenarios/ims/basic_call_tls.yaml carries PROVEN AGAINST: Asterisk (non-IMS SIP), carries no mock-only marker, declares no adversarial step, and is run by the sip-interop harness
+FAIL: scenarios/ims/register_digest_auth.yaml claims 'PROVEN AGAINST: Asterisk (non-IMS SIP)' but register_digest_auth.yaml is not in UDP_SCENARIOS, TLS_SCENARIO or AUTH_SCENARIO in test/interop/run-sip-scenario.sh — the marker and the harness's scenario list are two copies of one fact, and this is the check that catches them diverging
+```
+exit=1
+tree after revert: []
+
+## Mutation 5b (extra, not one of the five): the name survives in a trailing comment on the SAME line as the assignment
+
+```sh
+sed -i 's|^AUTH_SCENARIO=.*|AUTH_SCENARIO="${AUTH_SCENARIO:-scenarios/ims/basic_call.yaml}" # register_digest_auth.yaml|' test/interop/run-sip-scenario.sh; grep -n '^AUTH_SCENARIO=' test/interop/run-sip-scenario.sh
+bash scripts/check-scenario-labels.sh; echo "exit=$?"
+```
+
+Expected: red (the evasion closed in the last scenario-work commit)
+
+```
+OK: scenarios/diameter/s6a_air_ulr.yaml keeps MOCK-ONLY
+OK: scenarios/diameter/cx_mar_sar.yaml keeps MOCK-ONLY
+OK: scenarios/ims/register_basic.yaml keeps MOCK-ONLY
+OK: scenarios/ims/register_deregister.yaml keeps MOCK-ONLY
+OK: scenarios/ims/register_assert_liveness.yaml keeps MOCK-ONLY
+OK: scenarios/ims/malformed_sip_headers.yaml declares malform:/action: raw and keeps MOCK-ONLY
+OK: scenarios/diameter/malformed_diameter.yaml declares malform:/action: raw and keeps MOCK-ONLY
+OK: scenarios/diameter/uar_uaa.yaml is proven against a real peer and carries no mock-only marker
+OK: scenarios/diameter/credit_control.yaml is proven against a real peer and carries no mock-only marker
+OK: scenarios/ims/register_impaired.yaml carries PROVEN AGAINST: Asterisk (non-IMS SIP), carries no mock-only marker, declares no adversarial step, and is run by the sip-interop harness
+OK: scenarios/ims/basic_call.yaml carries PROVEN AGAINST: Asterisk (non-IMS SIP), carries no mock-only marker, declares no adversarial step, and is run by the sip-interop harness
+OK: scenarios/ims/basic_call_tls.yaml carries PROVEN AGAINST: Asterisk (non-IMS SIP), carries no mock-only marker, declares no adversarial step, and is run by the sip-interop harness
+FAIL: scenarios/ims/register_digest_auth.yaml claims 'PROVEN AGAINST: Asterisk (non-IMS SIP)' but register_digest_auth.yaml is not in UDP_SCENARIOS, TLS_SCENARIO or AUTH_SCENARIO in test/interop/run-sip-scenario.sh — the marker and the harness's scenario list are two copies of one fact, and this is the check that catches them diverging
+```
+exit=1
+tree after revert: []
+
+## Control: clean tree
+
+```sh
+true
+bash scripts/check-scenario-labels.sh; echo "exit=$?"
+```
+
+Expected: green
+
+```
+OK: scenarios/diameter/s6a_air_ulr.yaml keeps MOCK-ONLY
+OK: scenarios/diameter/cx_mar_sar.yaml keeps MOCK-ONLY
+OK: scenarios/ims/register_basic.yaml keeps MOCK-ONLY
+OK: scenarios/ims/register_deregister.yaml keeps MOCK-ONLY
+OK: scenarios/ims/register_assert_liveness.yaml keeps MOCK-ONLY
+OK: scenarios/ims/malformed_sip_headers.yaml declares malform:/action: raw and keeps MOCK-ONLY
+OK: scenarios/diameter/malformed_diameter.yaml declares malform:/action: raw and keeps MOCK-ONLY
+OK: scenarios/diameter/uar_uaa.yaml is proven against a real peer and carries no mock-only marker
+OK: scenarios/diameter/credit_control.yaml is proven against a real peer and carries no mock-only marker
+OK: scenarios/ims/register_impaired.yaml carries PROVEN AGAINST: Asterisk (non-IMS SIP), carries no mock-only marker, declares no adversarial step, and is run by the sip-interop harness
+OK: scenarios/ims/basic_call.yaml carries PROVEN AGAINST: Asterisk (non-IMS SIP), carries no mock-only marker, declares no adversarial step, and is run by the sip-interop harness
+OK: scenarios/ims/basic_call_tls.yaml carries PROVEN AGAINST: Asterisk (non-IMS SIP), carries no mock-only marker, declares no adversarial step, and is run by the sip-interop harness
+OK: scenarios/ims/register_digest_auth.yaml carries PROVEN AGAINST: Asterisk (non-IMS SIP), carries no mock-only marker, declares no adversarial step, and is run by the sip-interop harness
+```
+exit=0
+tree after revert: []
+
+## Guards A, B and C against the earlier guard
+
+Guard output before this run's guard change (scripts/check-scenario-labels.sh as of 616332e, run
+against the same tree) compared with today's output minus the register_digest_auth line:
+
+```sh
+diff <(grep -v register_digest_auth after.txt) before.txt; echo "diff exit=$?"
+```
+
+diff exit=0 (no difference; before: 12 lines, after: 13, the extra one being register_digest_auth.yaml).
+No MOCK-ONLY SCENARIO marker was added, removed or edited by the digest work: `git diff 616332e HEAD -- scenarios`
+shows no added or removed line containing MOCK-ONLY.

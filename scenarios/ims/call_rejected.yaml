@@ -1,0 +1,66 @@
+# VoLTE Call Rejected — INVITE → 486 Busy Here.
+# SYNTHETIC DATA: all subscriber identifiers use the Ofcom test range
+# (447700900xxx) and fictional .lab.local / .cellrift.local domains.
+# Never use real subscriber MSISDNs or SIP identities in scenario files.
+#
+# Flow:
+#   1. SIP INVITE → 486 Busy Here (callee is busy)
+#   2. assert_state: the dialog ended in "terminated", never "established"
+#
+# THIS SCENARIO DELIBERATELY FAILS, and the failure is the point. A SIP step
+# passes only on a 2xx final response, so step 1 is failed by the protocol
+# gate with "SIP 486 Busy Here (expected 2xx)" in its error — even though
+# its own assertion `response.status_code == 486` holds. Assertions run on
+# a failed step and can add a failure; they cannot rescue one. `cellrift run`
+# therefore exits non-zero on this file. Step 2 passes: the 486 terminated
+# the dialog, which is what a rejected call should look like.
+#
+# What this file shows you is exactly how a rejected call reads in a report.
+# Declaring "this step is SUPPOSED to receive an error" — negative testing,
+# where the 486 would be the pass — is an open design item, not a key you
+# have missed; see README "How a step passes or fails".
+#
+# References:
+#   - RFC 3261 §13.3.1.3 (Non-2xx Responses to INVITE)
+#   - RFC 3455 (P-Access-Network-Info)
+
+name: VoLTE call rejected (486 Busy Here)
+version: "1.0"
+description: >
+  Sends a SIP INVITE to a busy callee and shows how a 486 Busy Here reads
+  in a report: the step fails on the non-2xx final (by design), its own
+  status_code assertion holds, and the dialog ends terminated.
+
+protocols:
+  sip:
+    transport: udp
+    local_port: 5060
+
+variables:
+  caller_msisdn: "447700900001"
+  callee_msisdn: "447700900099"
+  pcscf_host: "pcscf.lab.local"
+
+steps:
+  # Step 1: SIP INVITE to a busy callee.
+  - id: send_invite
+    protocol: sip
+    action: send
+    target: "{{ pcscf_host }}:5060"
+    message: INVITE
+    fields:
+      From: "sip:{{ caller_msisdn }}@ims.local"
+      To: "sip:{{ callee_msisdn }}@ims.local"
+      Contact: "<sip:{{ caller_msisdn }}@10.0.0.1:5060>"
+      P-Access-Network-Info: "3GPP-E-UTRAN-FDD; utran-cell-id-3gpp=001010001000001"
+    capture:
+      reject_code: response.status_code
+    assert:
+      - response.status_code == 486
+
+  # Step 2: Verify call never reached established state.
+  - id: verify_not_established
+    protocol: sip
+    action: assert_state
+    check: terminated
+    timeout_ms: 2000

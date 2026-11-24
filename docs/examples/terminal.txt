@@ -1,0 +1,11 @@
+Scenario: VoLTE basic registration
+  ✓ [diameter] send diameter_auth (23ms)
+  ✗ [sip] send sip_register (384ms)
+    Error: assertion failed: response.status_code == 200 (actual: 403)
+  ✓ [sip] assert_state verify_registration (5ms)
+2/3 steps passed in 412ms
+
+Scenario: Diameter UAR/UAA
+  ✓ [diameter] send send_uar (18ms)
+  ✓ [diameter] send uar_repeat (22ms)
+2/2 steps passed in 47ms

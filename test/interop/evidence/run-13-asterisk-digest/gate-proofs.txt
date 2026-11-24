@@ -1,0 +1,156 @@
+# Gate proofs: the two refusal sites added for digest authentication, fired
+
+Date: 2026-10-02
+Run against commit: 5bccb73 (test/interop/up-sip.sh, test/interop/run-sip-scenario.sh)
+Peer image: andrius/asterisk:22.10.1_debian-trixie@sha256:212326bd3f973a597be9e4747be5d6653802e4950159e95aa7d728e394de2012
+
+Run in the same session as the recorded run, and re-fired here rather than copied
+from any earlier record. Two new `refuse` call sites exist since run 12's 20:
+`wait_for_auths` in up-sip.sh and `gate_peer_challenged` in run-sip-scenario.sh.
+Counted with `grep -c 'refuse "' test/interop/up-sip.sh test/interop/run-sip-scenario.sh`
+(6 and 16, 22 in all). `gate_no_adversarial_scenario`'s two refusals gained an
+input ($AUTH_SCENARIO) and are not new sites. The other 20 sites were not
+re-fired for this run and their proofs remain those of run 12.
+
+A refusal line is never altered. The failure dump run-sip-scenario.sh prints after a
+refusal (run outputs and a container log tail) is elided and replaced by a line count.
+$SCRATCH below stands for a temporary directory on the machine that ran the probes.
+Ports used are 15060/15061 only. The probe configs were written next to pjsip.conf,
+used once, and deleted; `git status --short` was empty afterwards.
+
+## W1 up-sip.sh wait_for_auths, fired by an endpoint whose auth= is mistyped
+
+The endpoint 447700900202 is told `auth=auth-sha265`. All three auth objects still load and
+`pjsip show auths` lists them, so only the per-endpoint check can catch this.
+
+```sh
+sed 's/^auth=auth-sha256$/auth=auth-sha265/' test/interop/asterisk/pjsip.conf > test/interop/asterisk/pjsip-probe-typo.conf
+PJSIP_CONF=test/interop/asterisk/pjsip-probe-typo.conf bash test/interop/up-sip.sh; echo "exit=$?"
+```
+
+```diff
+129c129
+< auth=auth-sha256
+---
+> auth=auth-sha265
+```
+
+```
+SIP RIG REFUSED: 'pjsip show auths' does not list auth-md5, auth-sha256 and auth-both as objects, or endpoints 447700900201/202/203 do not report auth= auth-md5/auth-sha256/auth-both, so a REGISTER would be answered 200 with no challenge
+```
+exit=1
+
+## W2 up-sip.sh wait_for_auths, fired by the three auth objects renamed
+
+```sh
+sed -E 's/^\[auth-(md5|sha256|both)\]$/[auth-\1-TYPO]/' test/interop/asterisk/pjsip.conf > test/interop/asterisk/pjsip-probe-ren.conf
+PJSIP_CONF=test/interop/asterisk/pjsip-probe-ren.conf bash test/interop/up-sip.sh; echo "exit=$?"
+```
+
+```diff
+97c97
+< [auth-md5]
+---
+> [auth-md5-TYPO]
+105c105
+< [auth-sha256]
+---
+> [auth-sha256-TYPO]
+113c113
+< [auth-both]
+---
+> [auth-both-TYPO]
+```
+
+```
+SIP RIG REFUSED: 'pjsip show auths' does not list auth-md5, auth-sha256 and auth-both as objects, or endpoints 447700900201/202/203 do not report auth= auth-md5/auth-sha256/auth-both, so a REGISTER would be answered 200 with no challenge
+```
+exit=1
+
+## Control after W1 and W2: the unmodified rig boots and passes
+
+```sh
+bash test/interop/up-sip.sh; echo "exit=$?"
+bash test/interop/run-sip-scenario.sh; echo "exit=$?"
+```
+
+```
+sip interop harness ready: asterisk on udp/15060 and tls/15061, certs in /tmp/cellrift-sip-certs, digest auth wiring verified (auth-md5, auth-sha256, auth-both), sip logger on
+up exit=0
+OK: asterisk answered register_impaired, basic_call, register_digest_auth (udp/15060) and basic_call_tls with certificate verification ON (tls/15061); the peer's own log confirms it received each scenario's requests and that it challenged the authenticated one. Asterisk accepts several malformed Authorization headers, so this is a proof of the digest ARITHMETIC; the header grammar is pinned by unit tests.
+run exit=0
+```
+
+## G1 run-sip-scenario.sh gate_peer_challenged, fired by a rig that never challenges
+
+The rig is booted with every `auth=` line removed (EXPECT_ENDPOINTS=0, because the boot gate
+would otherwise refuse first). The scenario run is a copy of register_digest_auth.yaml with
+its `response.auth.*` assertions removed and its comment line about them dropped, so that
+Cellrift's own account of the run is green and only the peer's log can say no challenge was sent.
+
+```sh
+grep -v '^auth=' test/interop/asterisk/pjsip.conf > test/interop/asterisk/pjsip-probe-noauth.conf
+PJSIP_CONF=test/interop/asterisk/pjsip-probe-noauth.conf EXPECT_ENDPOINTS=0 bash test/interop/up-sip.sh; echo "exit=$?"
+grep -v 'response\.auth\.' scenarios/ims/register_digest_auth.yaml > $SCRATCH/stripped.yaml
+AUTH_SCENARIO=$SCRATCH/stripped.yaml OUT=$SCRATCH/p2out bash test/interop/run-sip-scenario.sh; echo "exit=$?"
+```
+
+```diff
+123d122
+< auth=auth-md5
+129d127
+< auth=auth-sha256
+135d132
+< auth=auth-both
+```
+
+Boot, last line:
+
+```
+sip interop harness ready: asterisk on udp/15060 and tls/15061, certs in /tmp/cellrift-sip-certs, endpoint and auth gates skipped (EXPECT_ENDPOINTS=0), sip logger on
+```
+
+Cellrift's own account of the stripped scenario (the pass the harness captured; graded green by Cellrift):
+
+```
+Scenario: SIP REGISTER with digest authentication
+  ✓ [sip] send register_md5 (0ms)
+  ✓ [sip] send register_sha256 (12ms)
+  ✓ [sip] send register_both_offered (0ms)
+3/3 steps passed in 13ms
+```
+
+The harness's per-pass records for it: receipts=3 (the peer received the REGISTERs), challenges=0 (the peer sent no 401).
+
+```
+SIP RIG REFUSED: the peer's own log shows it never sent a 401 during stripped (waited up to 5000 ms for it), so the rig required no authentication and this run exercised no digest. Check that pjsip.conf's auth= lines name loaded [auth] objects ('pjsip show auths').
+```
+exit=1
+(post-refusal failure dump after the refusal line: 223 lines, elided)
+
+The unmodified register_digest_auth.yaml against the same no-auth rig refuses with the same line (gate runs before grade):
+
+```sh
+bash test/interop/run-sip-scenario.sh; echo "exit=$?"
+```
+
+```
+SIP RIG REFUSED: the peer's own log shows it never sent a 401 during register_digest_auth (waited up to 5000 ms for it), so the rig required no authentication and this run exercised no digest. Check that pjsip.conf's auth= lines name loaded [auth] objects ('pjsip show auths').
+```
+exit=1
+
+## Control after G1: the unmodified rig boots and passes again
+
+```sh
+bash test/interop/up-sip.sh; echo "exit=$?"
+bash test/interop/run-sip-scenario.sh; echo "exit=$?"
+```
+
+```
+sip interop harness ready: asterisk on udp/15060 and tls/15061, certs in /tmp/cellrift-sip-certs, digest auth wiring verified (auth-md5, auth-sha256, auth-both), sip logger on
+up exit=0
+OK: asterisk answered register_impaired, basic_call, register_digest_auth (udp/15060) and basic_call_tls with certificate verification ON (tls/15061); the peer's own log confirms it received each scenario's requests and that it challenged the authenticated one. Asterisk accepts several malformed Authorization headers, so this is a proof of the digest ARITHMETIC; the header grammar is pinned by unit tests.
+run exit=0
+```
+
+register_digest_auth.challenges in that control run: 3

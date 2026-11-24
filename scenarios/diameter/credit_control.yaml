@@ -1,0 +1,118 @@
+# ✅ PROVEN AGAINST A REAL PEER — a SigScale OCS, in CI on every push.
+#
+# The `credit-control-interop` job (.github/workflows/interop.yml) boots
+# sigscale/ocs (Apache-2.0, Erlang), provisions the subscriber below with a
+# balance, and runs this exact file against it: both CCRs are answered
+# Result-Code 2001. The OCS serves the 3GPP Ro/Gy interfaces, which are
+# Credit-Control Application-Id 4 — the application Cellrift sends CCR under.
+#
+# An earlier version of this header said no such peer existed and that
+# proving this scenario was out of reach. That was wrong: it generalised one
+# Docker image (gradiant/open5gs, which ships no OCS and whose PCRF speaks Gx
+# 16777238) into a claim about the whole ecosystem. The peer was one
+# `docker pull` away.
+#
+# Getting to 2001 took three corrections the OCS named itself, in one run:
+#   5005 — no Auth-Application-Id. Credit-Control is a BARE application, so
+#          it carries AVP 258 where a vendor-scoped command carries
+#          Vendor-Specific-Application-Id. Now auto-injected.
+#   5005 — no Service-Context-Id. Service data a client cannot derive; the
+#          scenario declares it below.
+#   5001 — Rating-Group at the top level. It belongs inside
+#          Multiple-Services-Credit-Control (RFC 4006 §8.16).
+# Then 5030 DIAMETER_USER_UNKNOWN until the harness provisioned a service
+# identity and a balance. See test/interop/EVIDENCE.md, run 10.
+#
+# WHAT THIS DOES NOT PROVE. TCP only: the OCS is reached through a published
+# container port, which carries no SCTP. Two CCRs of one session, against one
+# implementation. Cellrift sends no Multiple-Services-Credit-Control
+# Requested-Service-Unit, so this exercises the request/answer shape rather
+# than quota management.
+#
+# Diameter Credit-Control — CCR-I / CCA-I exchange.
+# SYNTHETIC DATA: all subscriber identifiers use the Ofcom test range
+# (447700900xxx) and fictional .lab.local / .cellrift.local domains.
+# Never use real subscriber MSISDNs or SIP identities in scenario files.
+#
+# Flow:
+#   1. Send CCR-Initial to OCS → receive CCA with Result-Code 2001
+#
+# Uses RFC 4006 Credit-Control AVPs:
+#   - CC-Request-Type (416): INITIAL_REQUEST = 1
+#   - CC-Request-Number (415): sequence number
+#   - Requested-Service-Unit (437): data quota request
+#   - Rating-Group (432): service classification
+#
+# References:
+#   - RFC 4006 (Diameter Credit-Control Application)
+#   - RFC 6733 (Diameter Base Protocol)
+
+name: Diameter credit control (CCR-I / CCA-I)
+version: "1.0"
+description: >
+  Sends a Diameter Credit-Control-Request (Initial) to the OCS and
+  validates a successful CCA response. Uses RFC 4006 AVPs including
+  CC-Request-Type, CC-Request-Number, and Rating-Group.
+
+protocols:
+  diameter:
+    transport: sctp
+    origin_host: test.cellrift.local
+    origin_realm: cellrift.local
+
+variables:
+  subscriber_msisdn: "447700900001"
+  ocs_target: "ocs.lab.local:3868"
+  session_id: "cellrift;credit;001"
+  # TS 32.299's PS charging service context.
+  service_context: "32251@3gpp.org"
+
+steps:
+  # Step 1: Diameter CCR-Initial to request credit.
+  - id: send_ccr_initial
+    protocol: diameter
+    action: send
+    target: "{{ ocs_target }}"
+    message: CCR
+    fields:
+      Session-Id: "{{ session_id }}"
+      Origin-Host: "pgw.cellrift.local"
+      Origin-Realm: "cellrift.local"
+      User-Name: "{{ subscriber_msisdn }}"
+      CC-Request-Type: "1"
+      CC-Request-Number: "0"
+      # RFC 4006 §8.42 marks Service-Context-Id mandatory, and it is service
+      # data a client cannot derive: 32251@3gpp.org is TS 32.299's PS
+      # charging context. A real OCS answers 5005 without it.
+      Service-Context-Id: "{{ service_context }}"
+      # Rating-Group belongs INSIDE Multiple-Services-Credit-Control (RFC 4006
+      # §8.16), not at the top level of the CCR, where a real OCS answers
+      # 5001 DIAMETER_AVP_UNSUPPORTED for it.
+      Multiple-Services-Credit-Control:
+        Rating-Group: "100"
+    capture:
+      result_code: response.Result-Code
+      cc_type: response.CC-Request-Type
+    assert:
+      - result_code == 2001
+
+  # Step 2: Diameter CCR-Update to report usage mid-session.
+  - id: send_ccr_update
+    protocol: diameter
+    action: send
+    target: "{{ ocs_target }}"
+    message: CCR
+    fields:
+      Session-Id: "{{ session_id }}"
+      Origin-Host: "pgw.cellrift.local"
+      Origin-Realm: "cellrift.local"
+      User-Name: "{{ subscriber_msisdn }}"
+      CC-Request-Type: "2"
+      CC-Request-Number: "1"
+      Service-Context-Id: "{{ service_context }}"
+      Multiple-Services-Credit-Control:
+        Rating-Group: "100"
+    capture:
+      update_result: response.Result-Code
+    assert:
+      - update_result == 2001

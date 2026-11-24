@@ -1,0 +1,5 @@
+Scenario: SIP REGISTER under injected latency
+  ✓ [sip] send register_impaired (653ms) (impaired +652ms)
+  ✓ [sip] send register_normal (1ms)
+  ✓ [sip] send register_held_answer (200ms) (impaired +200ms)
+3/3 steps passed in 855ms

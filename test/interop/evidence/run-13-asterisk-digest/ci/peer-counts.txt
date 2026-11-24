@@ -1,0 +1,3 @@
+cumulative (both passes of every scenario, informational only):
+from UDP: 22
+from TLS: 4

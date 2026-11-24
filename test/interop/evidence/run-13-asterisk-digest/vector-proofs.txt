@@ -1,0 +1,138 @@
+# Vector proofs: the RFC digest vectors, and the order they ran in
+
+This file has three sections. Section 1 is the one that matters for ordering.
+
+Recorded output is unaltered, except that commit-subject scopes naming internal
+work items are shown as `(…)`.
+
+## Section 1: the vector run that happened BEFORE any peer was configured
+
+The output below is the verbatim `go test -v` capture the implementing session wrote
+at 2026-10-02 11:49:29 +0300 (file mtime), between the two commits that
+introduced `internal/protocols/sip/digest_test.go` and `digest.go`
+(f9a3614 at 11:48:55 and 2ea0edf at 11:50:13). It was produced by
+`go test ./internal/protocols/sip/ -run TestDigest -count=1 -v`. It was NOT
+regenerated for this record. The first commit that put an `auth=` line in the
+Asterisk configuration is d77f5af at 17:34:32, about six hours later (section 3).
+The subtest lines are the ones quoted in that plan's own summary.
+
+Covered: RFC 7616 section 3.9.1 MD5 and SHA-256, RFC 2617 section 3.5 MD5, and
+two REGISTER literals computed with `openssl dgst` outside production code.
+Not covered by any RFC vector: these are HTTP GET examples, so `Method=REGISTER`
+and `uri` = the SIP Request-URI are pinned only by those two openssl literals.
+UNKNOWN: RFC 7616 section 3.9.2's SHA-512-256 vector did not reproduce during
+research; SHA-512-256 is unsupported and section 3.9.2 is cited nowhere.
+
+```
+=== RUN   TestDigestResponse_PublishedVectors
+=== RUN   TestDigestResponse_PublishedVectors/RFC_7616_3.9.1_MD5
+=== RUN   TestDigestResponse_PublishedVectors/RFC_7616_3.9.1_SHA-256
+=== RUN   TestDigestResponse_PublishedVectors/RFC_7616_3.4.5_prose_casing_is_WRONG
+=== RUN   TestDigestResponse_PublishedVectors/RFC_2617_3.5_MD5
+=== RUN   TestDigestResponse_PublishedVectors/REGISTER_literal_MD5_(computed_with_openssl,_not_by_this_package)
+=== RUN   TestDigestResponse_PublishedVectors/REGISTER_literal_SHA-256_(computed_with_openssl,_not_by_this_package)
+=== RUN   TestDigestResponse_PublishedVectors/algorithm_token_case_is_not_significant:_md5
+=== RUN   TestDigestResponse_PublishedVectors/algorithm_token_case_is_not_significant:_Md5
+=== RUN   TestDigestResponse_PublishedVectors/algorithm_token_case_is_not_significant:_sha-256
+--- PASS: TestDigestResponse_PublishedVectors (0.00s)
+    --- PASS: TestDigestResponse_PublishedVectors/RFC_7616_3.9.1_MD5 (0.00s)
+    --- PASS: TestDigestResponse_PublishedVectors/RFC_7616_3.9.1_SHA-256 (0.00s)
+    --- PASS: TestDigestResponse_PublishedVectors/RFC_7616_3.4.5_prose_casing_is_WRONG (0.00s)
+    --- PASS: TestDigestResponse_PublishedVectors/RFC_2617_3.5_MD5 (0.00s)
+    --- PASS: TestDigestResponse_PublishedVectors/REGISTER_literal_MD5_(computed_with_openssl,_not_by_this_package) (0.00s)
+    --- PASS: TestDigestResponse_PublishedVectors/REGISTER_literal_SHA-256_(computed_with_openssl,_not_by_this_package) (0.00s)
+    --- PASS: TestDigestResponse_PublishedVectors/algorithm_token_case_is_not_significant:_md5 (0.00s)
+    --- PASS: TestDigestResponse_PublishedVectors/algorithm_token_case_is_not_significant:_Md5 (0.00s)
+    --- PASS: TestDigestResponse_PublishedVectors/algorithm_token_case_is_not_significant:_sha-256 (0.00s)
+=== RUN   TestDigestResponse_CasingTrapIsDistinct
+--- PASS: TestDigestResponse_CasingTrapIsDistinct (0.00s)
+=== RUN   TestDigestResponse_UnsupportedAlgorithm
+=== RUN   TestDigestResponse_UnsupportedAlgorithm/SHA-512-256
+=== RUN   TestDigestResponse_UnsupportedAlgorithm/MD5-sess
+=== RUN   TestDigestResponse_UnsupportedAlgorithm/SHA-256-sess
+=== RUN   TestDigestResponse_UnsupportedAlgorithm/AKAv1-MD5
+=== RUN   TestDigestResponse_UnsupportedAlgorithm/#00
+=== RUN   TestDigestResponse_UnsupportedAlgorithm/Basic
+--- PASS: TestDigestResponse_UnsupportedAlgorithm (0.00s)
+    --- PASS: TestDigestResponse_UnsupportedAlgorithm/SHA-512-256 (0.00s)
+    --- PASS: TestDigestResponse_UnsupportedAlgorithm/MD5-sess (0.00s)
+    --- PASS: TestDigestResponse_UnsupportedAlgorithm/SHA-256-sess (0.00s)
+    --- PASS: TestDigestResponse_UnsupportedAlgorithm/AKAv1-MD5 (0.00s)
+    --- PASS: TestDigestResponse_UnsupportedAlgorithm/#00 (0.00s)
+    --- PASS: TestDigestResponse_UnsupportedAlgorithm/Basic (0.00s)
+PASS
+ok  	github.com/riftcell/cellrift/internal/protocols/sip	0.003s
+```
+
+## Section 2: RE-RUN, after the rig existed (2026-10-02, this session)
+
+Run so that the vectors are seen to still pass at the commit the peer run used.
+This section does not evidence ordering; section 1 does.
+
+```sh
+go test ./internal/protocols/sip/ -run TestDigestResponse -count=1 -v
+```
+
+```
+=== RUN   TestDigestResponse_PublishedVectors
+=== RUN   TestDigestResponse_PublishedVectors/RFC_7616_3.9.1_MD5
+=== RUN   TestDigestResponse_PublishedVectors/RFC_7616_3.9.1_SHA-256
+=== RUN   TestDigestResponse_PublishedVectors/RFC_7616_3.4.5_prose_casing_is_WRONG
+=== RUN   TestDigestResponse_PublishedVectors/RFC_2617_3.5_MD5
+=== RUN   TestDigestResponse_PublishedVectors/REGISTER_literal_MD5_(computed_with_openssl,_not_by_this_package)
+=== RUN   TestDigestResponse_PublishedVectors/REGISTER_literal_SHA-256_(computed_with_openssl,_not_by_this_package)
+=== RUN   TestDigestResponse_PublishedVectors/algorithm_token_case_is_not_significant:_md5
+=== RUN   TestDigestResponse_PublishedVectors/algorithm_token_case_is_not_significant:_Md5
+=== RUN   TestDigestResponse_PublishedVectors/algorithm_token_case_is_not_significant:_sha-256
+--- PASS: TestDigestResponse_PublishedVectors (0.00s)
+    --- PASS: TestDigestResponse_PublishedVectors/RFC_7616_3.9.1_MD5 (0.00s)
+    --- PASS: TestDigestResponse_PublishedVectors/RFC_7616_3.9.1_SHA-256 (0.00s)
+    --- PASS: TestDigestResponse_PublishedVectors/RFC_7616_3.4.5_prose_casing_is_WRONG (0.00s)
+    --- PASS: TestDigestResponse_PublishedVectors/RFC_2617_3.5_MD5 (0.00s)
+    --- PASS: TestDigestResponse_PublishedVectors/REGISTER_literal_MD5_(computed_with_openssl,_not_by_this_package) (0.00s)
+    --- PASS: TestDigestResponse_PublishedVectors/REGISTER_literal_SHA-256_(computed_with_openssl,_not_by_this_package) (0.00s)
+    --- PASS: TestDigestResponse_PublishedVectors/algorithm_token_case_is_not_significant:_md5 (0.00s)
+    --- PASS: TestDigestResponse_PublishedVectors/algorithm_token_case_is_not_significant:_Md5 (0.00s)
+    --- PASS: TestDigestResponse_PublishedVectors/algorithm_token_case_is_not_significant:_sha-256 (0.00s)
+=== RUN   TestDigestResponse_CasingTrapIsDistinct
+--- PASS: TestDigestResponse_CasingTrapIsDistinct (0.00s)
+=== RUN   TestDigestResponse_UnsupportedAlgorithm
+=== RUN   TestDigestResponse_UnsupportedAlgorithm/SHA-512-256
+=== RUN   TestDigestResponse_UnsupportedAlgorithm/MD5-sess
+=== RUN   TestDigestResponse_UnsupportedAlgorithm/SHA-256-sess
+=== RUN   TestDigestResponse_UnsupportedAlgorithm/AKAv1-MD5
+=== RUN   TestDigestResponse_UnsupportedAlgorithm/#00
+=== RUN   TestDigestResponse_UnsupportedAlgorithm/Basic
+--- PASS: TestDigestResponse_UnsupportedAlgorithm (0.00s)
+    --- PASS: TestDigestResponse_UnsupportedAlgorithm/SHA-512-256 (0.00s)
+    --- PASS: TestDigestResponse_UnsupportedAlgorithm/MD5-sess (0.00s)
+    --- PASS: TestDigestResponse_UnsupportedAlgorithm/SHA-256-sess (0.00s)
+    --- PASS: TestDigestResponse_UnsupportedAlgorithm/AKAv1-MD5 (0.00s)
+    --- PASS: TestDigestResponse_UnsupportedAlgorithm/#00 (0.00s)
+    --- PASS: TestDigestResponse_UnsupportedAlgorithm/Basic (0.00s)
+PASS
+ok  	github.com/riftcell/cellrift/internal/protocols/sip	0.003s
+```
+
+## Section 3: ordering evidence from git history
+
+```sh
+git log --format='%h %cI %s' -- internal/protocols/sip/digest_test.go | tail -3
+git log --format='%h %cI %s' -- test/interop/asterisk/pjsip.conf | tail -5
+git log -S 'auth=auth-md5' --format='%h %cI %s' -- test/interop/asterisk/pjsip.conf
+```
+
+```
+2ea0edf 2026-10-02T11:50:13+03:00 feat(…): formatAuthorization pins the digest header grammar a permissive peer will not enforce
+f9a3614 2026-10-02T11:48:55+03:00 feat(…): computeDigestResponse proven against RFC 7616, RFC 2617 and REGISTER vectors
+---
+d77f5af 2026-10-02T17:34:32+03:00 feat(…): require digest on three Asterisk endpoints and gate readiness on the auth wiring
+f85c9fc 2026-10-01T00:26:53+03:00 feat(…): Asterisk pjsip/dialplan config on 15060/15061
+---
+d77f5af 2026-10-02T17:34:32+03:00 feat(…): require digest on three Asterisk endpoints and gate readiness on the auth wiring
+```
+
+The earliest commit touching `digest_test.go` is f9a3614 (2026-10-02T11:48:55+03:00).
+The only commit introducing an `auth=` line is d77f5af (2026-10-02T17:34:32+03:00),
+later. The required order (vectors before any peer) holds. Commit timestamps are the committer's local
+clock and are this record's own evidence for the order, not an independent timestamp.

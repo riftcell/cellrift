@@ -1,0 +1,130 @@
+# Network-impairment demonstration — SIP REGISTER under drop, duplicate,
+# and reordered delivery.
+#
+# Four steps, in the order a reader would want to meet them:
+#
+#   1. register_dropped     — the REGISTER is built in full but deliberately
+#      never sent. The step passes (the impairment did exactly what was
+#      declared) and the run continues. response.dropped records the fact.
+#   2. register_duplicated  — the same already-built REGISTER is written to
+#      the wire twice, exercising the peer's own retransmission handling
+#      (RFC 3261 §17).
+#   3. reordered_pair       — two REGISTERs are declared in one order and put
+#      on the wire in the other. send_order, not list position, decides what
+#      the peer sees first.
+#   4. register_normal      — an ordinary REGISTER with no impair: block,
+#      proving the run carried on normally after all three impairments.
+#
+# SIP-only by design: a Diameter step here would pull this file into
+# scripts/check-scenario-labels.sh's MOCK-ONLY guard list purely because of
+# an unrelated caveat, when this file's whole job is demonstrating three new
+# scenario keys. The Diameter halves of drop, duplicate and reorder are
+# already proven by internal/protocols/diameter's own package tests.
+#
+# SYNTHETIC DATA: subscriber identifier uses the Ofcom test range
+# (447700900xxx) and a fictional .lab.local domain. Never use a real
+# subscriber MSISDN or SIP identity in a scenario file.
+#
+# References:
+#   - RFC 3261 §10 (SIP Registration)
+#   - RFC 3261 §17 (Transactions — what a duplicated REGISTER exercises)
+
+name: "SIP REGISTER under drop, duplicate, and reorder"
+version: "1.0"
+description: >
+  Demonstrates the impair: drop/duplicate keys and the reorder container
+  action in one worked example. The first REGISTER is built but never
+  sent; the second is sent twice; the third and fourth REGISTERs are
+  declared in one order and written to the wire in the reverse order; the
+  fifth is an ordinary REGISTER proving the run carried on normally.
+
+protocols:
+  sip:
+    transport: udp
+
+variables:
+  subscriber_msisdn: "447700900125"
+  pcscf_host: "pcscf.lab.local"
+
+steps:
+  # Step 1: a REGISTER that is built but deliberately never sent.
+  - id: register_dropped
+    protocol: sip
+    action: send
+    target: "{{ pcscf_host }}:5060"
+    message: REGISTER
+    impair:
+      drop: true
+    fields:
+      From: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      To: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      Contact: "<sip:{{ subscriber_msisdn }}@10.0.0.1:5060>"
+      Call-ID: "loss-reorder-dropped@lab.local"
+    assert:
+      - response.dropped == true
+
+  # Step 2: the same REGISTER written to the wire twice, exercising the
+  # peer's own retransmission handling (RFC 3261 §17).
+  - id: register_duplicated
+    protocol: sip
+    action: send
+    target: "{{ pcscf_host }}:5060"
+    message: REGISTER
+    impair:
+      duplicate: true
+    fields:
+      From: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      To: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      Contact: "<sip:{{ subscriber_msisdn }}@10.0.0.1:5060>"
+      Call-ID: "loss-reorder-duplicated@lab.local"
+    assert:
+      - response.status_code == 200
+      - response.duplicated == true
+
+  # Step 3: two REGISTERs declared in one order and put on the wire in the
+  # other. send_order, not list position, decides what the peer sees first.
+  - id: reordered_pair
+    action: reorder
+    timeout_ms: 3000
+    steps:
+      - id: register_second_on_the_wire
+        protocol: sip
+        action: send
+        target: "{{ pcscf_host }}:5060"
+        message: REGISTER
+        send_order: 2
+        fields:
+          From: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+          To: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+          Contact: "<sip:{{ subscriber_msisdn }}@10.0.0.1:5060>"
+          Call-ID: "reorder-second-on-the-wire@lab.local"
+        assert:
+          - response.status_code == 200
+      - id: register_first_on_the_wire
+        protocol: sip
+        action: send
+        target: "{{ pcscf_host }}:5060"
+        message: REGISTER
+        send_order: 1
+        fields:
+          From: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+          To: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+          Contact: "<sip:{{ subscriber_msisdn }}@10.0.0.1:5060>"
+          Call-ID: "reorder-first-on-the-wire@lab.local"
+        assert:
+          - response.status_code == 200
+
+  # Step 4: an ordinary REGISTER with no impair: block, proving the run
+  # carried on normally after all three impairments.
+  - id: register_normal
+    protocol: sip
+    action: send
+    target: "{{ pcscf_host }}:5060"
+    message: REGISTER
+    fields:
+      From: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      To: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      Contact: "<sip:{{ subscriber_msisdn }}@10.0.0.1:5060>"
+      Call-ID: "loss-reorder-normal@lab.local"
+    assert:
+      - response.status_code == 200

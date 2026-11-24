@@ -1,0 +1,460 @@
+# 3GPP TS 29.229 (Cx/Dx interface) AVP dictionary.
+# AVP code/name/type/flag data transcribed from the public 3GPP TS 29.229
+# specification for product-design purposes (3GPP terms of use). No text or
+# structure copied from any third-party dictionary implementation.
+#
+# Source: 3GPP TS 29.229 V13.0.0 (2015-12), Table 6.3.1 ("Diameter Multimedia
+# Application AVPs") and the per-AVP clauses 6.3.1-6.3.67. Every entry's
+# code/name/type/flags below was transcribed directly from that table and its
+# clauses. Table 6.3.1's own header states: "The Vendor-ID header of all AVPs
+# defined in this specification shall be set to 3GPP (10415) if not otherwise
+# indicated" -- hence every entry here carries vendor-id 10415.
+#
+# This file covers codes 600-655 (54 entries; codes 627 and 636 are unused in
+# the table itself, not a transcription omission). Codes 656-658
+# (Allowed-WAF-WWSF-Identities, WebRTC-Authentication-Function-Name,
+# WebRTC-Web-Server-Function-Name) are real Rel-13 assignments in the same
+# table, deliberately left out because this file tracks the 600-655 range --
+# a floor, not a ceiling.
+application: Cx
+spec: "3GPP TS 29.229"
+avps:
+  # 3GPP TS 29.229 §6.3.1
+  - name: Visited-Network-Identifier
+    code: 600
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.2
+  - name: Public-Identity
+    code: 601
+    vendor-id: 10415
+    type: UTF8String
+    flags: { mandatory: true, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.3
+  - name: Server-Name
+    code: 602
+    vendor-id: 10415
+    type: UTF8String
+    flags: { mandatory: true, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.4
+  - name: Server-Capabilities
+    code: 603
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: Mandatory-Capability, required: false, max: 0 }
+      - { name: Optional-Capability, required: false, max: 0 }
+      - { name: Server-Name, required: false, max: 0 }
+
+  # 3GPP TS 29.229 §6.3.5
+  - name: Mandatory-Capability
+    code: 604
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: true, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.6
+  - name: Optional-Capability
+    code: 605
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: true, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.7
+  - name: User-Data
+    code: 606
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.8
+  - name: SIP-Number-Auth-Items
+    code: 607
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: true, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.9
+  - name: SIP-Authentication-Scheme
+    code: 608
+    vendor-id: 10415
+    type: UTF8String
+    flags: { mandatory: true, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.10
+  - name: SIP-Authenticate
+    code: 609
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.11
+  - name: SIP-Authorization
+    code: 610
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.12
+  - name: SIP-Authentication-Context
+    code: 611
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.13
+  - name: SIP-Auth-Data-Item
+    code: 612
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: SIP-Item-Number, required: false, max: 1 }
+      - { name: SIP-Authentication-Scheme, required: false, max: 1 }
+      - { name: SIP-Authenticate, required: false, max: 1 }
+      - { name: SIP-Authorization, required: false, max: 1 }
+      - { name: SIP-Authentication-Context, required: false, max: 1 }
+      - { name: Confidentiality-Key, required: false, max: 1 }
+      - { name: Integrity-Key, required: false, max: 1 }
+      - { name: SIP-Digest-Authenticate, required: false, max: 1 } # code 635, defined later in this same file
+      # Framed-IP-Address, Framed-IPv6-Prefix and Framed-Interface-Id omitted:
+      # reused from IETF RFC 4005, outside this file's TS 29.229 600-655 range.
+      # Line-Identifier omitted: ETSI vendor 13019 (not 3GPP 10415), code 500,
+      # outside this file's range.
+
+  # 3GPP TS 29.229 §6.3.14 (this entry was previously misnamed and mistyped
+  # as a Grouped AVP with no basis in the spec table; corrected here)
+  - name: SIP-Item-Number
+    code: 613
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: true, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.15
+  - name: Server-Assignment-Type
+    code: 614
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: true, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.16
+  - name: Deregistration-Reason
+    code: 615
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: Reason-Code, required: true, max: 1 }
+      - { name: Reason-Info, required: false, max: 1 }
+
+  # 3GPP TS 29.229 §6.3.17
+  - name: Reason-Code
+    code: 616
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: true, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.18
+  - name: Reason-Info
+    code: 617
+    vendor-id: 10415
+    type: UTF8String
+    flags: { mandatory: true, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.19
+  - name: Charging-Information
+    code: 618
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: true, vendor: true }
+    members:
+      - { name: Primary-Event-Charging-Function-Name, required: false, max: 1 }
+      - { name: Secondary-Event-Charging-Function-Name, required: false, max: 1 }
+      - { name: Primary-Charging-Collection-Function-Name, required: false, max: 1 }
+      - { name: Secondary-Charging-Collection-Function-Name, required: false, max: 1 }
+
+  # 3GPP TS 29.229 §6.3.20
+  - name: Primary-Event-Charging-Function-Name
+    code: 619
+    vendor-id: 10415
+    type: DiameterURI
+    flags: { mandatory: true, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.21
+  - name: Secondary-Event-Charging-Function-Name
+    code: 620
+    vendor-id: 10415
+    type: DiameterURI
+    flags: { mandatory: true, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.22
+  - name: Primary-Charging-Collection-Function-Name
+    code: 621
+    vendor-id: 10415
+    type: DiameterURI
+    flags: { mandatory: true, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.23
+  - name: Secondary-Charging-Collection-Function-Name
+    code: 622
+    vendor-id: 10415
+    type: DiameterURI
+    flags: { mandatory: true, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.24
+  - name: User-Authorization-Type
+    code: 623
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: true, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.26 (§6.3.25 is Void in the spec)
+  - name: User-Data-Already-Available
+    code: 624
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: true, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.27
+  - name: Confidentiality-Key
+    code: 625
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.28
+  - name: Integrity-Key
+    code: 626
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: true, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.29 (code 627 is unused in Table 6.3.1 itself)
+  - name: Supported-Features
+    code: 628
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: false, vendor: true }
+    members:
+      - { name: Vendor-Id, required: true, max: 1 } # base.yaml, RFC 6733 code 266
+      - { name: Feature-List-ID, required: true, max: 1 } # this file, code 629
+      - { name: Feature-List, required: true, max: 1 } # this file, code 630
+
+  # 3GPP TS 29.229 §6.3.30
+  - name: Feature-List-ID
+    code: 629
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.31
+  - name: Feature-List
+    code: 630
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.32
+  - name: Supported-Applications
+    code: 631
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: false, vendor: true }
+    members:
+      - { name: Auth-Application-Id, required: false, max: 0 } # base.yaml
+      - { name: Acct-Application-Id, required: false, max: 0 } # base.yaml
+      - { name: Vendor-Specific-Application-Id, required: false, max: 0 } # base.yaml
+
+  # 3GPP TS 29.229 §6.3.33
+  - name: Associated-Identities
+    code: 632
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: false, vendor: true }
+    members:
+      - { name: User-Name, required: false, max: 0 } # base.yaml
+
+  # 3GPP TS 29.229 §6.3.34
+  - name: Originating-Request
+    code: 633
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: true, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.35
+  - name: Wildcarded-Public-Identity
+    code: 634
+    vendor-id: 10415
+    type: UTF8String
+    flags: { mandatory: false, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.36
+  - name: SIP-Digest-Authenticate
+    code: 635
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: false, vendor: true }
+    # members omitted entirely: Digest-Realm (104), Digest-Algorithm (111),
+    # Digest-QoP (110) and Digest-HA1 (121) are all reused from IETF RFC 4740,
+    # non-3GPP vendor, outside this file's TS 29.229 600-655 range.
+
+  # 3GPP TS 29.229 §6.3.44 (code 636 is unused in Table 6.3.1 itself)
+  - name: UAR-Flags
+    code: 637
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.45
+  - name: Loose-Route-Indication
+    code: 638
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.46
+  - name: SCSCF-Restoration-Info
+    code: 639
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: false, vendor: true }
+    members:
+      - { name: User-Name, required: true, max: 1 } # base.yaml
+      - { name: Restoration-Info, required: true, max: 0 } # this file, code 649
+      - { name: SIP-Authentication-Scheme, required: false, max: 1 } # this file, code 608
+
+  # 3GPP TS 29.229 §6.3.47
+  - name: Path
+    code: 640
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: false, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.48
+  - name: Contact
+    code: 641
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: false, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.49
+  - name: Subscription-Info
+    code: 642
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: false, vendor: true }
+    members:
+      - { name: Call-ID-SIP-Header, required: true, max: 1 }
+      - { name: From-SIP-Header, required: true, max: 1 }
+      - { name: To-SIP-Header, required: true, max: 1 }
+      - { name: Record-Route, required: true, max: 1 }
+      - { name: Contact, required: true, max: 1 }
+
+  # 3GPP TS 29.229 §6.3.49.1
+  - name: Call-ID-SIP-Header
+    code: 643
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: false, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.49.2
+  - name: From-SIP-Header
+    code: 644
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: false, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.49.3
+  - name: To-SIP-Header
+    code: 645
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: false, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.49.4
+  - name: Record-Route
+    code: 646
+    vendor-id: 10415
+    type: OctetString
+    flags: { mandatory: false, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.50
+  - name: Associated-Registered-Identities
+    code: 647
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: false, vendor: true }
+    members:
+      - { name: User-Name, required: false, max: 0 } # base.yaml
+
+  # 3GPP TS 29.229 §6.3.51
+  - name: Multiple-Registration-Indication
+    code: 648
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.52
+  - name: Restoration-Info
+    code: 649
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: false, vendor: true }
+    members:
+      - { name: Path, required: true, max: 1 }
+      - { name: Contact, required: true, max: 1 }
+      - { name: Initial-CSeq-Sequence-Number, required: false, max: 1 }
+      - { name: Call-ID-SIP-Header, required: false, max: 1 }
+      - { name: Subscription-Info, required: false, max: 1 }
+
+  # 3GPP TS 29.229 §6.3.56
+  - name: Session-Priority
+    code: 650
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.57
+  - name: Identity-with-Emergency-Registration
+    code: 651
+    vendor-id: 10415
+    type: Grouped
+    flags: { mandatory: false, vendor: true }
+    members:
+      - { name: User-Name, required: true, max: 1 } # base.yaml
+      - { name: Public-Identity, required: true, max: 1 } # this file, code 601
+
+  # 3GPP TS 29.229 §6.3.58 — "Priviledged-Sender-Indication" is the spec's own
+  # spelling (not "Privileged"); transcribed verbatim so dictionary name
+  # lookup matches the specification, not a corrected spelling.
+  - name: Priviledged-Sender-Indication
+    code: 652
+    vendor-id: 10415
+    type: Enumerated
+    flags: { mandatory: false, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.59
+  - name: LIA-Flags
+    code: 653
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.62
+  - name: Initial-CSeq-Sequence-Number
+    code: 654
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }
+
+  # 3GPP TS 29.229 §6.3.63
+  - name: SAR-Flags
+    code: 655
+    vendor-id: 10415
+    type: Unsigned32
+    flags: { mandatory: false, vendor: true }

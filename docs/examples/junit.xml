@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="VoLTE basic registration" tests="3" failures="1" time="0.412">
+    <testcase name="diameter_auth" classname="diameter.send" time="0.023"></testcase>
+    <testcase name="sip_register" classname="sip.send" time="0.384">
+      <failure message="assertion failed: response.status_code == 200 (actual: 403)">assertion failed: response.status_code == 200 (actual: 403)</failure>
+    </testcase>
+    <testcase name="verify_registration" classname="sip.assert_state" time="0.005"></testcase>
+  </testsuite>
+  <testsuite name="Diameter UAR/UAA" tests="2" failures="0" time="0.047">
+    <testcase name="send_uar" classname="diameter.send" time="0.018"></testcase>
+    <testcase name="uar_repeat" classname="diameter.send" time="0.022"></testcase>
+  </testsuite>
+</testsuites>

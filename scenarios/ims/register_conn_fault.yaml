@@ -1,0 +1,145 @@
+# Network-impairment demonstration — SIP REGISTER under three connection-level
+# faults: truncated frame, TCP reset, and abrupt close.
+#
+# Four steps, in the order a reader would want to meet them:
+#
+#   1. register_truncated   — only the first few bytes of an already-encoded
+#      REGISTER are written to the wire; too few to frame or parse. Its
+#      assert reads the outcome back as "truncated" (see the step below).
+#   2. register_reset       — the REGISTER is sent in full, then the
+#      connection is hard-reset (SO_LINGER 0, then close — a genuine TCP RST)
+#      before any response is read. Its assert reads the outcome back as
+#      "reset".
+#   3. register_abrupt_close — the REGISTER is sent in full, then the
+#      connection is closed with no clean shutdown (a plain FIN, not an RST)
+#      before any response is read. Its assert reads the outcome back as
+#      "closed".
+#   4. register_normal      — an ordinary REGISTER with no impair: block,
+#      proving the run recovers and connects cleanly after all three faults.
+#
+# THIS SCENARIO DELIBERATELY FAILS. Steps 1-3 each destroy their own
+# connection before a response can ever be read, so each one has no answer
+# to report and Status: failed is the correct, documented outcome for all
+# three — not a bug. `cellrift run` therefore exits non-zero on this file.
+# Only step 4 (register_normal) passes. A reader running this file and
+# seeing a non-zero exit code and three FAILED steps is seeing exactly what
+# this scenario is for.
+#
+# transport: tcp IS LOAD-BEARING. `reset` and `abrupt_close` act on a
+# connection; SIP's default UDP transport has none, and declaring either over
+# UDP fails the step at send time with a message saying so. `truncate` alone
+# has no such requirement — a short datagram needs no connection lifecycle at
+# all, since the datagram boundary is itself the frame boundary — but this
+# file declares `transport: tcp` scenario-wide so all three faults can be
+# demonstrated together against one mock.
+#
+# SIP SCOPE: this client dials a fresh connection on every send (see
+# internal/protocols/sip/adapter.go's own SCOPE DISCLOSURE comment on
+# applyConnFault), so these faults are scoped to each step's own
+# dial-send-receive cycle rather than being mid-session faults on a
+# long-lived connection the way Diameter's are. Do not read step 2's reset,
+# for instance, as testing a reset of a connection any earlier step held
+# open — there is no such connection to hold.
+#
+# SIP-only by design: a Diameter step here would pull this file into
+# scripts/check-scenario-labels.sh's MOCK-ONLY guard list purely because of
+# an unrelated caveat, when this file's whole job is demonstrating three
+# connection-fault scenario keys. This file also deliberately omits the
+# fourth connection-fault key (sctp_abort), since it is SIP and `cellrift
+# validate` correctly rejects that key on any step that will not run over
+# SCTP — its end-to-end proof lives entirely in
+# internal/protocols/diameter's own package tests
+# (TestAdapter_SCTPAbort_AttributedToTheFaultingStep and its siblings).
+#
+# SYNTHETIC DATA: subscriber identifier uses the Ofcom test range
+# (447700900xxx) and a fictional .lab.local domain. Never use a real
+# subscriber MSISDN or SIP identity in a scenario file.
+#
+# References:
+#   - RFC 3261 §10 (SIP Registration)
+#   - RFC 3261 §18 (Transport — the connection semantics reset/abrupt_close
+#     and truncate each act on)
+
+name: "SIP REGISTER under truncate, reset, and abrupt close"
+version: "1.0"
+description: >
+  Demonstrates the impair: truncate/reset/abrupt_close connection-fault keys
+  in one worked example. The first REGISTER is sent as a truncated,
+  unparseable fragment; the second is sent in full and then the connection
+  is reset; the third is sent in full and then abruptly closed; the fourth
+  is an ordinary REGISTER proving the run recovers. Steps 1-3 fail by
+  design — see the header above.
+
+protocols:
+  sip:
+    transport: tcp
+
+variables:
+  subscriber_msisdn: "447700900126"
+  pcscf_host: "pcscf.lab.local"
+
+steps:
+  # Step 1: only the first few bytes of the REGISTER reach the wire.
+  - id: register_truncated
+    protocol: sip
+    action: send
+    target: "{{ pcscf_host }}:5060"
+    message: REGISTER
+    impair:
+      truncate: true
+    fields:
+      From: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      To: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      Contact: "<sip:{{ subscriber_msisdn }}@10.0.0.1:5060>"
+      Call-ID: "conn-fault-truncated@lab.local"
+    assert:
+      - response.connection_state == "truncated"
+
+  # Step 2: the REGISTER is sent in full, then the connection is hard-reset
+  # (SO_LINGER 0, then close — a genuine TCP RST) before any response is read.
+  - id: register_reset
+    protocol: sip
+    action: send
+    target: "{{ pcscf_host }}:5060"
+    message: REGISTER
+    impair:
+      reset: true
+    fields:
+      From: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      To: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      Contact: "<sip:{{ subscriber_msisdn }}@10.0.0.1:5060>"
+      Call-ID: "conn-fault-reset@lab.local"
+    assert:
+      - response.connection_state == "reset"
+
+  # Step 3: the REGISTER is sent in full, then the connection is closed with
+  # no clean shutdown (a plain FIN, not an RST) before any response is read.
+  - id: register_abrupt_close
+    protocol: sip
+    action: send
+    target: "{{ pcscf_host }}:5060"
+    message: REGISTER
+    impair:
+      abrupt_close: true
+    fields:
+      From: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      To: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      Contact: "<sip:{{ subscriber_msisdn }}@10.0.0.1:5060>"
+      Call-ID: "conn-fault-abrupt-close@lab.local"
+    assert:
+      - response.connection_state == "closed"
+
+  # Step 4: an ordinary REGISTER with no impair: block, proving the run
+  # recovers and connects cleanly after all three connection faults.
+  - id: register_normal
+    protocol: sip
+    action: send
+    target: "{{ pcscf_host }}:5060"
+    message: REGISTER
+    fields:
+      From: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      To: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      Contact: "<sip:{{ subscriber_msisdn }}@10.0.0.1:5060>"
+      Call-ID: "conn-fault-normal@lab.local"
+    assert:
+      - response.status_code == 200

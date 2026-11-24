@@ -1,0 +1,51 @@
+[
+  {
+    "scenario": "VoLTE basic registration",
+    "status": "failed",
+    "duration_ms": 412,
+    "steps": [
+      {
+        "id": "diameter_auth",
+        "protocol": "diameter",
+        "status": "passed",
+        "duration_ms": 23,
+        "error": null
+      },
+      {
+        "id": "sip_register",
+        "protocol": "sip",
+        "status": "failed",
+        "duration_ms": 384,
+        "error": "assertion failed: response.status_code == 200 (actual: 403)"
+      },
+      {
+        "id": "verify_registration",
+        "protocol": "sip",
+        "status": "passed",
+        "duration_ms": 5,
+        "error": null
+      }
+    ]
+  },
+  {
+    "scenario": "Diameter UAR/UAA",
+    "status": "passed",
+    "duration_ms": 47,
+    "steps": [
+      {
+        "id": "send_uar",
+        "protocol": "diameter",
+        "status": "passed",
+        "duration_ms": 18,
+        "error": null
+      },
+      {
+        "id": "uar_repeat",
+        "protocol": "diameter",
+        "status": "passed",
+        "duration_ms": 22,
+        "error": null
+      }
+    ]
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "scenario": "liveness experiment e3",
+  "status": "failed",
+  "duration_ms": 5001,
+  "steps": [
+    {
+      "id": "uar_plain",
+      "protocol": "diameter",
+      "status": "failed",
+      "duration_ms": 5001,
+      "error": "assertion failed: response.timed_out == false (actual: true)"
+    }
+  ]
+}

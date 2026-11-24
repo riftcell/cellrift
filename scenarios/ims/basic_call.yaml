@@ -1,0 +1,81 @@
+# VoLTE Basic Call — INVITE → 180 Ringing → 200 OK → BYE.
+# PROVEN AGAINST: Asterisk (non-IMS SIP) — the sip-interop CI job runs this
+# file against a digest-pinned Asterisk 22.10.1 container on every push.
+# Asterisk answers 100 Trying, 180 Ringing and 200 OK with SDP, and accepts
+# the BYE. Two caveats, both load-bearing:
+#   - The 180 is NOT asserted here. Provisional responses are consumed
+#     silently, so this file asserts only the final status code and the
+#     captured codec; the 180 is evidenced solely by the peer's own log.
+#   - Cellrift sends no ACK for the 200 (RFC 3261 §13.2.1 requires one), so
+#     the dialog is never confirmed from the peer's side. This run passes
+#     because the BYE arrives before the peer gives up retransmitting.
+# SYNTHETIC DATA: all subscriber identifiers use the Ofcom test range
+# (447700900xxx) and fictional .lab.local / .cellrift.local domains.
+# Never use real subscriber MSISDNs or SIP identities in scenario files.
+#
+# Flow:
+#   1. SIP INVITE → 180 Ringing → 200 OK (call setup)
+#   2. SIP BYE → 200 OK (call teardown)
+#
+# Includes 3GPP IMS extension headers per RFC 3455:
+#   - P-Access-Network-Info (access technology)
+#   - P-Charging-Vector (charging correlation)
+#
+# References:
+#   - RFC 3261 §13 (SIP Dialog / INVITE)
+#   - RFC 3455 (3GPP Private Header Extensions)
+
+name: VoLTE basic call
+version: "1.0"
+description: >
+  End-to-end VoLTE call: INVITE with 180 Ringing, 200 OK answer,
+  and BYE teardown. Validates call setup and teardown with 3GPP
+  P-Access-Network-Info and P-Charging-Vector headers.
+
+protocols:
+  sip:
+    transport: udp
+    local_port: 5060
+
+variables:
+  caller_msisdn: "447700900001"
+  callee_msisdn: "447700900002"
+  pcscf_host: "pcscf.lab.local"
+  icid: "cellrift-call-001"
+
+steps:
+  # Step 1: SIP INVITE with SDP offer to callee via P-CSCF.
+  - id: send_invite
+    protocol: sip
+    action: send
+    target: "{{ pcscf_host }}:5060"
+    message: INVITE
+    fields:
+      From: "sip:{{ caller_msisdn }}@ims.local"
+      To: "sip:{{ callee_msisdn }}@ims.local"
+      Contact: "<sip:{{ caller_msisdn }}@10.0.0.1:5060>"
+      P-Access-Network-Info: "3GPP-E-UTRAN-FDD; utran-cell-id-3gpp=001010001000001"
+      P-Charging-Vector: "icid-value={{ icid }}"
+    body:
+      content_type: application/sdp
+      template: basic_audio_offer
+    capture:
+      call_status: response.status_code
+      remote_rtp_port: response.body.sdp.port
+      negotiated_codec: response.body.sdp.codec
+    assert:
+      - response.status_code == 200
+      - negotiated_codec != null
+
+  # Step 2: SIP BYE to terminate the call.
+  - id: send_bye
+    protocol: sip
+    action: send
+    target: "{{ pcscf_host }}:5060"
+    message: BYE
+    fields:
+      From: "sip:{{ caller_msisdn }}@ims.local"
+      To: "sip:{{ callee_msisdn }}@ims.local"
+      P-Charging-Vector: "icid-value={{ icid }}"
+    assert:
+      - response.status_code == 200

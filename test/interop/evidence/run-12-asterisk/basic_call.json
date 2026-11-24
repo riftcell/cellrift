@@ -1,0 +1,21 @@
+{
+  "scenario": "VoLTE basic call",
+  "status": "passed",
+  "duration_ms": 1004,
+  "steps": [
+    {
+      "id": "send_invite",
+      "protocol": "sip",
+      "status": "passed",
+      "duration_ms": 1003,
+      "error": null
+    },
+    {
+      "id": "send_bye",
+      "protocol": "sip",
+      "status": "passed",
+      "duration_ms": 0,
+      "error": null
+    }
+  ]
+}

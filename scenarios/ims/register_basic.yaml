@@ -1,0 +1,96 @@
+# ⚠️ MOCK-ONLY SCENARIO — will fail against a real Diameter peer.
+# Two unrelated reasons, not one:
+#   (1) SIP half: the real-peer HSS used for interop testing
+#       (gradiant/open5gs:2.8.0, see test/interop/EVIDENCE.md and
+#       .github/workflows/interop.yml) has no P-CSCF/SIP endpoint, so the
+#       sip_register step below stays unproven against a real peer pending
+#       a real P-CSCF (such as Kamailio).
+#   (2) Diameter half: this scenario's own diameter_auth step is a UAR. The
+#       that exchange is now PROVEN against the real peer — the interop job
+#       drives scenarios/diameter/uar_uaa.yaml against a genuine Open5GS HSS
+#       on every push. It is not what keeps this file mock-only. (The RFC 6733 §5.3 CER/CEA handshake
+#       underneath it does interoperate with that peer.)
+# Neither half of this scenario is proven against a real peer today.
+#
+# VoLTE Basic Registration — Diameter UAR/UAA + SIP REGISTER.
+# SYNTHETIC DATA: all subscriber identifiers use the Ofcom test range
+# (447700900xxx) and fictional .lab.local / .cellrift.local domains.
+# Never use real subscriber MSISDNs or SIP identities in scenario files.
+#
+# Flow:
+#   1. Diameter UAR → HSS returns UAA with server_name
+#   2. SIP REGISTER → P-CSCF returns 200 OK
+#   3. Assert registration state is established
+#
+# Includes 3GPP IMS extension headers:
+#   - P-Visited-Network-ID (RFC 3455)
+#   - Path (RFC 3327)
+#
+# References:
+#   - RFC 3261 §10 (SIP Registration)
+#   - RFC 6733 (Diameter Base Protocol)
+#   - RFC 3455 (Private Header Extensions for 3GPP)
+#   - RFC 3327 (SIP Path Header Extension)
+
+name: VoLTE basic registration
+version: "1.0"
+description: >
+  Validates that a subscriber can register on the IMS core.
+  Covers Diameter UAR/UAA exchange followed by SIP REGISTER
+  with P-Visited-Network-ID and Path headers.
+
+protocols:
+  sip:
+    transport: udp
+    local_port: 5060
+  diameter:
+    transport: sctp
+    origin_host: test.cellrift.local
+    origin_realm: cellrift.local
+
+variables:
+  subscriber_msisdn: "447700900001"
+  pcscf_target: "pcscf.lab.local:5060"
+  hss_target: "hss.lab.local:3868"
+  visited_network: "mnc001.mcc001.3gppnetwork.org"
+
+steps:
+  # Step 1: Authorize subscriber at HSS via Diameter UAR.
+  - id: diameter_auth
+    protocol: diameter
+    action: send
+    target: "{{ hss_target }}"
+    message: UAR
+    fields:
+      User-Name: "{{ subscriber_msisdn }}"
+      Public-Identity: "sip:{{ subscriber_msisdn }}@ims.{{ visited_network }}"
+    capture:
+      result_code: response.Experimental-Result-Code
+      server_name: response.Server-Name
+    assert:
+      - result_code == 2001
+      - server_name != null
+
+  # Step 2: SIP REGISTER with 3GPP IMS headers.
+  - id: sip_register
+    protocol: sip
+    action: send
+    target: "{{ pcscf_target }}"
+    message: REGISTER
+    fields:
+      From: "sip:{{ subscriber_msisdn }}@ims.{{ visited_network }}"
+      To: "sip:{{ subscriber_msisdn }}@ims.{{ visited_network }}"
+      Contact: "<sip:{{ subscriber_msisdn }}@10.0.0.1:5060>"
+      P-Visited-Network-ID: "{{ visited_network }}"
+      Path: "<sip:orig@pcscf.{{ visited_network }};lr>"
+      Authorization: "{{ diameter_auth.server_name }}"
+    assert:
+      - response.status_code == 200
+      - response.header.Contact != null
+
+  # Step 3: Verify registration state.
+  - id: verify_registration
+    protocol: sip
+    action: assert_state
+    check: registered
+    timeout_ms: 5000

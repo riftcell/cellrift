@@ -1,0 +1,14 @@
+{
+  "scenario": "liveness experiment e3",
+  "status": "failed",
+  "duration_ms": 1,
+  "steps": [
+    {
+      "id": "uar_plain",
+      "protocol": "diameter",
+      "status": "failed",
+      "duration_ms": 1,
+      "error": "Result-Code 5005 (expected 2001)"
+    }
+  ]
+}

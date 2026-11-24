@@ -1,0 +1,10 @@
+/opt/open5gs/lib/x86_64-linux-gnu/libfdcore.so.1.5.0
+/opt/open5gs/lib/x86_64-linux-gnu/libfdcore.so.7
+/opt/open5gs/lib/x86_64-linux-gnu/libfdcore.so
+count[Unable to forward answer to deleted / closed peer] in /opt/open5gs/lib/x86_64-linux-gnu/libfdcore.so.1.5.0: 1
+count[Invalid state to receive a new connection attempt] in /opt/open5gs/lib/x86_64-linux-gnu/libfdcore.so.1.5.0: 1
+count[STATE_OPEN] in /opt/open5gs/lib/x86_64-linux-gnu/libfdcore.so.1.5.0: 8
+Open5GS v2.8.0
+
+PRETTY_NAME="Debian GNU/Linux 11 (bullseye)"
+NAME="Debian GNU/Linux"

@@ -1,0 +1,14 @@
+2026-10-02T17:20:20.2422770Z Complete job name: SIP Real-Peer Interop (Asterisk)
+2026-10-02T17:20:20.6237445Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +8a7a6f412f7e095bfb633db4cd551edf73753e11:refs/remotes/origin/probe/peer-02-deliberate-red
+2026-10-02T17:20:21.1612288Z Switched to a new branch 'probe/peer-02-deliberate-red'
+2026-10-02T17:20:21.1631960Z 8a7a6f412f7e095bfb633db4cd551edf73753e11
+2026-10-02T17:20:35.2797321Z ##[group]Run bash test/interop/up-sip.sh
+2026-10-02T17:20:35.3067980Z shell: /usr/bin/bash -e {0}
+2026-10-02T17:20:44.2347415Z Status: Downloaded newer image for andrius/asterisk@sha256:212326bd3f973a597be9e4747be5d6653802e4950159e95aa7d728e394de2012
+2026-10-02T17:21:20.6844393Z SIP RIG REFUSED: 'pjsip show auths' does not list auth-md5, auth-sha256 and auth-both as objects, or endpoints 447700900201/202/203 do not report auth= auth-md5/auth-sha256/auth-both, so a REGISTER would be answered 200 with no challenge
+2026-10-02T17:21:20.6867732Z ##[error]Process completed with exit code 1.
+2026-10-02T17:21:20.6926623Z ##[group]Run docker logs -t asterisk > asterisk.log 2>&1 || true
+2026-10-02T17:21:20.9372134Z With the provided path, there will be 1 file uploaded
+2026-10-02T17:21:21.9696472Z Artifact download URL: https://github.com/riftcell/cellrift/actions/runs/37040015812/artifacts/11242750412
+2026-10-02T17:21:21.9832585Z ##[group]Run bash test/interop/down-sip.sh
+2026-10-02T17:21:22.4025778Z Cleaning up orphan processes

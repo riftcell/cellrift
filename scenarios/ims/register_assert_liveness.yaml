@@ -1,0 +1,145 @@
+# ⚠️ MOCK-ONLY SCENARIO — will fail against a real peer.
+# The diameter_liveness step below is a UAR, and that exchange is now proven
+# against a real Open5GS HSS by the interop job — see
+# scenarios/diameter/uar_uaa.yaml. The Diameter half is no longer why this
+# file is mock-only. The SIP half is: that interop HSS has no P-CSCF/SIP
+# endpoint, so no real peer has ever answered the REGISTER steps below.
+#
+# Assert liveness after a fault — the documented pattern for answering "is the
+# peer still there?" with a client-only tool.
+#
+# Four steps, in pairs:
+#
+#   1. diameter_reset    — a UAR is sent in full, then the connection is
+#      hard-reset (SO_LINGER 0, then close — a genuine TCP RST) before any
+#      answer is read. Asserts response.connection_state == "reset".
+#   2. diameter_liveness — an ORDINARY UAR with no impair: block. It passes
+#      only if the peer accepted a brand-new association and completed a fresh
+#      RFC 6733 §5.3 CER/CEA handshake, because the reset above tore the old
+#      one down and cleared the client's peer state. No special syntax is
+#      needed for that: an ordinary send step re-handshakes on its own.
+#   3. sip_reset         — a REGISTER is sent in full, then the connection is
+#      hard-reset before any response is read. Asserts
+#      response.connection_state == "reset".
+#   4. sip_liveness      — an ordinary REGISTER with no impair: block.
+#
+# WHAT THIS PATTERN ACTUALLY PROVES, AND WHAT IT DOES NOT. A passing
+# liveness step proves the peer is answering on the wire: it accepted a new
+# connection, completed the protocol's own handshake where one exists, and
+# produced a well-formed answer. It does NOT prove the peer's host is
+# healthy, that no process crashed and restarted underneath, or that any
+# internal subsystem survived. Cellrift is a client with no privileged access
+# to the system under test — wire-visible liveness is the honest answer it
+# can give, and it is deliberately the only claim this scenario makes.
+#
+# The two protocols prove different things and the difference is on purpose.
+# Diameter holds one connection across steps, so step 2 genuinely exercises
+# reconnection. SIP dials a fresh connection on every send, so step 4 proves
+# only that a fresh dial succeeds — there was never a long-lived connection
+# for step 3's reset to have damaged.
+#
+# THIS SCENARIO DELIBERATELY FAILS. Steps 1 and 3 destroy their own
+# connection before an answer can be read, so each has no answer to report
+# and Status: failed is the correct, documented outcome for both — not a bug.
+# `cellrift run` therefore exits non-zero on this file. Steps 2 and 4 pass.
+#
+# transport: tcp IS LOAD-BEARING on both protocols. `reset` acts on a
+# connection; SIP's default UDP transport has none, and Diameter's default
+# attempts SCTP, whose fault vocabulary is the separate `sctp_abort` key.
+#
+# SYNTHETIC DATA: subscriber identifiers use the Ofcom test range
+# (447700900xxx) and fictional .lab.local / .cellrift.local domains. Never
+# use a real subscriber MSISDN or SIP identity in a scenario file.
+#
+# References:
+#   - RFC 3261 §10 (SIP Registration)
+#   - RFC 6733 §5.3 (Diameter capabilities exchange — what step 2 re-runs)
+#   - RFC 3261 §18 / RFC 6733 §2.1 (the transport semantics `reset` acts on)
+
+name: "Assert liveness after a connection fault"
+version: "1.0"
+description: >
+  Demonstrates the assert-liveness-after-fault pattern on both protocols. A
+  Diameter UAR and a SIP REGISTER are each sent in full and then have their
+  connection hard-reset; each is followed by an ordinary, unimpaired step
+  that passes only if the peer is still answering on the wire. Steps 1 and 3
+  fail by design — see the header above.
+
+protocols:
+  sip:
+    transport: tcp
+  diameter:
+    transport: tcp
+    origin_host: test.cellrift.local
+    origin_realm: cellrift.local
+
+variables:
+  subscriber_msisdn: "447700900131"
+  hss_target: "hss.lab.local:3868"
+  pcscf_target: "pcscf.lab.local:5060"
+
+steps:
+  # Step 1: the UAR reaches the peer in full, then the association is reset.
+  - id: diameter_reset
+    protocol: diameter
+    action: send
+    target: "{{ hss_target }}"
+    message: UAR
+    impair:
+      reset: true
+    fields:
+      User-Name: "{{ subscriber_msisdn }}"
+      Public-Identity: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+    assert:
+      - response.connection_state == "reset"
+      - response.timed_out == false
+
+  # Step 2: liveness. An ordinary UAR — it passes only if the peer accepted a
+  # new association and completed a fresh CER/CEA after step 1 tore the old
+  # one down.
+  - id: diameter_liveness
+    protocol: diameter
+    action: send
+    target: "{{ hss_target }}"
+    message: UAR
+    fields:
+      User-Name: "{{ subscriber_msisdn }}"
+      Public-Identity: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+    capture:
+      liveness_result: response.Experimental-Result-Code
+    assert:
+      - liveness_result == 2001
+      - response.timed_out == false
+
+  # Step 3: the REGISTER reaches the peer in full, then the connection is reset.
+  - id: sip_reset
+    protocol: sip
+    action: send
+    target: "{{ pcscf_target }}"
+    message: REGISTER
+    impair:
+      reset: true
+    fields:
+      From: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      To: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      Contact: "<sip:{{ subscriber_msisdn }}@10.0.0.1:5060>"
+      Call-ID: "assert-liveness-reset@lab.local"
+    assert:
+      - response.connection_state == "reset"
+      - response.timed_out == false
+
+  # Step 4: liveness. An ordinary REGISTER — for SIP this proves a fresh dial
+  # succeeds, not that a damaged connection recovered; there was never one.
+  - id: sip_liveness
+    protocol: sip
+    action: send
+    target: "{{ pcscf_target }}"
+    message: REGISTER
+    fields:
+      From: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      To: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      Contact: "<sip:{{ subscriber_msisdn }}@10.0.0.1:5060>"
+      Call-ID: "assert-liveness-normal@lab.local"
+    assert:
+      - response.status_code == 200
+      - response.timed_out == false

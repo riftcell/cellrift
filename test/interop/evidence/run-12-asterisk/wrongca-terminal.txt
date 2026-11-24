@@ -1,0 +1,7 @@
+Scenario: VoLTE basic call (SIP/TLS)
+  ✗ [sip] send send_invite (3ms)
+    Error: send failed: dial tls "127.0.0.1:15061": tls: failed to verify certificate: x509: certificate signed by unknown authority; assertion "response.status_code == 200": "response.status_code" is not present in the response or captured state (use "== null" to assert absence)
+  ✗ [sip] send send_bye (0ms)
+    Error: send failed: dial tls "127.0.0.1:15061": tls: failed to verify certificate: x509: certificate signed by unknown authority; assertion "response.status_code == 200": "response.status_code" is not present in the response or captured state (use "== null" to assert absence)
+0/2 steps passed in 4ms
+exit status 1

@@ -1,0 +1,13 @@
+experiment: e3
+container-start: 2026-09-30T14:12:15.598196541Z
+run.start: 1790777537.214853954  run.end: 1790777563.282144831
+run.exit: 1
+warnings: none
+rows per src,dst,cmd.code,request (from chunks.csv):
+      2 127.0.0.1 > 127.0.0.1 cmd=257 req=False
+      2 127.0.0.1 > 127.0.0.1 cmd=257 req=True
+      4 127.0.0.1 > 127.0.0.1 cmd=280 req=False
+      4 127.0.0.1 > 127.0.0.1 cmd=280 req=True
+      1 127.0.0.1 > 127.0.0.1 cmd=300 req=False
+      2 127.0.0.1 > 127.0.0.1 cmd=300 req=True
+hsslog-grep lines: 10

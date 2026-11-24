@@ -1,0 +1,109 @@
+# SELF-TEST SCENARIO — run it with `cellrift selftest`, not `cellrift run`.
+#
+# This is the one scenario in the library that passes out of the box, and it
+# passes for a reason that makes it useless as evidence about any real
+# network: `cellrift selftest` starts Cellrift's own in-process mock peers —
+# a SIP UAS on a loopback UDP port and a strict RFC 6733 Diameter HSS on a
+# loopback TCP port — and points this file at them. A green result proves the
+# binary, its encoders, the SIP dialog tracker, the Diameter CER/CEA
+# handshake and every reporter work on this machine. It proves nothing about
+# a P-CSCF or an HSS you own. (MOCK-ONLY by construction: the two targets
+# below are placeholders that selftest overrides with the mocks' real ports.)
+#
+# It is also the shortest complete tour of the scenario vocabulary: two
+# protocols, capture:, a captured value flowing into a later step's fields:,
+# every assertion operator the README's "How a step passes or fails" section
+# describes, and a SIP assert_state. Copy it as a starting point.
+#
+# SYNTHETIC DATA: the subscriber is the Ofcom test-range number the mock HSS
+# is provisioned with (447700900001) and the domains are fictional.
+
+name: Cellrift self-test
+version: "1.0"
+description: >
+  Loopback proof that this cellrift binary works: a Diameter UAR/UAA and a
+  Credit-Control exchange against the built-in mock HSS, then a SIP REGISTER,
+  OPTIONS and registration-state check against the built-in mock UAS.
+
+protocols:
+  diameter:
+    transport: tcp                 # the mock HSS listens on TCP; SCTP is not exercised here
+    origin_host: selftest.cellrift.local
+    origin_realm: cellrift.local
+  sip:
+    transport: udp
+
+variables:
+  subscriber_msisdn: "447700900001"
+  hss_target: "hss.selftest.invalid:3868"       # overridden by selftest
+  pcscf_target: "pcscf.selftest.invalid:5060"   # overridden by selftest
+  home_domain: "ims.mnc001.mcc001.3gppnetwork.org"
+
+steps:
+  # 1. Diameter UAR. The first Diameter step also performs the RFC 6733 §5.3
+  #    CER/CEA handshake; the mock is strict, so a UAR sent before a
+  #    successful CEA would be discarded and this step would time out.
+  - id: diameter_uar
+    protocol: diameter
+    action: send
+    target: "{{ hss_target }}"
+    message: UAR
+    fields:
+      User-Name: "{{ subscriber_msisdn }}"
+      Public-Identity: "sip:{{ subscriber_msisdn }}@{{ home_domain }}"
+    capture:
+      server_name: response.Server-Name
+    assert:
+      - response.Experimental-Result-Code == 2001
+      - server_name != null
+
+  # 2. Credit-Control on the same association — no second handshake.
+  - id: diameter_ccr
+    protocol: diameter
+    action: send
+    target: "{{ hss_target }}"
+    message: CCR
+    fields:
+      Session-Id: "selftest.cellrift.local;1;1"
+      User-Name: "{{ subscriber_msisdn }}"
+      CC-Request-Type: "1"       # INITIAL_REQUEST
+      CC-Request-Number: "0"
+      Rating-Group: "100"
+    assert:
+      - response.Result-Code == 2001
+
+  # 3. SIP REGISTER, carrying the S-CSCF name the UAA returned.
+  - id: sip_register
+    protocol: sip
+    action: send
+    target: "{{ pcscf_target }}"
+    message: REGISTER
+    fields:
+      From: "sip:{{ subscriber_msisdn }}@{{ home_domain }}"
+      To: "sip:{{ subscriber_msisdn }}@{{ home_domain }}"
+      Contact: "<sip:{{ subscriber_msisdn }}@127.0.0.1:5060>"
+      Route: "<{{ diameter_uar.server_name }};lr>"
+    assert:
+      - response.status_code == 200
+      - response.header.Contact != null
+      - response.timed_out == false
+
+  # 4. An OPTIONS ping, with the quoted form of a right-hand side.
+  - id: sip_options
+    protocol: sip
+    action: send
+    target: "{{ pcscf_target }}"
+    message: OPTIONS
+    fields:
+      From: "sip:{{ subscriber_msisdn }}@{{ home_domain }}"
+      To: "sip:{{ home_domain }}"
+    assert:
+      - response.status_code == 200
+      - response.reason_phrase == "OK"
+
+  # 5. The dialog tracker saw the 200 to REGISTER.
+  - id: verify_registered
+    protocol: sip
+    action: assert_state
+    check: registered
+    timeout_ms: 2000

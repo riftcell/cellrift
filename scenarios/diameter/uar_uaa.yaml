@@ -1,0 +1,103 @@
+# ✅ PROVEN AGAINST A REAL PEER — a gradiant/open5gs HSS, in CI on every push.
+#
+# The `diameter-interop` CI job (.github/workflows/interop.yml) runs this
+# exact file against a genuine gradiant/open5gs:2.8.0 HSS on every push: the
+# RFC 6733 §5.3 CER/CEA reaches STATE_OPEN and both UARs below are answered
+# Experimental-Result-Code 2001 DIAMETER_FIRST_REGISTRATION. It is not a
+# mock, not a recording, and not a claim — the job fails the build if the
+# peer ever stops answering that way.
+#
+# Getting here took four runs, each finding exactly one more gap, because a
+# real peer reports only the first rule it hits:
+#   run 1 — no request-body Vendor-Specific-Application-Id (AVP 260)
+#   run 2 — no Session-Id (AVP 263) on any application request
+#   run 3 — no Origin-Host / Origin-Realm (264/296), which RFC 6733 §6.3
+#           and §6.4 require in EVERY Diameter message
+#   run 4 — a fixture gap (the test subscriber had no MSISDN provisioned),
+#           plus the discovery that a Cx UAA carries NO base Result-Code at
+#           all, which Cellrift had been silently treating as a PASS
+# See test/interop/EVIDENCE.md for all four, with the captured bytes.
+#
+# The job runs this file twice, once per transport: TCP, and a genuine RFC
+# 4960 SCTP association (freeDiameter logs "(SCTP,soc#8)"). The SCTP leg
+# fails rather than passing if Cellrift substitutes TCP, so it can never be a
+# TCP run wearing an SCTP label.
+#
+# WHAT THIS DOES NOT PROVE. One command (UAR/UAA), against one peer.
+# Cellrift's other five Diameter commands — CCR, AIR, ULR, MAR, SAR — have
+# never been sent to a real peer at all, and every other Diameter scenario in
+# this library is still MOCK-ONLY.
+#
+# transport: sctp below is honoured: the Diameter adapter now dials a real
+# one-to-one SCTP association where the kernel provides one, and substitutes
+# TCP with a recorded warning where it does not. The interop job continues to
+# set CELLRIFT_TRANSPORT_FALLBACK=tcp so that run pins one transport rather
+# than varying with the runner's kernel.
+#
+# SYNTHETIC DATA: all subscriber identifiers use the Ofcom test range
+# (447700900xxx) and fictional .lab.local / .cellrift.local domains.
+# Never use real subscriber MSISDNs or SIP identities in scenario files.
+name: Diameter UAR/UAA
+version: "1.0"
+description: >
+  Standalone Diameter User-Authorization-Request / Answer exchange.
+  Verifies that the HSS returns DIAMETER_SUCCESS for a known subscriber.
+
+protocols:
+  diameter:
+    transport: sctp
+    origin_host: test.cellrift.local
+    origin_realm: cellrift.local
+
+variables:
+  subscriber_msisdn: "447700900001"
+  hss_target: "hss.lab.local:3868"
+  # TS 29.229 §6.1.1 marks Visited-Network-Identifier mandatory in the UAR.
+  # It is the roaming network the subscriber is attaching from, so it is
+  # scenario data — Cellrift cannot invent it the way it can a Session-Id.
+  # The PLMN of the provisioned IMSI (001/01), which is what a real HSS
+  # derives its IMPUs from. It must match the domain the Cx scenarios use:
+  # a UAR registers the IMPI/IMPU pair in the HSS's context, and a later MAR
+  # naming a different domain is answered 5002 IDENTITIES_DONT_MATCH — which
+  # is exactly what a mcc234 domain here used to cause (EVIDENCE.md, run 6).
+  visited_network: "mnc001.mcc001.3gppnetwork.org"
+
+steps:
+  - id: send_uar
+    protocol: diameter
+    action: send
+    target: "{{ hss_target }}"
+    message: UAR
+    fields:
+      User-Name: "{{ subscriber_msisdn }}"
+      Public-Identity: "sip:{{ subscriber_msisdn }}@ims.{{ visited_network }}"
+      Visited-Network-Identifier: "{{ visited_network }}"
+    capture:
+      result_code: response.Experimental-Result-Code
+      session_id: response.Session-Id
+    assert:
+      # 2001 here is 3GPP's DIAMETER_FIRST_REGISTRATION, not the base
+      # protocol's DIAMETER_SUCCESS: a Cx UAA reports through
+      # Experimental-Result and carries no Result-Code at all.
+      - result_code == 2001
+      # Server-Name is deliberately NOT asserted. On a first registration a
+      # real HSS returns Server-Capabilities instead, leaving the I-CSCF to
+      # choose an S-CSCF, so `server_name != null` can only ever pass
+      # against a mock. The answer echoing our Session-Id is the thing that
+      # is true of every UAA, real or mocked.
+      - session_id != null
+
+  # Step 2: Send a second UAR to confirm idempotent authorization.
+  - id: uar_repeat
+    protocol: diameter
+    action: send
+    target: "{{ hss_target }}"
+    message: UAR
+    fields:
+      User-Name: "{{ subscriber_msisdn }}"
+      Public-Identity: "sip:{{ subscriber_msisdn }}@ims.{{ visited_network }}"
+      Visited-Network-Identifier: "{{ visited_network }}"
+    capture:
+      repeat_result: response.Experimental-Result-Code
+    assert:
+      - repeat_result == 2001

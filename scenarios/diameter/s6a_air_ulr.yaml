@@ -1,0 +1,76 @@
+# ✅ PROVEN AGAINST A REAL PEER — an Open5GS HSS, in CI on every push.
+#
+# The `diameter-interop` job (.github/workflows/interop.yml, via
+# test/interop/run-scenario.sh) runs this exact file against a genuine
+# gradiant/open5gs:2.8.0 HSS over both TCP and real SCTP, after uar_uaa.yaml:
+# AIR and ULR are both answered Result-Code 2001. The job fails the build if
+# either stops being answered that way. Note it is the BASE Result-Code here,
+# unlike Cx, whose answers report through Experimental-Result.
+#
+# Getting there took one correction the peer named itself (EVIDENCE.md run 6):
+# Experimental-Result-Code 5001 DIAMETER_ERROR_USER_UNKNOWN, because S6a's
+# User-Name carries the IMSI (TS 29.272 §7.3.1), not the MSISDN. The IMSI
+# below is the one the interop harness provisions.
+#
+# SYNTHETIC DATA: all subscriber identifiers use the Ofcom test range
+# (447700900xxx) and fictional .lab.local / .cellrift.local domains.
+# Never use real subscriber MSISDNs or SIP identities in scenario files.
+name: Diameter S6a AIR/ULR
+version: "1.0"
+description: >
+  Standalone S6a Authentication-Information-Request/Answer followed by an
+  Update-Location-Request/Answer exchange, per 3GPP TS 29.272 §7.2. Shows the
+  nested-Grouped-AVP scenario syntax: Requested-EUTRAN-Authentication-Info
+  and Terminal-Information are each authored as a nested YAML map under
+  fields: and flattened to dotted AVP paths by the Diameter encoder.
+
+protocols:
+  diameter:
+    transport: sctp
+    # S6a traffic comes from an MME, which is a different Diameter node from
+    # the I-CSCF that sends Cx. Distinct Origin-Hosts also keep the interop
+    # harness honest: freeDiameter keeps one peer object per name, and
+    # scenarios sharing a name fight over it (test/interop/EVIDENCE.md, run 8).
+    origin_host: s6a.cellrift.local
+    origin_realm: cellrift.local
+
+variables:
+  # S6a's User-Name carries the IMSI, not an MSISDN (TS 29.272 §7.3.1). A real
+  # Open5GS HSS answers 5001 DIAMETER_ERROR_USER_UNKNOWN for anything else —
+  # see test/interop/EVIDENCE.md, run 6. 001/01 is the 3GPP test PLMN.
+  subscriber_imsi: "001010000000001"
+  hss_target: "hss.lab.local:3868"
+
+steps:
+  - id: send_air
+    protocol: diameter
+    action: send
+    target: "{{ hss_target }}"
+    message: AIR
+    fields:
+      User-Name: "{{ subscriber_imsi }}"
+      Visited-PLMN-Id: "\x02\xf8\x10"
+      Requested-EUTRAN-Authentication-Info:
+        Number-Of-Requested-Vectors: 1
+        Immediate-Response-Preferred: 0
+    capture:
+      result_code: response.Result-Code
+    assert:
+      - result_code == 2001
+
+  - id: send_ulr
+    protocol: diameter
+    action: send
+    target: "{{ hss_target }}"
+    message: ULR
+    fields:
+      User-Name: "{{ subscriber_imsi }}"
+      RAT-Type: 1004 # EUTRAN, TS 29.212 §5.3.31
+      ULR-Flags: 3
+      Visited-PLMN-Id: "\x02\xf8\x10"
+      Terminal-Information:
+        Software-Version: "01"
+    capture:
+      result_code: response.Result-Code
+    assert:
+      - result_code == 2001

@@ -1,0 +1,88 @@
+# ⚠️ MOCK-ONLY SCENARIO — will fail against a real Diameter peer.
+# Both steps are Cx UARs, and that exchange is proven against a real Open5GS
+# HSS in CI over both TCP and real SCTP (uar_uaa.yaml,
+# test/interop/EVIDENCE.md). What is NOT proven is this file's own subject: no
+# real HSS has ever been asked to survive a deliberate RFC 4960 ABORT, so the
+# assertions below read Cellrift's own view of the association it tore down,
+# and a real peer's reaction to one is exactly the question this scenario
+# exists to let you ask of infrastructure you own.
+#
+# Connection-fault demonstration — a genuine RFC 4960 ABORT on a Diameter
+# SCTP association, then proof the peer still answers.
+#
+#   1. uar_sctp_abort — the UAR is sent in full, then an ABORT chunk is
+#      written on the association before any answer is read. The peer
+#      really received a request and then watched its association die — the
+#      behaviour a network partition or a crashed client produces, and the
+#      case an HSS's association-cleanup and retry logic exists for. Asserts
+#      response.connection_state == "aborted".
+#   2. uar_liveness   — an ordinary UAR with no impair: block. It passes only
+#      if the peer accepted a brand-new association and completed a fresh
+#      RFC 6733 §5.3 CER/CEA handshake: the abort tore the old one down and
+#      cleared the client's peer state, so this step re-handshakes on its
+#      own. No special syntax is needed for that.
+#
+# THIS SCENARIO DELIBERATELY FAILS. Step 1 destroys its own association
+# before an answer can be read, so it has no answer to report and
+# Status: failed is the correct, documented outcome — not a bug. `cellrift
+# run` therefore exits non-zero on this file. Step 2 passes.
+#
+# transport: sctp IS LOAD-BEARING, twice over. `cellrift validate` rejects
+# sctp_abort on any step that will not run over SCTP — an ABORT chunk has no
+# meaning on a TCP socket, whose fault vocabulary is `reset`. And at run
+# time the kernel must actually provide SCTP: on a host without the sctp
+# module the Diameter adapter substitutes TCP with a recorded warning, and
+# step 1 then fails with "an RFC 4960 ABORT requires an SCTP association"
+# rather than reporting a fake abort. (`CELLRIFT_TRANSPORT_FALLBACK=tcp`
+# forces the same substitution.) A step that could not attempt its fault
+# never claims to have inflicted one.
+#
+# SYNTHETIC DATA: the subscriber identifier uses the Ofcom test range
+# (447700900xxx) and fictional .lab.local / .cellrift.local domains. Never
+# use a real subscriber MSISDN in a scenario file.
+
+name: Diameter SCTP abort then liveness
+version: "1.0"
+description: >
+  A UAR followed by a real RFC 4960 ABORT on its SCTP association, then an
+  ordinary UAR proving the HSS accepts a fresh association and handshake.
+  Step 1 fails by design; cellrift run exits non-zero on this file.
+
+protocols:
+  diameter:
+    transport: sctp
+    origin_host: test.cellrift.local
+    origin_realm: cellrift.local
+
+variables:
+  subscriber_msisdn: "447700900001"
+  hss_target: "hss.lab.local:3868"
+
+steps:
+  # Step 1: UAR sent in full, then ABORT. Fails by design.
+  - id: uar_sctp_abort
+    protocol: diameter
+    action: send
+    target: "{{ hss_target }}"
+    message: UAR
+    impair:
+      sctp_abort: true
+    fields:
+      User-Name: "{{ subscriber_msisdn }}"
+      Public-Identity: "sip:{{ subscriber_msisdn }}@ims.mnc001.mcc001.3gppnetwork.org"
+    assert:
+      - response.connection_state == "aborted"
+      - response.timed_out == false
+
+  # Step 2: ordinary UAR over a fresh association and handshake.
+  - id: uar_liveness
+    protocol: diameter
+    action: send
+    target: "{{ hss_target }}"
+    message: UAR
+    fields:
+      User-Name: "{{ subscriber_msisdn }}"
+      Public-Identity: "sip:{{ subscriber_msisdn }}@ims.mnc001.mcc001.3gppnetwork.org"
+    assert:
+      - response.Experimental-Result-Code == 2001
+      - response.timed_out == false

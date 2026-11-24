@@ -1,0 +1,101 @@
+# ⚠️ MOCK-ONLY SCENARIO — will fail against a real peer.
+# The Diameter sub-step is a Cx UAR, and that exchange is proven against a
+# real Open5GS HSS in CI (scenarios/diameter/uar_uaa.yaml). What keeps this
+# file mock-only is the SIP half: that interop HSS has no P-CSCF/SIP
+# endpoint, so no real peer has ever answered the REGISTER beside it — nor
+# has any real peer seen these two legs sent concurrently.
+#
+# Flow-control demonstration — `action: parallel` and `action: wait`.
+#
+#   1. attach            — a parallel group. Its two sub-steps run at the same
+#      moment, each on its own goroutine: a Diameter UAR to the HSS and a SIP
+#      REGISTER to the P-CSCF. The group finishes when both have, and each
+#      sub-step reports its own result and runs its own assert: block.
+#   2. settle            — a wait. The engine sleeps 500 ms and reports the
+#      step as passed; no protocol is involved and none may be declared.
+#      Its realistic use is the gap a real network needs between two events
+#      — a registration timer, a peer's cache refresh, a subscriber-data
+#      write becoming visible — where firing the next step immediately would
+#      test Cellrift's speed rather than the peer's behaviour.
+#   3. verify_registered — the SIP dialog tracker saw the 200 to REGISTER.
+#
+# THE PARALLEL GROUP MUST MIX PROTOCOLS. Two sub-steps on the same protocol
+# would share one adapter and one connection with no locking, so `cellrift
+# validate` rejects that shape ("parallel sub-steps must use distinct
+# protocols") until each sub-step gets an adapter of its own. One SIP plus
+# one Diameter sub-step is the form this feature supports today, and it is
+# also the realistic one: an IMS attach genuinely has these two legs in
+# flight together.
+#
+# A captured value from a parallel sub-step (diameter_uar.server_name below)
+# is visible to every step AFTER the group, exactly as from a sequential
+# step; it is not visible to the group's other sub-step, which may already
+# have been sent.
+#
+# SYNTHETIC DATA: the subscriber identifier uses the Ofcom test range
+# (447700900xxx) and fictional .lab.local / .cellrift.local domains. Never
+# use a real subscriber MSISDN or SIP identity in a scenario file.
+
+name: IMS attach with parallel legs and a wait
+version: "1.0"
+description: >
+  A Diameter UAR and a SIP REGISTER sent concurrently in one parallel group,
+  a 500 ms wait, then an assert_state proving the registration was tracked.
+  Demonstrates action: parallel (cross-protocol) and action: wait.
+
+protocols:
+  diameter:
+    transport: tcp
+    origin_host: test.cellrift.local
+    origin_realm: cellrift.local
+  sip:
+    transport: udp
+
+variables:
+  subscriber_msisdn: "447700900001"
+  hss_target: "hss.lab.local:3868"
+  pcscf_target: "pcscf.lab.local:5060"
+  home_domain: "ims.mnc001.mcc001.3gppnetwork.org"
+
+steps:
+  # Step 1: both legs of the attach, concurrently.
+  - id: attach
+    action: parallel
+    steps:
+      - id: diameter_uar
+        protocol: diameter
+        action: send
+        target: "{{ hss_target }}"
+        message: UAR
+        fields:
+          User-Name: "{{ subscriber_msisdn }}"
+          Public-Identity: "sip:{{ subscriber_msisdn }}@{{ home_domain }}"
+        capture:
+          server_name: response.Server-Name
+        assert:
+          - response.Experimental-Result-Code == 2001
+
+      - id: sip_register
+        protocol: sip
+        action: send
+        target: "{{ pcscf_target }}"
+        message: REGISTER
+        fields:
+          From: "sip:{{ subscriber_msisdn }}@{{ home_domain }}"
+          To: "sip:{{ subscriber_msisdn }}@{{ home_domain }}"
+          Contact: "<sip:{{ subscriber_msisdn }}@10.0.0.1:5060>"
+        assert:
+          - response.status_code == 200
+
+  # Step 2: let the network settle before checking state.
+  - id: settle
+    action: wait
+    duration_ms: 500
+
+  # Step 3: the tracker saw the 200 to REGISTER; the UAA's capture is
+  # visible here, after the group.
+  - id: verify_registered
+    protocol: sip
+    action: assert_state
+    check: registered
+    timeout_ms: 2000

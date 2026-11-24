@@ -1,0 +1,179 @@
+# MOCK-ONLY SCENARIO — deliberately hostile traffic, never run against a
+# real P-CSCF. Every step below either corrupts an already-serialised SIP
+# header line or sends another protocol's bytes over this connection
+# outright; a real UA's tolerance of a missing, duplicated, or overwritten
+# Via header is inconsistent across implementations, which is exactly why
+# this file exists to prove Cellrift can produce that input on demand, not
+# to validate any peer's behaviour under it.
+#
+# Six steps, in order:
+#
+#   1. register_missing_via   — a REGISTER with its Via header dropped
+#      entirely (the missing op).
+#   2. register_duplicate_via — a REGISTER with a second Via line appended
+#      (the duplicate op) — deliberately adversarial coverage,
+#      since real UAs are inconsistently first-wins or last-wins on a
+#      duplicated header.
+#   3. register_overwrite_via — a REGISTER with its Via header's value
+#      replaced outright (the overwrite op).
+#   4. register_clean         — an ordinary REGISTER with no malform: block,
+#      proving the run recovers, and capturing this step's raw wire bytes
+#      for step 6 to replay. response.__raw is the reserved raw-response
+#      capture path (see internal/engine/executor.go's rawResponsePath).
+#   5. inject_diameter_over_sip — no SIP message at all: 20 raw bytes of a
+#      Diameter CER header are written directly onto this SIP connection via
+#      the raw action (the inline-hex byte source).
+#   6. replay_captured_wire   — the exact bytes register_clean's peer
+#      actually received, captured via response.__raw and replayed verbatim
+#      through a second raw-action step (the captured-ref byte
+#      source, the second source alongside step 5's inline literal).
+#
+# THIS SCENARIO DELIBERATELY FAILS on steps 1-3 and 5: a peer that cannot
+# parse a header-malformed or cross-protocol message has no answer to send
+# back, so those steps report Status: failed and `cellrift run` exits
+# non-zero on this file. That is the documented outcome, not a bug. Step 4
+# carries the only assertion in this file (an ordinary REGISTER has a
+# well-defined 200 OK outcome to check, unlike the malformed steps); steps
+# 1-3 and 5-6 assert nothing, since a failing assertion would terminate the
+# whole scenario on a step whose entire point is reaching a peer-specific
+# outcome this scenario does not define.
+#
+# transport: tcp IS LOAD-BEARING — this file is driven against
+# sip.TCPMockUASServer, whose RawReads() observes the exact bytes each step
+# put on the wire, including the ones no SIP parser can make sense of.
+#
+# SYNTHETIC DATA: subscriber identifiers use the Ofcom test range
+# (447700900xxx) and a fictional .lab.local domain. Never use a real
+# subscriber MSISDN or SIP identity in a scenario file.
+#
+# References:
+#   - RFC 3261 §20.42 (Via header field — the header every step here targets)
+#   - RFC 6733 §5.3 (Capabilities-Exchange-Request — the header step 5's raw
+#     bytes represent)
+
+name: "SIP header malformation and cross-protocol injection"
+version: "1.0"
+description: >
+  Demonstrates the malform: sip_header missing/duplicate/overwrite ops
+  against a REGISTER's Via header, then both raw-action byte sources: an
+  inline Diameter CER header sent over this SIP connection, and a prior
+  step's own captured wire bytes replayed verbatim. Steps 1-3 and 5 fail by
+  design — see the header above.
+
+protocols:
+  sip:
+    transport: tcp
+
+variables:
+  subscriber_msisdn: "447700900202"
+  pcscf_host: "pcscf.lab.local"
+
+steps:
+  # Step 1: the Via header is dropped from an otherwise ordinary REGISTER.
+  - id: register_missing_via
+    protocol: sip
+    action: send
+    target: "{{ pcscf_host }}:5060"
+    message: REGISTER
+    timeout_ms: 500
+    fields:
+      From: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      To: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      Contact: "<sip:{{ subscriber_msisdn }}@10.0.0.1:5060>"
+      Call-ID: "malform-missing-via@lab.local"
+    malform:
+      sip_header:
+        name: Via
+        op: missing
+
+  # Step 2: a second Via line is appended alongside the real one. Real UAs
+  # are inconsistently first-wins or last-wins on a duplicated header, which
+  # is exactly why this op is deliberately adversarial coverage.
+  - id: register_duplicate_via
+    protocol: sip
+    action: send
+    target: "{{ pcscf_host }}:5060"
+    message: REGISTER
+    timeout_ms: 500
+    fields:
+      From: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      To: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      Contact: "<sip:{{ subscriber_msisdn }}@10.0.0.1:5060>"
+      Call-ID: "malform-duplicate-via@lab.local"
+    malform:
+      sip_header:
+        name: Via
+        op: duplicate
+
+  # Step 3: the Via header's value is replaced outright with an arbitrary,
+  # not-a-real-via string.
+  - id: register_overwrite_via
+    protocol: sip
+    action: send
+    target: "{{ pcscf_host }}:5060"
+    message: REGISTER
+    timeout_ms: 500
+    fields:
+      From: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      To: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      Contact: "<sip:{{ subscriber_msisdn }}@10.0.0.1:5060>"
+      Call-ID: "malform-overwrite-via@lab.local"
+    malform:
+      sip_header:
+        name: Via
+        op: overwrite
+        value: "SIP/2.0/TCP not-a-real-via"
+
+  # Step 4: an ordinary REGISTER, no malform: block. Proves the run recovers
+  # after three malformed steps, and captures its own raw wire bytes — the
+  # reserved response.__raw path — for step 6 to replay verbatim.
+  - id: register_clean
+    protocol: sip
+    action: send
+    target: "{{ pcscf_host }}:5060"
+    message: REGISTER
+    fields:
+      From: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      To: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+      Contact: "<sip:{{ subscriber_msisdn }}@10.0.0.1:5060>"
+      Call-ID: "malform-clean@lab.local"
+    capture:
+      clean_wire: response.__raw
+    assert:
+      - response.status_code == 200
+
+  # Step 5: no SIP message is built at all. These 20 bytes are a Diameter
+  # CER header: Version 1 (byte 0), Message Length 20 (bytes 1-3), R-flag
+  # set + Command Code 257 Capabilities-Exchange (bytes 4-7), Application-Id
+  # 0 (bytes 8-11), Hop-by-Hop Identifier 0x11111111 (bytes 12-15), and
+  # End-to-End Identifier 0x22222222 (bytes 16-19) — one protocol's bytes,
+  # placed literally on the other protocol's connection.
+  - id: inject_diameter_over_sip
+    protocol: sip
+    action: raw
+    target: "{{ pcscf_host }}:5060"
+    raw:
+      hex: "0100001480000101000000001111111122222222"
+    # A raw step never receives; raw_bytes_sent (the 20-byte CER header
+    # above) is its one stable, falsifiable observable.
+    assert:
+      - response.raw_bytes_sent == 20
+
+  # Step 6: replay the exact bytes a real peer actually sent back in step 4,
+  # verbatim, over a fresh raw-action step — the second byte source
+  # alongside step 5's inline literal. register_clean.clean_wire (rather
+  # than the bare clean_wire) is the step-ID-qualified reference form
+  # register_basic.yaml's own diameter_auth.server_name reference already
+  # establishes for a cross-step capture.
+  - id: replay_captured_wire
+    protocol: sip
+    action: raw
+    target: "{{ pcscf_host }}:5060"
+    raw:
+      ref: "{{ register_clean.clean_wire }}"
+    # The replayed length is whatever the peer answered step 4 with, so an
+    # exact count cannot be pinned here — but a captured response is never
+    # empty, and asserting so proves the capture-then-replay chain actually
+    # carried bytes rather than silently sending nothing.
+    assert:
+      - response.raw_bytes_sent > 0

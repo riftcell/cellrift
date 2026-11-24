@@ -1,0 +1,4 @@
+Scenario: VoLTE basic call
+  ✓ [sip] send send_invite (1004ms)
+  ✓ [sip] send send_bye (0ms)
+2/2 steps passed in 1005ms

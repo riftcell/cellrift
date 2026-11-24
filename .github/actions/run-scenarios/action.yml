@@ -1,0 +1,130 @@
+name: "Cellrift Run Scenarios"
+description: "Run Cellrift telecom test scenarios against a target environment"
+branding:
+  icon: "phone"
+  color: "blue"
+
+# This is a composite action, not a Docker one. The Docker form it used to
+# declare could not work: `image: ../../../Dockerfile` escapes the action's
+# own directory, which GitHub does not support, and the repository-root
+# Dockerfile needs the whole repo as its build context rather than the action
+# directory. A composite action also gets a shell, which is what expands the
+# `scenarios` glob below — Docker `args` are passed verbatim, so cellrift
+# received the literal string "scenarios/ims/*.yaml" and exited 2.
+#
+# It builds cellrift from the checked-out source, so the calling workflow
+# must run actions/checkout first. Using this from another repository means
+# copying this directory too, and replacing the build step with a download
+# of a released binary.
+
+inputs:
+  scenarios:
+    description: "Glob pattern or space-separated list of scenario YAML files to run"
+    required: true
+    default: "scenarios/ims/basic_call.yaml"
+  target-host:
+    description: "Override the target host for all scenario steps, as host:port"
+    required: false
+    default: ""
+  format:
+    description: "Output format: terminal, junit, json"
+    required: false
+    default: "junit"
+  output:
+    description: "Path to write the report file (e.g. results.xml)"
+    required: false
+    default: "cellrift-results.xml"
+  allow-mock-only:
+    description: >
+      Permit scenarios carrying the MOCK-ONLY marker. These are written for
+      Cellrift's own in-process mocks, and some of them send deliberately
+      malformed or cross-protocol traffic; never aim one at infrastructure
+      you do not own. Off by default.
+    required: false
+    default: "false"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: go.mod
+        cache: true
+
+    - name: Build cellrift
+      shell: bash
+      run: go build -o "${RUNNER_TEMP}/cellrift" ./cmd/cellrift
+
+    # Every input below is read from the environment, never interpolated
+    # into the script body. `scenarios` and `target-host` come from a
+    # workflow_dispatch form, and a value like `; rm -rf $HOME` interpolated
+    # straight into a run: block would execute — GitHub's own scripting
+    # guidance, and the reason these steps look more careful than they
+    # otherwise would.
+    - name: Resolve scenario files
+      id: resolve
+      shell: bash
+      env:
+        SCENARIOS: ${{ inputs.scenarios }}
+      run: |
+        set -euo pipefail
+        shopt -s nullglob
+        # Unquoted on purpose: this is where the glob is expanded.
+        files=()
+        for entry in $SCENARIOS; do
+          # A directory expands to the scenario files in it. The README
+          # taught `scenarios: scenarios/ims/` for years, and cellrift takes
+          # files, not directories — so that form used to fail with
+          # "is a directory" rather than doing the obvious thing.
+          if [ -d "$entry" ]; then
+            files+=( "$entry"/*.yaml "$entry"/*.yml )
+          else
+            files+=( "$entry" )
+          fi
+        done
+        if [ ${#files[@]} -eq 0 ]; then
+          echo "::error::no scenario files matched: $SCENARIOS"
+          exit 1
+        fi
+        printf 'matched %d scenario file(s):\n' "${#files[@]}"
+        printf '  %s\n' "${files[@]}"
+        printf 'files=%s\n' "${files[*]}" >> "$GITHUB_OUTPUT"
+
+    - name: Refuse MOCK-ONLY scenarios
+      if: inputs.allow-mock-only != 'true'
+      shell: bash
+      env:
+        FILES: ${{ steps.resolve.outputs.files }}
+      run: |
+        set -euo pipefail
+        blocked=()
+        for f in $FILES; do
+          # "MOCK-ONLY SCENARIO", the header marker, not a bare "MOCK-ONLY":
+          # register_loss_reorder.yaml mentions the latter in prose explaining
+          # why it is NOT one, and blocking it would be a false positive.
+          if grep -q "MOCK-ONLY SCENARIO" "$f"; then
+            blocked+=( "$f" )
+          fi
+        done
+        if [ ${#blocked[@]} -gt 0 ]; then
+          echo "::error::these scenarios are written for Cellrift's own mocks and must not be aimed at real infrastructure:"
+          printf '::error::  %s\n' "${blocked[@]}"
+          echo "::error::some send deliberately malformed or cross-protocol traffic. Set allow-mock-only: true only for a peer you own."
+          exit 1
+        fi
+
+    - name: Run scenarios
+      shell: bash
+      env:
+        FILES: ${{ steps.resolve.outputs.files }}
+        TARGET_HOST: ${{ inputs.target-host }}
+        FORMAT: ${{ inputs.format }}
+        OUTPUT: ${{ inputs.output }}
+      run: |
+        set -euo pipefail
+        args=( run --format "$FORMAT" --output "$OUTPUT" )
+        if [ -n "$TARGET_HOST" ]; then
+          args+=( --target-host "$TARGET_HOST" )
+        fi
+        "${RUNNER_TEMP}/cellrift" "${args[@]}" $FILES

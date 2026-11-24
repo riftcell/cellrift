@@ -1,0 +1,250 @@
+# Interop — real third-party peers, not Cellrift's own mocks: Open5GS (Diameter
+# Cx, TCP and SCTP), SigScale OCS (Diameter Ro/Gy, TCP) and Asterisk (SIP over
+# UDP and TLS). Asterisk is a plain SIP server, not a P-CSCF.
+#
+# Lives in its own workflow file, separate from ci.yml, because it needs real
+# container boot time and several Docker Hub pulls (gradiant/open5gs:2.8.0,
+# mongo:7.0, the OCS and a digest-pinned Asterisk) — infrastructure ci.yml's `build` job deliberately does not carry,
+# so the fast feedback loop `build` provides stays fast.
+#
+# It runs twice, once per transport (TCP and real SCTP), against the same
+# peer. See the matrix comment below for why SCTP cannot silently degrade
+# into a second TCP run.
+#
+# This job's status is truthful: it never masks a failing step as passing.
+# Whether it is promoted to a required branch-protection status check is a decision to be
+# taken after its first several runs, once its stability against GitHub's
+# runner infrastructure (vs. this repo's local Docker) is known — not encoded
+# here as YAML.
+
+name: Interop
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+  workflow_dispatch:
+    inputs:
+      experiment:
+        description: "capture-liveness.sh experiment id (e0-e6); e3 is the no-fault one"
+        default: e0
+
+jobs:
+  diameter-interop:
+    name: Diameter Real-Peer Interop (Open5GS, ${{ matrix.transport }})
+    runs-on: ubuntu-latest
+
+    # Both transports, as separate runs against the same peer. TCP is the
+    # deterministic leg: CELLRIFT_TRANSPORT_FALLBACK=tcp forces it, so the
+    # result never varies with the runner's kernel. SCTP dials a real RFC
+    # 4960 association — GitHub's ubuntu runners do support it, which this
+    # repository knew only because an SCTP adapter test once FAILED here on a
+    # scheduling race instead of skipping, and those tests skip themselves
+    # when SCTP is unavailable.
+    #
+    # The SCTP leg cannot quietly degrade: Cellrift substitutes TCP with a
+    # recorded warning where the kernel has no SCTP, and run-scenario.sh
+    # fails on that warning rather than reporting an SCTP proof it did not
+    # earn. If a future runner image drops SCTP, this leg goes red and says
+    # exactly why.
+    strategy:
+      fail-fast: false
+      matrix:
+        transport: [tcp, sctp]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Boot Open5GS HSS + Mongo
+        run: bash test/interop/up.sh
+
+      # An empty CELLRIFT_TRANSPORT_FALLBACK is not the same as an unset one
+      # to Cellrift's env parsing, but run-scenario.sh only checks for the
+      # literal "tcp", so the sctp leg's empty value means "do not force".
+      - name: Run UAR/UAA against the real peer over ${{ matrix.transport }}
+        env:
+          CELLRIFT_TRANSPORT_FALLBACK: ${{ matrix.transport == 'tcp' && 'tcp' || '' }}
+        run: bash test/interop/run-scenario.sh
+
+      - name: Capture HSS logs
+        if: always()
+        run: docker logs hss > hss.log 2>&1 || true
+
+      - name: Upload interop artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diameter-interop-evidence-${{ matrix.transport }}
+          path: |
+            hss.log
+            /tmp/cellrift-interop.json
+
+      - name: Tear down containers
+        if: always()
+        run: bash test/interop/down.sh
+
+  credit-control-interop:
+    name: Credit-Control Real-Peer Interop (SigScale OCS)
+    runs-on: ubuntu-latest
+
+    # A second peer, in its own job. SigScale OCS (Apache-2.0) serves Ro/Gy —
+    # Credit-Control Application-Id 4, which is what Cellrift sends CCR
+    # under — and it is the only peer here that can answer a CCR at all: the
+    # Open5GS image ships no OCS and its PCRF speaks Gx (16777238).
+    #
+    # Its own job rather than another step in the matrix above, because the
+    # peers are independent: an OCS that will not boot must not be able to
+    # fail the five commands the HSS already proves. TCP only — the OCS is
+    # reached through a published container port, which carries no SCTP, and
+    # the SCTP path is proven against the HSS.
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Boot SigScale OCS and provision a subscriber
+        run: bash test/interop/up-ocs.sh
+
+      - name: Run CCR/CCA against the real OCS
+        run: bash test/interop/run-ocs-scenario.sh
+
+      - name: Capture OCS logs
+        if: always()
+        run: docker logs ocs > ocs.log 2>&1 || true
+
+      - name: Upload interop artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: credit-control-interop-evidence
+          path: |
+            ocs.log
+            /tmp/cellrift-ocs.json
+
+      - name: Tear down the OCS
+        if: always()
+        run: bash test/interop/down-ocs.sh
+
+  sip-interop:
+    name: SIP Real-Peer Interop (Asterisk)
+    runs-on: ubuntu-latest
+
+    # A third peer, in its own job. Asterisk answers SIP; the HSS and the OCS
+    # answer Diameter and have no SIP endpoint at all. Keeping it separate
+    # keeps the failure domains separate for the same reason the OCS job
+    # records: an Asterisk that will not boot must not be able to fail the six
+    # Diameter commands the other two jobs already prove.
+    #
+    # Asterisk is a plain SIP server, not a P-CSCF. This job proves that a real
+    # third-party SIP stack answers Cellrift on every push; it proves nothing
+    # about IMS semantics, and the scenarios it runs keep saying so in their own
+    # headers.
+    #
+    # Not run for a pull request opened from a different repository. The job
+    # boots a container with host networking, writes per-run private keys and
+    # uploads the peer's own log, and an untrusted head branch must not drive
+    # that. github.repository and github.event.pull_request.head.repo.full_name
+    # are both documented fields (the latter is required in the pull request
+    # payload schema), and a push event has no pull_request object, which is why
+    # the event-name test comes first. If the head repository has been deleted,
+    # head.repo is null, the comparison is false and the job is skipped — it
+    # fails closed. NOT EXERCISED: this repository has no fork PR to test it
+    # against, and no other job here is fork-gated, so this expression is new
+    # syntax rather than a copy of a working one.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      # Boots the digest-pinned Asterisk on 15060/15061, generates a per-run CA
+      # and server certificate, and returns only once the container's own CLI
+      # confirms both transports are bound. It deliberately does not treat
+      # "Asterisk Ready." as readiness: Asterisk logs that line even when a
+      # transport failed to bind.
+      - name: Boot Asterisk (digest-pinned) and generate per-run certificates
+        run: bash test/interop/up-sip.sh
+
+      # Runs register_impaired, basic_call (UDP) and a derived basic_call_tls
+      # with certificate verification ON, and refuses to grade a run whose
+      # bytes the peer's own log does not show arriving.
+      - name: Run the SIP scenarios against the real peer
+        run: bash test/interop/run-sip-scenario.sh
+
+      # The peer's own words are the evidence, not Cellrift's self-report.
+      - name: Capture Asterisk logs
+        if: always()
+        run: docker logs -t asterisk > asterisk.log 2>&1 || true
+
+      - name: Upload interop artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sip-interop-evidence
+          path: |
+            asterisk.log
+            /tmp/cellrift-sip/**
+
+      - name: Tear down Asterisk
+        if: always()
+        run: bash test/interop/down-sip.sh
+
+  # Manual only: this job needs a root packet capture and installs tshark, and
+  # it is a diagnostic reproduction of a finding rather than a per-push gate.
+  # The per-push interop proof is diameter-interop above. The runner's tshark
+  # differs from the 4.6.8 used locally, so its field output may be formatted
+  # differently. capture-liveness.sh boots its own fresh peer (and up.sh tears
+  # down first), so there is deliberately no separate boot step here.
+  liveness-after-abort:
+    name: Liveness-after-abort capture (manual)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      # Asserted, not trusted: without SCTP Cellrift substitutes TCP with a
+      # recorded warning and the capture would say nothing about SCTP.
+      - name: Load SCTP and assert it is present
+        run: |
+          sudo modprobe sctp
+          test -e /proc/net/sctp
+
+      - name: Install capture tools
+        run: sudo apt-get update && sudo apt-get install -y tshark tcpdump
+
+      - name: Run the experiment
+        run: bash test/interop/capture-liveness.sh "${{ inputs.experiment }}"
+
+      - name: Upload capture artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: liveness-after-abort-${{ inputs.experiment }}
+          path: /tmp/cellrift-liveness/**
+
+      - name: Tear down
+        if: always()
+        run: bash test/interop/down.sh

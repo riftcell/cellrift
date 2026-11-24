@@ -1,0 +1,28 @@
+{
+  "scenario": "SIP REGISTER with digest authentication",
+  "status": "passed",
+  "duration_ms": 1,
+  "steps": [
+    {
+      "id": "register_md5",
+      "protocol": "sip",
+      "status": "passed",
+      "duration_ms": 0,
+      "error": null
+    },
+    {
+      "id": "register_sha256",
+      "protocol": "sip",
+      "status": "passed",
+      "duration_ms": 0,
+      "error": null
+    },
+    {
+      "id": "register_both_offered",
+      "protocol": "sip",
+      "status": "passed",
+      "duration_ms": 0,
+      "error": null
+    }
+  ]
+}

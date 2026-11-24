@@ -1,0 +1,5 @@
+Scenario: SIP REGISTER with digest authentication
+  ✓ [sip] send register_md5 (1ms)
+  ✓ [sip] send register_sha256 (51ms)
+  ✓ [sip] send register_both_offered (1ms)
+3/3 steps passed in 54ms

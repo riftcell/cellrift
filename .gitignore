@@ -1,0 +1,56 @@
+# Private strategy and internal planning docs
+.private/
+
+# GSD planning workspace — private working notes, not part of the published repo.
+# Kept on disk, never committed: .planning/ holds the codebase map, roadmap,
+# phase plans and state that are internal thinking rather than project docs.
+.planning/
+
+# Claude Code local settings — contains per-user permission grants and tool-access
+# rules that are machine-specific and must not be shared.
+# CLAUDE.md (project-level instructions) is intentionally tracked.
+# .claude/commands/ and .claude/hooks/ can be committed if added for team use.
+.claude/settings.local.json
+
+# Compiled binaries
+/cellrift
+/cellrift-*
+/dist/
+
+# Go build cache
+*.test
+*.out
+coverage.txt
+
+# Python build artifacts (sdk/python/)
+__pycache__/
+*.pyc
+*.egg-info/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Protocol captures — ignored by default so a stray tcpdump run never lands in
+# a commit. Curated evidence under test/interop/evidence/ is the deliberate
+# exception: those captures are small, loopback-only, carry synthetic
+# identities, and are committed precisely so a recorded interop finding does
+# not depend on a CI artifact that expires or a run URL that stops resolving.
+*.pcap
+*.pcapng
+!test/interop/evidence/**/*.pcap
+!test/interop/evidence/**/*.pcapng
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# goreleaser
+dist/

@@ -1,0 +1,71 @@
+version: 2
+
+project_name: cellrift
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - main: ./cmd/cellrift
+    binary: cellrift
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+
+archives:
+  - formats:
+      - tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        formats:
+          - zip
+    files:
+      - LICENSE
+      - README.md
+      - CHANGELOG.md
+      - scenarios/**/*
+
+brews:
+  # skip_upload is on because github.com/riftcell/homebrew-cellrift does not
+  # exist yet. Without it, the first `v0.1.0` tag builds every archive and then
+  # fails at the publish step. Create the tap repository, then remove this line.
+  - skip_upload: true
+    repository:
+      owner: riftcell
+      name: homebrew-cellrift
+    homepage: "https://github.com/riftcell/cellrift"
+    description: "CI/CD-native Telecom protocol testing framework"
+    license: "MIT"
+    install: |
+      bin.install "cellrift"
+    test: |
+      system "#{bin}/cellrift", "--version"
+
+checksum:
+  name_template: "checksums.txt"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^ci:"
+
+release:
+  github:
+    owner: riftcell
+    name: cellrift
+  draft: false
+  prerelease: auto
+  name_template: "v{{.Version}}"

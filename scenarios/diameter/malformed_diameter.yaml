@@ -1,0 +1,123 @@
+# MOCK-ONLY SCENARIO — deliberately hostile traffic, never run against a
+# real HSS. Every step below either corrupts an already-correctly-encoded
+# Diameter header field or sends another protocol's bytes over this
+# connection outright; an incorrect AVP Length or Message Length header is
+# exactly the input a real HSS's framer is least defended against, and this
+# file exists to prove Cellrift can produce that input on demand, not to
+# validate any peer's tolerance of it.
+#
+# Three steps, in order:
+#
+#   1. uar_bad_avp_length — a normal UAR, correctly encoded by the real
+#      encoder, then has its Session-Id AVP's own 3-byte Length field
+#      overwritten with a declared-wrong value. Every other
+#      byte — Code, Flags, VendorID, Data, padding, and every other AVP —
+#      is untouched.
+#   2. uar_bad_msg_length — the same UAR, this time with the message's
+#      3-byte Message Length header overwritten instead.
+#   3. inject_sip_over_diameter — no Diameter message at all: the raw wire
+#      bytes of a short SIP OPTIONS request are written directly onto this
+#      Diameter connection via action: raw, bypassing BuildRequest/EncodeAVP
+#      entirely (the cross-protocol case).
+#
+# THIS SCENARIO DELIBERATELY FAILS. A peer that cannot frame or parse a
+# corrupted or cross-protocol message has no answer to send back, so all
+# three steps report Status: failed and `cellrift run` exits non-zero on
+# this file. That is the documented outcome, not a bug — see
+# docs/scenario.schema.json's malform/raw blocks for the declarations that
+# produce it.
+#
+# The two malform: steps carry no assert: block on purpose. What a peer does
+# with a malformed message (times out, resets, answers with an error code)
+# is peer-specific behaviour outside this file's scope, so those steps
+# report Status: failed and do not assert on WHY. Assertions do still run on
+# a failed step and would surface a wrong-headed check, but they cannot
+# turn a failed step green — so nothing here pretends to know the peer's
+# reaction. The raw step is different: it never receives, so its status is
+# only "the write succeeded"; it asserts the one thing it can actually
+# observe, the exact byte count it put on the wire.
+#
+# transport: tcp IS LOAD-BEARING — it lets this file run against an
+# in-process TCP mock with no SCTP kernel module required.
+#
+# SYNTHETIC DATA: subscriber identifiers use the Ofcom test range
+# (447700900xxx) and a fictional .lab.local domain. Never use a real
+# subscriber MSISDN or SIP identity in a scenario file.
+#
+# References:
+#   - RFC 6733 §4.1 (AVP header format — the 3-byte Length field step 1
+#     corrupts)
+#   - RFC 6733 §3 (Diameter Header — the 3-byte Message Length field step 2
+#     corrupts)
+
+name: "Diameter AVP/Message-Length malformation and cross-protocol injection"
+version: "1.0"
+description: >
+  Demonstrates the malform: avp_length and msg_length keys against a real
+  UAR, then sends a raw SIP OPTIONS request's wire bytes directly over the
+  same Diameter connection via action: raw. All three steps fail by
+  design — see the header above.
+
+protocols:
+  diameter:
+    transport: tcp
+    origin_host: test.cellrift.local
+    origin_realm: cellrift.local
+
+variables:
+  subscriber_msisdn: "447700900201"
+  hss_target: "hss.lab.local:3868"
+
+steps:
+  # Step 1: a normal, correctly-encoded UAR, then the Session-Id AVP's own
+  # Length field is overwritten with a declared-wrong value.
+  - id: uar_bad_avp_length
+    protocol: diameter
+    action: send
+    target: "{{ hss_target }}"
+    message: UAR
+    timeout_ms: 500
+    fields:
+      Session-Id: "test.cellrift.local;{{ subscriber_msisdn }};1"
+      Origin-Host: "test.cellrift.local"
+      Origin-Realm: "cellrift.local"
+      Public-Identity: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+    malform:
+      avp_length:
+        name: Session-Id
+        value: 9999
+
+  # Step 2: the same UAR, this time with the Diameter header's own Message
+  # Length field overwritten instead of any single AVP's.
+  - id: uar_bad_msg_length
+    protocol: diameter
+    action: send
+    target: "{{ hss_target }}"
+    message: UAR
+    timeout_ms: 500
+    fields:
+      Session-Id: "test.cellrift.local;{{ subscriber_msisdn }};2"
+      Origin-Host: "test.cellrift.local"
+      Origin-Realm: "cellrift.local"
+      Public-Identity: "sip:{{ subscriber_msisdn }}@ims.lab.local"
+    malform:
+      msg_length: 9999
+
+  # Step 3: no Diameter message is built at all. The raw hex below is the
+  # exact CRLF-terminated encoding of:
+  #   OPTIONS sip:hss.lab.local SIP/2.0\r\n\r\n
+  # (generated via: printf 'OPTIONS sip:hss.lab.local SIP/2.0\r\n\r\n' |
+  #  od -An -tx1 | tr -d ' \n') — a reader can decode the hex below and
+  # confirm it reproduces that literal text.
+  - id: inject_sip_over_diameter
+    protocol: diameter
+    action: raw
+    target: "{{ hss_target }}"
+    raw:
+      hex: "4f5054494f4e53207369703a6873732e6c61622e6c6f63616c205349502f322e300d0a0d0a"
+    # A raw step performs no receive, so its status alone is not evidence
+    # of anything but a successful write. raw_bytes_sent is the one stable
+    # observable it has: the 37 bytes of the OPTIONS literal above. If the
+    # hex were edited or the write cut short, this is what would fail.
+    assert:
+      - response.raw_bytes_sent == 37

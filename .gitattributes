@@ -1,0 +1,9 @@
+# The peer log is a captured artefact: its CRLF line endings are part of the
+# bytes and must survive a commit (core.autocrlf=input would strip them).
+test/interop/evidence/run-12-asterisk/asterisk.log -text
+test/interop/evidence/run-13-asterisk-digest/asterisk.log -text
+test/interop/evidence/run-13-asterisk-digest/ci/asterisk-ci.log -text
+test/interop/evidence/run-14-red-ci/asterisk-red.log -text
+test/interop/evidence/run-14-red-ci/local-red-run.log -text
+test/interop/evidence/run-14-red-ci/ci-red-run-clause-a.log -text
+test/interop/evidence/run-14-red-ci/ci-red-run-clause-b.log -text

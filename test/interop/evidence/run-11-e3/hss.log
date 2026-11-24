@@ -1,0 +1,245 @@
+2026-09-30T14:12:15.698289597Z Open5GS daemon v2.8.0
+2026-09-30T14:12:15.698368593Z 
+2026-09-30T14:12:15.698372088Z [32m09/30 14:12:15.697[0m: [[33mapp[0m] [1;32mINFO[0m: Configuration: '/opt/open5gs/etc/open5gs/hss.yaml' (../lib/app/ogs-init.c:144)
+2026-09-30T14:12:15.698375874Z [32m09/30 14:12:15.698[0m: [[33mapp[0m] [1;32mINFO[0m: File Logging: '/opt/open5gs/var/log/open5gs/hss.log' (../lib/app/ogs-init.c:147)
+2026-09-30T14:12:15.701805418Z [32m09/30 14:12:15.701[0m: [[33mdbi[0m] [1;32mINFO[0m: MongoDB URI: 'mongodb://localhost/open5gs' (../lib/dbi/ogs-mongoc.c:128)
+2026-09-30T14:12:15.744588525Z [32m09/30 14:12:15.744[0m: [[33mapp[0m] [1;32mINFO[0m: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+2026-09-30T14:12:15.744967305Z [32m09/30 14:12:15.744[0m: [[33mapp[0m] [1;32mINFO[0m: HSS initialize...done (../src/hss/app-init.c:31)
+2026-09-30T14:12:36.503390575Z [32m09/30 14:12:36.503[0m: [[33mdiam[0m] [1;32mINFO[0m: CONNECTED TO 'test.cellrift.local' (SCTP,soc#8): (../lib/diameter/common/logger.c:81)
+2026-09-30T14:12:36.503824646Z [32m09/30 14:12:36.503[0m: [[33mdiam[0m] [1;33mERROR[0m: Conflicting rule: the number of occurences (0) is < the rule min (1) for 'Visited-Network-Identifier'.
+2026-09-30T14:12:36.503833319Z  ((null):0)
+2026-09-30T14:12:36.503885656Z [32m09/30 14:12:36.503[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in parserules_do@messages.c:2650: ERROR: in '((fd_dict_iterate_rules ( model, &data, parserules_check_one_rule )))' :	Bad message
+2026-09-30T14:12:36.503889712Z  ((null):0)
+2026-09-30T14:12:36.503892606Z [32m09/30 14:12:36.503[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:99: PARSING ERROR: 'DIAMETER_MISSING_AVP' from 'test.cellrift.local': 
+2026-09-30T14:12:36.503896152Z  ((null):0)
+2026-09-30T14:12:36.503898605Z [32m09/30 14:12:36.503[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:      '3GPP/User-Authorization-Request'
+2026-09-30T14:12:36.503901770Z  ((null):0)
+2026-09-30T14:12:36.503904424Z [32m09/30 14:12:36.503[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:        Version: 0x01
+2026-09-30T14:12:36.503907488Z  ((null):0)
+2026-09-30T14:12:36.503910022Z [32m09/30 14:12:36.503[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:        Length: 268
+2026-09-30T14:12:36.503912976Z  ((null):0)
+2026-09-30T14:12:36.503915470Z [32m09/30 14:12:36.503[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:        Flags: 0x80 (R---)
+2026-09-30T14:12:36.503918274Z  ((null):0)
+2026-09-30T14:12:36.503940557Z [32m09/30 14:12:36.503[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:        Command Code: 300
+2026-09-30T14:12:36.503969680Z  ((null):0)
+2026-09-30T14:12:36.503972615Z [32m09/30 14:12:36.503[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:        ApplicationId: 16777216
+2026-09-30T14:12:36.503975619Z  ((null):0)
+2026-09-30T14:12:36.503978213Z [32m09/30 14:12:36.503[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:        Hop-by-Hop Identifier: 0xA2AB6B0F
+2026-09-30T14:12:36.503981007Z  ((null):0)
+2026-09-30T14:12:36.503983601Z [32m09/30 14:12:36.503[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:        End-to-End Identifier: 0x6038DC3A
+2026-09-30T14:12:36.503986515Z  ((null):0)
+2026-09-30T14:12:36.503989109Z [32m09/30 14:12:36.503[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:         {internal data}: src:test.cellrift.local(19) rwb:(nil) rt:1 cb:(nil),(nil)((nil)) qry:(nil) asso:0 sess:(nil)
+2026-09-30T14:12:36.503992163Z  ((null):0)
+2026-09-30T14:12:36.503994817Z [32m09/30 14:12:36.503[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:         AVP: 'Session-Id'(263) l=49 f=-M val="test.cellrift.local;1790777556;1;bd085431"
+2026-09-30T14:12:36.503998042Z  ((null):0)
+2026-09-30T14:12:36.504000966Z [32m09/30 14:12:36.503[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:         AVP: 'Public-Identity'(601) vend='3GPP'(10415) l=62 f=VM val="sip:447700900001@ims.mnc001.mcc001.3gppnetwork.org"
+2026-09-30T14:12:36.504004472Z  ((null):0)
+2026-09-30T14:12:36.504007045Z [32m09/30 14:12:36.503[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:         AVP: 'User-Name'(1) l=20 f=-M val="447700900001"
+2026-09-30T14:12:36.504010290Z  ((null):0)
+2026-09-30T14:12:36.504012974Z [32m09/30 14:12:36.503[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:         AVP: 'Origin-Host'(264) l=27 f=-M val="test.cellrift.local"
+2026-09-30T14:12:36.504016239Z  ((null):0)
+2026-09-30T14:12:36.504019133Z [32m09/30 14:12:36.503[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:         AVP: 'Origin-Realm'(296) l=22 f=-M val="cellrift.local"
+2026-09-30T14:12:36.504022719Z  ((null):0)
+2026-09-30T14:12:36.504025372Z [32m09/30 14:12:36.503[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:         AVP: 'Destination-Realm'(283) l=16 f=-M val="gradiant"
+2026-09-30T14:12:36.504044381Z  ((null):0)
+2026-09-30T14:12:36.504076508Z [32m09/30 14:12:36.503[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:         AVP: 'Vendor-Specific-Application-Id'(260) l=32 f=-M val=(grouped)
+2026-09-30T14:12:36.504079803Z  ((null):0)
+2026-09-30T14:12:36.504082577Z [32m09/30 14:12:36.503[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:            AVP: 'Vendor-Id'(266) l=12 f=-M val=10415 (0x28af)
+2026-09-30T14:12:36.504085732Z  ((null):0)
+2026-09-30T14:12:36.504088346Z [32m09/30 14:12:36.503[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:            AVP: 'Auth-Application-Id'(258) l=12 f=-M val=16777216 (0x1000000)
+2026-09-30T14:12:36.504091400Z  ((null):0)
+2026-09-30T14:12:36.504093844Z [32m09/30 14:12:36.503[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:         AVP: 'Auth-Session-State'(277) l=12 f=-M val='NO_STATE_MAINTAINED' (1 (0x1))
+2026-09-30T14:12:36.504096968Z  ((null):0)
+2026-09-30T14:12:36.504099472Z [32m09/30 14:12:36.503[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:         AVP: 'Route-Record'(282) l=8 f=-M val="test.cellrift.local"
+2026-09-30T14:12:36.504102747Z  ((null):0)
+2026-09-30T14:12:36.504105321Z [32m09/30 14:12:36.504[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in msg_dispatch@routing_dispatch.c:455: ERROR: in '(fd_msg_parse_or_error( &msgptr, &error ))' :	Bad message
+2026-09-30T14:12:36.504108595Z  ((null):0)
+2026-09-30T14:12:36.504119231Z [32m09/30 14:12:36.504[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:108: PARSING ERROR, returning:
+2026-09-30T14:12:36.504122386Z  ((null):0)
+2026-09-30T14:12:36.504125020Z [32m09/30 14:12:36.504[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:      '3GPP/User-Authorization-Answer'
+2026-09-30T14:12:36.504128144Z  ((null):0)
+2026-09-30T14:12:36.504130688Z [32m09/30 14:12:36.504[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:        Version: 0x01
+2026-09-30T14:12:36.504133472Z  ((null):0)
+2026-09-30T14:12:36.504136036Z [32m09/30 14:12:36.504[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:        Length: 20
+2026-09-30T14:12:36.504139010Z  ((null):0)
+2026-09-30T14:12:36.504141784Z [32m09/30 14:12:36.504[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:        Flags: 0x40 (-P--)
+2026-09-30T14:12:36.504144809Z  ((null):0)
+2026-09-30T14:12:36.504150918Z [32m09/30 14:12:36.504[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:        Command Code: 300
+2026-09-30T14:12:36.504153882Z  ((null):0)
+2026-09-30T14:12:36.504319607Z [32m09/30 14:12:36.504[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:        ApplicationId: 16777216
+2026-09-30T14:12:36.504326047Z  ((null):0)
+2026-09-30T14:12:36.504328851Z [32m09/30 14:12:36.504[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:        Hop-by-Hop Identifier: 0xA2AB6B0F
+2026-09-30T14:12:36.504331915Z  ((null):0)
+2026-09-30T14:12:36.504334549Z [32m09/30 14:12:36.504[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:        End-to-End Identifier: 0x6038DC3A
+2026-09-30T14:12:36.504337424Z  ((null):0)
+2026-09-30T14:12:36.504339977Z [32m09/30 14:12:36.504[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:         {internal data}: src:(nil)(0) rwb:(nil) rt:0 cb:(nil),(nil)((nil)) qry:0x7ff9c40010e0 asso:0 sess:0x7ff9e40011c0
+2026-09-30T14:12:36.504342932Z  ((null):0)
+2026-09-30T14:12:36.504366236Z [32m09/30 14:12:36.504[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:         AVP: 'Session-Id'(263) l=8 f=-M val="test.cellrift.local;1790777556;1;bd085431"
+2026-09-30T14:12:36.504369361Z  ((null):0)
+2026-09-30T14:12:36.504371975Z [32m09/30 14:12:36.504[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:         AVP: 'Origin-Host'(264) l=8 f=-M val="hss.gradiant"
+2026-09-30T14:12:36.504374959Z  ((null):0)
+2026-09-30T14:12:36.504377573Z [32m09/30 14:12:36.504[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:         AVP: 'Origin-Realm'(296) l=8 f=-M val="gradiant"
+2026-09-30T14:12:36.504380557Z  ((null):0)
+2026-09-30T14:12:36.504382951Z [32m09/30 14:12:36.504[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:         AVP: 'Result-Code'(268) l=12 f=-M val='DIAMETER_MISSING_AVP' (5005 (0x138d))
+2026-09-30T14:12:36.504385815Z  ((null):0)
+2026-09-30T14:12:36.504388259Z [32m09/30 14:12:36.504[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:         AVP: 'Failed-AVP'(279) l=8 f=-M val=(grouped)
+2026-09-30T14:12:36.504391263Z  ((null):0)
+2026-09-30T14:12:36.504394338Z [32m09/30 14:12:36.504[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:            AVP: 'Visited-Network-Identifier'(600) vend='3GPP'(10415) l=13 f=VM val=<00>
+2026-09-30T14:12:36.504402390Z  ((null):0)
+2026-09-30T14:12:36.504405154Z [32m09/30 14:12:36.504[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:         AVP: 'Error-Message'(281) l=8 f=-- val="DIAMETER_MISSING_AVP"
+2026-09-30T14:12:36.504408268Z  ((null):0)
+2026-09-30T14:12:36.709137495Z [32m09/30 14:12:36.708[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:PSM/test.cellrift.local in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'test.cellrift.local'
+2026-09-30T14:12:36.709155942Z  ((null):0)
+2026-09-30T14:12:38.278461462Z [32m09/30 14:12:38.278[0m: [[33mdiam[0m] [1;32mINFO[0m: CONNECTED TO 'test.cellrift.local' (SCTP,soc#18): (../lib/diameter/common/logger.c:81)
+2026-09-30T14:12:38.278679540Z [32m09/30 14:12:38.278[0m: [[33mdiam[0m] [1;33mERROR[0m: Conflicting rule: the number of occurences (0) is < the rule min (1) for 'Visited-Network-Identifier'.
+2026-09-30T14:12:38.278690486Z  ((null):0)
+2026-09-30T14:12:38.278736108Z [32m09/30 14:12:38.278[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in parserules_do@messages.c:2650: ERROR: in '((fd_dict_iterate_rules ( model, &data, parserules_check_one_rule )))' :	Bad message
+2026-09-30T14:12:38.278746984Z  ((null):0)
+2026-09-30T14:12:38.278808430Z [32m09/30 14:12:38.278[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:99: PARSING ERROR: 'DIAMETER_MISSING_AVP' from 'test.cellrift.local': 
+2026-09-30T14:12:38.278812566Z  ((null):0)
+2026-09-30T14:12:38.278842475Z [32m09/30 14:12:38.278[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:      '3GPP/User-Authorization-Request'
+2026-09-30T14:12:38.278846131Z  ((null):0)
+2026-09-30T14:12:38.278880937Z [32m09/30 14:12:38.278[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:        Version: 0x01
+2026-09-30T14:12:38.278884322Z  ((null):0)
+2026-09-30T14:12:38.278920761Z [32m09/30 14:12:38.278[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:        Length: 268
+2026-09-30T14:12:38.278924386Z  ((null):0)
+2026-09-30T14:12:38.278990344Z [32m09/30 14:12:38.278[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:        Flags: 0x80 (R---)
+2026-09-30T14:12:38.278994329Z  ((null):0)
+2026-09-30T14:12:38.279043562Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:        Command Code: 300
+2026-09-30T14:12:38.279047137Z  ((null):0)
+2026-09-30T14:12:38.279049751Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:        ApplicationId: 16777216
+2026-09-30T14:12:38.279058424Z  ((null):0)
+2026-09-30T14:12:38.279101748Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:        Hop-by-Hop Identifier: 0xCBC229D7
+2026-09-30T14:12:38.279104953Z  ((null):0)
+2026-09-30T14:12:38.279150626Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:        End-to-End Identifier: 0x31B1510B
+2026-09-30T14:12:38.279154722Z  ((null):0)
+2026-09-30T14:12:38.279188847Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:         {internal data}: src:test.cellrift.local(19) rwb:(nil) rt:1 cb:(nil),(nil)((nil)) qry:(nil) asso:0 sess:(nil)
+2026-09-30T14:12:38.279192222Z  ((null):0)
+2026-09-30T14:12:38.279245856Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:         AVP: 'Session-Id'(263) l=49 f=-M val="test.cellrift.local;1790777558;1;7db64719"
+2026-09-30T14:12:38.279249762Z  ((null):0)
+2026-09-30T14:12:38.279256652Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:         AVP: 'User-Name'(1) l=20 f=-M val="447700900001"
+2026-09-30T14:12:38.279259697Z  ((null):0)
+2026-09-30T14:12:38.279280468Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:         AVP: 'Public-Identity'(601) vend='3GPP'(10415) l=62 f=VM val="sip:447700900001@ims.mnc001.mcc001.3gppnetwork.org"
+2026-09-30T14:12:38.279284223Z  ((null):0)
+2026-09-30T14:12:38.279339755Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:         AVP: 'Origin-Host'(264) l=27 f=-M val="test.cellrift.local"
+2026-09-30T14:12:38.279343400Z  ((null):0)
+2026-09-30T14:12:38.279346135Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:         AVP: 'Origin-Realm'(296) l=22 f=-M val="cellrift.local"
+2026-09-30T14:12:38.279349399Z  ((null):0)
+2026-09-30T14:12:38.279373920Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:         AVP: 'Destination-Realm'(283) l=16 f=-M val="gradiant"
+2026-09-30T14:12:38.279377325Z  ((null):0)
+2026-09-30T14:12:38.279420574Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:         AVP: 'Vendor-Specific-Application-Id'(260) l=32 f=-M val=(grouped)
+2026-09-30T14:12:38.279424150Z  ((null):0)
+2026-09-30T14:12:38.279493387Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:            AVP: 'Vendor-Id'(266) l=12 f=-M val=10415 (0x28af)
+2026-09-30T14:12:38.279497102Z  ((null):0)
+2026-09-30T14:12:38.279503181Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:            AVP: 'Auth-Application-Id'(258) l=12 f=-M val=16777216 (0x1000000)
+2026-09-30T14:12:38.279505585Z  ((null):0)
+2026-09-30T14:12:38.279507588Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:         AVP: 'Auth-Session-State'(277) l=12 f=-M val='NO_STATE_MAINTAINED' (1 (0x1))
+2026-09-30T14:12:38.279512565Z  ((null):0)
+2026-09-30T14:12:38.279515589Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:100:         AVP: 'Route-Record'(282) l=8 f=-M val="test.cellrift.local"
+2026-09-30T14:12:38.279519115Z  ((null):0)
+2026-09-30T14:12:38.279710062Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in msg_dispatch@routing_dispatch.c:455: ERROR: in '(fd_msg_parse_or_error( &msgptr, &error ))' :	Bad message
+2026-09-30T14:12:38.279716632Z  ((null):0)
+2026-09-30T14:12:38.279719456Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:108: PARSING ERROR, returning:
+2026-09-30T14:12:38.279722420Z  ((null):0)
+2026-09-30T14:12:38.279725124Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:      '3GPP/User-Authorization-Answer'
+2026-09-30T14:12:38.279728209Z  ((null):0)
+2026-09-30T14:12:38.279730993Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:        Version: 0x01
+2026-09-30T14:12:38.279734098Z  ((null):0)
+2026-09-30T14:12:38.279737142Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:        Length: 20
+2026-09-30T14:12:38.279740056Z  ((null):0)
+2026-09-30T14:12:38.279743001Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:        Flags: 0x40 (-P--)
+2026-09-30T14:12:38.279745995Z  ((null):0)
+2026-09-30T14:12:38.279748579Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:        Command Code: 300
+2026-09-30T14:12:38.279751143Z  ((null):0)
+2026-09-30T14:12:38.279753406Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:        ApplicationId: 16777216
+2026-09-30T14:12:38.279760607Z  ((null):0)
+2026-09-30T14:12:38.279763401Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:        Hop-by-Hop Identifier: 0xCBC229D7
+2026-09-30T14:12:38.279766395Z  ((null):0)
+2026-09-30T14:12:38.279769189Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:        End-to-End Identifier: 0x31B1510B
+2026-09-30T14:12:38.279772244Z  ((null):0)
+2026-09-30T14:12:38.279774948Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:         {internal data}: src:(nil)(0) rwb:(nil) rt:0 cb:(nil),(nil)((nil)) qry:0x7ff9bc001720 asso:0 sess:0x7ff9e4002650
+2026-09-30T14:12:38.279778443Z  ((null):0)
+2026-09-30T14:12:38.279780967Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:         AVP: 'Session-Id'(263) l=8 f=-M val="test.cellrift.local;1790777558;1;7db64719"
+2026-09-30T14:12:38.279784182Z  ((null):0)
+2026-09-30T14:12:38.279786846Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:         AVP: 'Origin-Host'(264) l=8 f=-M val="hss.gradiant"
+2026-09-30T14:12:38.279789870Z  ((null):0)
+2026-09-30T14:12:38.279792544Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:         AVP: 'Origin-Realm'(296) l=8 f=-M val="gradiant"
+2026-09-30T14:12:38.279795578Z  ((null):0)
+2026-09-30T14:12:38.279798423Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:         AVP: 'Result-Code'(268) l=12 f=-M val='DIAMETER_MISSING_AVP' (5005 (0x138d))
+2026-09-30T14:12:38.279801457Z  ((null):0)
+2026-09-30T14:12:38.279804181Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:         AVP: 'Failed-AVP'(279) l=8 f=-M val=(grouped)
+2026-09-30T14:12:38.279807156Z  ((null):0)
+2026-09-30T14:12:38.279842883Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:            AVP: 'Visited-Network-Identifier'(600) vend='3GPP'(10415) l=13 f=VM val=<00>
+2026-09-30T14:12:38.279846448Z  ((null):0)
+2026-09-30T14:12:38.279849152Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Dispatch (0x55e3dd0ab520) in md_hook_cb_tree@dbg_msg_dumps.c:109:         AVP: 'Error-Message'(281) l=8 f=-- val="DIAMETER_MISSING_AVP"
+2026-09-30T14:12:38.279851546Z  ((null):0)
+2026-09-30T14:12:38.279857134Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:112: ROUTING ERROR 'Unable to forward answer to deleted / closed peer 'test.cellrift.local'.' for: 
+2026-09-30T14:12:38.279859608Z  ((null):0)
+2026-09-30T14:12:38.279861440Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:113:      '3GPP/User-Authorization-Answer'
+2026-09-30T14:12:38.279863824Z  ((null):0)
+2026-09-30T14:12:38.279865827Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:113:        Version: 0x01
+2026-09-30T14:12:38.279867890Z  ((null):0)
+2026-09-30T14:12:38.279869793Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:113:        Length: 20
+2026-09-30T14:12:38.279871936Z  ((null):0)
+2026-09-30T14:12:38.279873879Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:113:        Flags: 0x40 (-P--)
+2026-09-30T14:12:38.279875952Z  ((null):0)
+2026-09-30T14:12:38.279877814Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:113:        Command Code: 300
+2026-09-30T14:12:38.279880038Z  ((null):0)
+2026-09-30T14:12:38.279959435Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:113:        ApplicationId: 16777216
+2026-09-30T14:12:38.279962660Z  ((null):0)
+2026-09-30T14:12:38.279964613Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:113:        Hop-by-Hop Identifier: 0xCBC229D7
+2026-09-30T14:12:38.279966766Z  ((null):0)
+2026-09-30T14:12:38.280003260Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:113:        End-to-End Identifier: 0x31B1510B
+2026-09-30T14:12:38.280017821Z  ((null):0)
+2026-09-30T14:12:38.280019824Z [32m09/30 14:12:38.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:113:         {internal data}: src:(nil)(0) rwb:(nil) rt:0 cb:(nil),(nil)((nil)) qry:0x7ff9bc001720 asso:0 sess:0x7ff9e4002650
+2026-09-30T14:12:38.280024511Z  ((null):0)
+2026-09-30T14:12:38.280069367Z [32m09/30 14:12:38.280[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:113:         AVP: 'Session-Id'(263) l=8 f=-M val="test.cellrift.local;1790777558;1;7db64719"
+2026-09-30T14:12:38.280073584Z  ((null):0)
+2026-09-30T14:12:38.280079202Z [32m09/30 14:12:38.280[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:113:         AVP: 'Origin-Host'(264) l=8 f=-M val="hss.gradiant"
+2026-09-30T14:12:38.280081485Z  ((null):0)
+2026-09-30T14:12:38.280132366Z [32m09/30 14:12:38.280[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:113:         AVP: 'Origin-Realm'(296) l=8 f=-M val="gradiant"
+2026-09-30T14:12:38.280136462Z  ((null):0)
+2026-09-30T14:12:38.280144213Z [32m09/30 14:12:38.280[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:113:         AVP: 'Result-Code'(268) l=12 f=-M val='DIAMETER_MISSING_AVP' (5005 (0x138d))
+2026-09-30T14:12:38.280147518Z  ((null):0)
+2026-09-30T14:12:38.280150212Z [32m09/30 14:12:38.280[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:113:         AVP: 'Failed-AVP'(279) l=8 f=-M val=(grouped)
+2026-09-30T14:12:38.280153477Z  ((null):0)
+2026-09-30T14:12:38.280158825Z [32m09/30 14:12:38.280[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:113:            AVP: 'Visited-Network-Identifier'(600) vend='3GPP'(10415) l=13 f=VM val=<00>
+2026-09-30T14:12:38.280162821Z  ((null):0)
+2026-09-30T14:12:38.280205128Z [32m09/30 14:12:38.280[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:113:         AVP: 'Error-Message'(281) l=8 f=-- val="DIAMETER_MISSING_AVP"
+2026-09-30T14:12:38.280210155Z  ((null):0)
+2026-09-30T14:12:38.280275692Z [32m09/30 14:12:38.280[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:116: DROPPED 'Unable to forward answer to deleted / closed peer 'test.cellrift.local'.'
+2026-09-30T14:12:38.280279868Z  ((null):0)
+2026-09-30T14:12:38.280282803Z [32m09/30 14:12:38.280[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:117:      '3GPP/User-Authorization-Answer'
+2026-09-30T14:12:38.280285877Z  ((null):0)
+2026-09-30T14:12:38.280335536Z [32m09/30 14:12:38.280[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:117:        Version: 0x01
+2026-09-30T14:12:38.280339502Z  ((null):0)
+2026-09-30T14:12:38.280342196Z [32m09/30 14:12:38.280[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:117:        Length: 20
+2026-09-30T14:12:38.280345371Z  ((null):0)
+2026-09-30T14:12:38.280348004Z [32m09/30 14:12:38.280[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:117:        Flags: 0x40 (-P--)
+2026-09-30T14:12:38.280351109Z  ((null):0)
+2026-09-30T14:12:38.280390151Z [32m09/30 14:12:38.280[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:117:        Command Code: 300
+2026-09-30T14:12:38.280393296Z  ((null):0)
+2026-09-30T14:12:38.280395169Z [32m09/30 14:12:38.280[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:117:        ApplicationId: 16777216
+2026-09-30T14:12:38.280397232Z  ((null):0)
+2026-09-30T14:12:38.280399125Z [32m09/30 14:12:38.280[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:117:        Hop-by-Hop Identifier: 0xCBC229D7
+2026-09-30T14:12:38.280401178Z  ((null):0)
+2026-09-30T14:12:38.280402980Z [32m09/30 14:12:38.280[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:117:        End-to-End Identifier: 0x31B1510B
+2026-09-30T14:12:38.280405063Z  ((null):0)
+2026-09-30T14:12:38.280444281Z [32m09/30 14:12:38.280[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:117:         {internal data}: src:(nil)(0) rwb:(nil) rt:0 cb:(nil),(nil)((nil)) qry:0x7ff9bc001720 asso:0 sess:0x7ff9e4002650
+2026-09-30T14:12:38.280460575Z  ((null):0)
+2026-09-30T14:12:38.280463640Z [32m09/30 14:12:38.280[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:117:         AVP: 'Session-Id'(263) l=8 f=-M val="test.cellrift.local;1790777558;1;7db64719"
+2026-09-30T14:12:38.280467095Z  ((null):0)
+2026-09-30T14:12:38.280509077Z [32m09/30 14:12:38.280[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:117:         AVP: 'Origin-Host'(264) l=8 f=-M val="hss.gradiant"
+2026-09-30T14:12:38.280512041Z  ((null):0)
+2026-09-30T14:12:38.280514044Z [32m09/30 14:12:38.280[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:117:         AVP: 'Origin-Realm'(296) l=8 f=-M val="gradiant"
+2026-09-30T14:12:38.280516268Z  ((null):0)
+2026-09-30T14:12:38.280597998Z [32m09/30 14:12:38.280[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:117:         AVP: 'Result-Code'(268) l=12 f=-M val='DIAMETER_MISSING_AVP' (5005 (0x138d))
+2026-09-30T14:12:38.280601013Z  ((null):0)
+2026-09-30T14:12:38.280602926Z [32m09/30 14:12:38.280[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:117:         AVP: 'Failed-AVP'(279) l=8 f=-M val=(grouped)
+2026-09-30T14:12:38.280605059Z  ((null):0)
+2026-09-30T14:12:38.280607052Z [32m09/30 14:12:38.280[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:117:            AVP: 'Visited-Network-Identifier'(600) vend='3GPP'(10415) l=13 f=VM val=<00>
+2026-09-30T14:12:38.280612630Z  ((null):0)
+2026-09-30T14:12:38.280614543Z [32m09/30 14:12:38.280[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:Routing-OUT (0x55e3dd0c5d90) in md_hook_cb_tree@dbg_msg_dumps.c:117:         AVP: 'Error-Message'(281) l=8 f=-- val="DIAMETER_MISSING_AVP"
+2026-09-30T14:12:38.280616806Z  ((null):0)
+2026-09-30T14:12:43.279129653Z [32m09/30 14:12:43.279[0m: [[33mdiam[0m] [1;33mERROR[0m: pid:PSM/test.cellrift.local in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'test.cellrift.local'
+2026-09-30T14:12:43.279148711Z  ((null):0)

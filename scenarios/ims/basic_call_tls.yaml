@@ -1,0 +1,92 @@
+# VoLTE Basic Call over SIP/TLS — INVITE → 180 Ringing → 200 OK → BYE.
+# PROVEN AGAINST: Asterisk (non-IMS SIP) — in CI with certificate
+# verification ON, via a ca_file override; THIS FILE as shipped sets
+# insecure_skip_verify and is never edited by the harness. The sip-interop job
+# derives a copy whose insecure_skip_verify line is replaced by a ca_file
+# naming a per-run harness-generated CA, and runs that copy against a
+# digest-pinned Asterisk 22.10.1. Point this file at your own peer; see
+# test/interop/README.md for supplying your own CA, certificate and key.
+# SYNTHETIC DATA: all subscriber identifiers use the Ofcom test range
+# (447700900xxx) and fictional .lab.local / .cellrift.local domains.
+# Never use real subscriber MSISDNs or SIP identities in scenario files.
+#
+# This scenario is identical to basic_call.yaml but uses TLS transport.
+# The target port is 5061 (standard SIP/TLS port, RFC 3261 §26.2.2).
+#
+# insecure_skip_verify is set because this is a lab template pointed at a
+# self-signed peer. Server verification is ON by default; this key is the
+# only way to turn it off, and the run reports a warning when it is set.
+# For production, delete insecure_skip_verify and add:
+#   ca_file:   certs/ca.crt        (verify the server certificate)
+#   cert_file: certs/client.crt    (+ key_file, for mutual TLS)
+#   key_file:  certs/client.key
+#
+# Flow:
+#   1. SIP INVITE over TLS → 180 Ringing → 200 OK (call setup)
+#   2. SIP BYE over TLS → 200 OK (call teardown)
+#
+# References:
+#   - RFC 3261 §26.2.2 (SIP over TLS)
+#   - RFC 3261 §13 (SIP Dialog / INVITE)
+#   - RFC 3455 (3GPP Private Header Extensions)
+
+name: VoLTE basic call (SIP/TLS)
+version: "1.0"
+description: >
+  End-to-end VoLTE call over SIP/TLS transport: INVITE with 180 Ringing,
+  200 OK answer, and BYE teardown. Validates TLS transport, call setup,
+  and teardown with 3GPP P-Access-Network-Info and P-Charging-Vector headers.
+  Opts out of server verification (insecure_skip_verify) for a lab peer with
+  a self-signed certificate; the run reports a warning for it.
+
+protocols:
+  sip:
+    transport: tls
+    # Lab only: disables server certificate verification for a self-signed
+    # peer. Remove this and set ca_file to verify; add cert_file + key_file
+    # for mutual TLS.
+    insecure_skip_verify: true
+
+variables:
+  caller_msisdn: "447700900001"
+  callee_msisdn: "447700900002"
+  pcscf_host: "pcscf.lab.local"
+  pcscf_tls_port: "5061"
+  icid: "cellrift-call-tls-001"
+
+steps:
+  # Step 1: SIP INVITE over TLS with SDP offer.
+  - id: send_invite
+    protocol: sip
+    action: send
+    target: "{{ pcscf_host }}:{{ pcscf_tls_port }}"
+    message: INVITE
+    fields:
+      From: "sip:{{ caller_msisdn }}@ims.local"
+      To: "sip:{{ callee_msisdn }}@ims.local"
+      Contact: "<sip:{{ caller_msisdn }}@10.0.0.1:5061;transport=TLS>"
+      P-Access-Network-Info: "3GPP-E-UTRAN-FDD; utran-cell-id-3gpp=001010001000001"
+      P-Charging-Vector: "icid-value={{ icid }}"
+    body:
+      content_type: application/sdp
+      template: basic_audio_offer
+    capture:
+      call_status: response.status_code
+      remote_rtp_port: response.body.sdp.port
+      negotiated_codec: response.body.sdp.codec
+    assert:
+      - response.status_code == 200
+      - negotiated_codec != null
+
+  # Step 2: SIP BYE over TLS to terminate the call.
+  - id: send_bye
+    protocol: sip
+    action: send
+    target: "{{ pcscf_host }}:{{ pcscf_tls_port }}"
+    message: BYE
+    fields:
+      From: "sip:{{ caller_msisdn }}@ims.local"
+      To: "sip:{{ callee_msisdn }}@ims.local"
+      P-Charging-Vector: "icid-value={{ icid }}"
+    assert:
+      - response.status_code == 200

@@ -1,0 +1,1324 @@
+2026-10-02T15:48:43.076255592Z Seeding global EID '60:45:bd:ab:25:1a' from 'eth0' using 'siocgifhwaddr'
+2026-10-02T15:48:43.076294620Z Parsing /etc/asterisk/asterisk.conf
+2026-10-02T15:48:43.248756628Z Asterisk 22.10.1, Copyright (C) 1999 - 2025, Sangoma Technologies Corporation and others.
+2026-10-02T15:48:43.248777519Z Created by Mark Spencer <markster@digium.com>
+2026-10-02T15:48:43.248781295Z Asterisk comes with ABSOLUTELY NO WARRANTY; type 'core show warranty' for details.
+2026-10-02T15:48:43.248784359Z This is free software, with components licensed under the GNU General Public
+2026-10-02T15:48:43.248787243Z License version 2 and other licenses; you are welcome to redistribute it under
+2026-10-02T15:48:43.248790017Z certain conditions. Type 'core show license' for details.
+2026-10-02T15:48:43.248792882Z =========================================================================
+2026-10-02T15:48:43.248795626Z Running as user 'asterisk'
+2026-10-02T15:48:43.248798190Z Parsing /etc/asterisk/asterisk.conf
+2026-10-02T15:48:43.248800723Z gl_pathc 6
+2026-10-02T15:48:43.248803157Z UUID system initiated
+2026-10-02T15:48:43.248805741Z Unable to find key 'UUID' in family 'pbx'
+2026-10-02T15:48:43.248808465Z PBX UUID: 539faf32-ca22-430d-b483-54b95d95ae83
+2026-10-02T15:48:43.248810969Z Could not find option 'minimum_size' with type 'threadpool' in module 'stasis'
+2026-10-02T15:48:43.248813643Z extract int from [5] in [0, 2147483647] gives [5](0)
+2026-10-02T15:48:43.248816176Z extract int from [50] in [0, 2147483647] gives [50](0)
+2026-10-02T15:48:43.248818670Z extract int from [20] in [0, 2147483647] gives [20](0)
+2026-10-02T15:48:43.248821174Z extract int from [5] in [0, 2147483647] gives [5](0)
+2026-10-02T15:48:43.248823678Z extract int from [5] in [0, 2147483647] gives [5](0)
+2026-10-02T15:48:43.248826392Z extract int from [50] in [0, 2147483647] gives [50](0)
+2026-10-02T15:48:43.248828985Z extract int from [20] in [0, 2147483647] gives [20](0)
+2026-10-02T15:48:43.248831439Z extract int from [5] in [0, 2147483647] gives [5](0)
+2026-10-02T15:48:43.248833933Z Parsing /etc/asterisk/stasis.conf
+2026-10-02T15:48:43.248836416Z Taskprocessor 'taskpool/s:stasis-00000000': Task pushed from taskpool.c:176 (taskpool_taskprocessor_alloc)
+2026-10-02T15:48:43.248839070Z Taskprocessor 'taskpool/s:stasis-00000001': Task pushed from taskpool.c:176 (taskpool_taskprocessor_alloc)
+2026-10-02T15:48:43.248841754Z Taskprocessor 'taskpool/s:stasis-00000002': Task pushed from taskpool.c:176 (taskpool_taskprocessor_alloc)
+2026-10-02T15:48:43.248844488Z Taskprocessor 'taskpool/s:stasis-00000003': Task pushed from taskpool.c:176 (taskpool_taskprocessor_alloc)
+2026-10-02T15:48:43.248847102Z Taskprocessor 'taskpool/s:stasis-00000004': Task pushed from taskpool.c:176 (taskpool_taskprocessor_alloc)
+2026-10-02T15:48:43.248849746Z Resetting translation matrix
+2026-10-02T15:48:43.248852180Z Parsing /etc/asterisk/sorcery.conf
+2026-10-02T15:48:43.248862115Z Taskprocessor 'taskpool/s:sorcery-00000005': Task pushed from taskpool.c:176 (taskpool_taskprocessor_alloc)
+2026-10-02T15:48:43.248864949Z Parsing /etc/asterisk/sorcery.conf
+2026-10-02T15:48:43.248867413Z Creating topic. name: system:all, detail: 
+2026-10-02T15:48:43.248870768Z Topic 'system:all': 0x55769421fe20 created
+2026-10-02T15:48:43.248873432Z Creating topic. name: endpoint:all, detail: 
+2026-10-02T15:48:43.248876025Z Topic 'endpoint:all': 0x557694cd4d70 created
+2026-10-02T15:48:43.248878569Z Creating topic. name: cache_pattern:0/endpoint:all, detail: 
+2026-10-02T15:48:43.248881053Z Topic 'cache_pattern:0/endpoint:all': 0x557694223610 created
+2026-10-02T15:48:43.248883707Z [Oct  2 15:48:43]  Asterisk PBX Core Initializing
+2026-10-02T15:48:43.252617029Z [Oct  2 15:48:43]  Asterisk Dynamic Loader Starting:
+2026-10-02T15:48:43.253584518Z [Oct  2 15:48:43] NOTICE[1]: loader.c:2568 load_modules: 342 modules will be loaded.
+2026-10-02T15:48:43.317193913Z [Oct  2 15:48:43] NOTICE[1]: res_config_ldap.c:1881 parse_config: No directory user found, anonymous binding as default.
+2026-10-02T15:48:43.317344136Z [Oct  2 15:48:43] ERROR[1]: res_config_ldap.c:1907 parse_config: No directory URL or host found.
+2026-10-02T15:48:43.317349043Z [Oct  2 15:48:43] ERROR[1]: res_config_ldap.c:1769 load_module: Cannot load LDAP RealTime driver.
+2026-10-02T15:48:43.317352308Z [Oct  2 15:48:43] WARNING[1]: res_config_pgsql.c:1468 parse_config: PostgreSQL RealTime: No database user found, using 'asterisk' as default.
+2026-10-02T15:48:43.317355383Z [Oct  2 15:48:43] WARNING[1]: res_config_pgsql.c:1480 parse_config: PostgreSQL RealTime: No database password found, using 'asterisk' as default.
+2026-10-02T15:48:43.317358307Z [Oct  2 15:48:43] WARNING[1]: res_config_pgsql.c:1492 parse_config: PostgreSQL RealTime: No database host found, using localhost via socket.
+2026-10-02T15:48:43.317361041Z [Oct  2 15:48:43] WARNING[1]: res_config_pgsql.c:1499 parse_config: PostgreSQL RealTime: No database name found, using 'asterisk' as default.
+2026-10-02T15:48:43.317363905Z [Oct  2 15:48:43] WARNING[1]: res_config_pgsql.c:1512 parse_config: PostgreSQL RealTime: No database port found, using 5432 as default.
+2026-10-02T15:48:43.317366760Z [Oct  2 15:48:43] WARNING[1]: res_config_pgsql.c:1538 parse_config: PostgreSQL RealTime: No database socket found, using '/tmp/.s.PGSQL.5432' as default.
+2026-10-02T15:48:43.317438326Z [Oct  2 15:48:43] ERROR[1]: res_config_pgsql.c:1636 pgsql_reconnect: PostgreSQL RealTime: Failed to connect database asterisk on : 
+2026-10-02T15:48:43.317472817Z [Oct  2 15:48:43] WARNING[1]: res_config_pgsql.c:1574 parse_config: PostgreSQL RealTime: Couldn't establish connection. Check debug.
+2026-10-02T15:48:43.317560868Z [Oct  2 15:48:43]   == PostgreSQL RealTime reloaded.
+2026-10-02T15:48:43.320847126Z [Oct  2 15:48:43] NOTICE[1]: cdr.c:4656 cdr_toggle_runtime_options: CDR simple logging enabled.
+2026-10-02T15:48:43.324292460Z [Oct  2 15:48:43] NOTICE[1]: indications.c:1100 load_indications: Default country for indication tones: us
+2026-10-02T15:48:43.324350957Z [Oct  2 15:48:43] NOTICE[1]: indications.c:424 ast_set_indication_country: Setting default indication country to 'us'
+2026-10-02T15:48:43.342840095Z [Oct  2 15:48:43]     -- Local IPv4 address determined to be: 10.1.1.45
+2026-10-02T15:48:43.343416122Z [Oct  2 15:48:43]     -- Local IPv6 address determined to be: fe80::6245:bdff:feab:251a
+2026-10-02T15:48:43.366850946Z [Oct  2 15:48:43]   == 'UDP+IPv4' is an available SIP transport
+2026-10-02T15:48:43.366878577Z [Oct  2 15:48:43]   == 'TCP+IPv4' is not an available SIP transport, disabling resolver support for it
+2026-10-02T15:48:43.366882192Z [Oct  2 15:48:43]   == 'TLS+IPv4' is an available SIP transport
+2026-10-02T15:48:43.366884486Z [Oct  2 15:48:43]   == 'UDP+IPv6' is not an available SIP transport, disabling resolver support for it
+2026-10-02T15:48:43.366886619Z [Oct  2 15:48:43]   == 'TCP+IPv6' is not an available SIP transport, disabling resolver support for it
+2026-10-02T15:48:43.366889183Z [Oct  2 15:48:43]   == 'TLS+IPv6' is not an available SIP transport, disabling resolver support for it
+2026-10-02T15:48:43.373218046Z [Oct  2 15:48:43] WARNING[1]: res_phoneprov.c:1255 get_defaults: Unable to find a valid server address or name.
+2026-10-02T15:48:43.373745410Z [Oct  2 15:48:43]     -- Files not found in moh for moh class:default
+2026-10-02T15:48:43.373751689Z [Oct  2 15:48:43] WARNING[1]: res_musiconhold.c:2333 load_module: No music on hold classes configured, disabling music on hold.
+2026-10-02T15:48:43.387740034Z [Oct  2 15:48:43]   == libsrtp2 2.7.0 initialized
+2026-10-02T15:48:43.389111243Z [Oct  2 15:48:43]   == RTP Allocating from port range 10000 -> 20000
+2026-10-02T15:48:43.389662623Z [Oct  2 15:48:43] NOTICE[1]: res_smdi.c:1430 load_module: No SMDI interfaces are available to listen on, not starting SMDI listener.
+2026-10-02T15:48:43.393384228Z ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+2026-10-02T15:48:43.393441463Z ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+2026-10-02T15:48:43.393445169Z ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+2026-10-02T15:48:43.393448183Z ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+2026-10-02T15:48:43.393451128Z ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+2026-10-02T15:48:43.393453932Z ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+2026-10-02T15:48:43.393456606Z ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+2026-10-02T15:48:43.393459490Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM sysdefault
+2026-10-02T15:48:43.393469144Z ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+2026-10-02T15:48:43.393528182Z ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+2026-10-02T15:48:43.393597716Z ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+2026-10-02T15:48:43.393614751Z ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+2026-10-02T15:48:43.393663163Z ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+2026-10-02T15:48:43.393731254Z ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+2026-10-02T15:48:43.393799716Z ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+2026-10-02T15:48:43.393854938Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM sysdefault
+2026-10-02T15:48:43.393896880Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.front
+2026-10-02T15:48:43.393900055Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.rear
+2026-10-02T15:48:43.393942819Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.center_lfe
+2026-10-02T15:48:43.394027094Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.side
+2026-10-02T15:48:43.394092762Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.surround21
+2026-10-02T15:48:43.394158640Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.surround21
+2026-10-02T15:48:43.394217397Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.surround40
+2026-10-02T15:48:43.394220812Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.surround41
+2026-10-02T15:48:43.394284146Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.surround50
+2026-10-02T15:48:43.394289695Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.surround51
+2026-10-02T15:48:43.394292659Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.surround71
+2026-10-02T15:48:43.394295463Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.iec958
+2026-10-02T15:48:43.394302083Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.iec958
+2026-10-02T15:48:43.394361441Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.iec958
+2026-10-02T15:48:43.394510203Z ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+2026-10-02T15:48:43.394514880Z ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+2026-10-02T15:48:43.394517754Z ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+2026-10-02T15:48:43.394520628Z ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+2026-10-02T15:48:43.394523412Z ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+2026-10-02T15:48:43.394526106Z ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+2026-10-02T15:48:43.394552776Z ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+2026-10-02T15:48:43.394555971Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM hdmi
+2026-10-02T15:48:43.394677441Z ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+2026-10-02T15:48:43.394681968Z ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+2026-10-02T15:48:43.394684903Z ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+2026-10-02T15:48:43.394687516Z ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+2026-10-02T15:48:43.394690291Z ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+2026-10-02T15:48:43.394693125Z ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+2026-10-02T15:48:43.394732303Z ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+2026-10-02T15:48:43.394764451Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM hdmi
+2026-10-02T15:48:43.394767235Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.modem
+2026-10-02T15:48:43.394770019Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.modem
+2026-10-02T15:48:43.394773164Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.phoneline
+2026-10-02T15:48:43.394836528Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.phoneline
+2026-10-02T15:48:43.394956517Z ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+2026-10-02T15:48:43.394961324Z ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+2026-10-02T15:48:43.394964218Z ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+2026-10-02T15:48:43.394967022Z ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+2026-10-02T15:48:43.394969836Z ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+2026-10-02T15:48:43.394972610Z ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+2026-10-02T15:48:43.394975455Z ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+2026-10-02T15:48:43.395012530Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM default
+2026-10-02T15:48:43.395133670Z ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+2026-10-02T15:48:43.395138507Z ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+2026-10-02T15:48:43.395141522Z ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+2026-10-02T15:48:43.395190775Z ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+2026-10-02T15:48:43.395194681Z ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+2026-10-02T15:48:43.395197605Z ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+2026-10-02T15:48:43.395200700Z ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+2026-10-02T15:48:43.395208271Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM default
+2026-10-02T15:48:43.395413436Z ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+2026-10-02T15:48:43.395457512Z ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_id returned error: No such file or directory
+2026-10-02T15:48:43.395460546Z ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+2026-10-02T15:48:43.395463180Z ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+2026-10-02T15:48:43.395465994Z ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+2026-10-02T15:48:43.395468628Z ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+2026-10-02T15:48:43.395473485Z ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+2026-10-02T15:48:43.395476440Z ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM dmix
+2026-10-02T15:48:43.397579958Z Cannot connect to server socket err = No such file or directory
+2026-10-02T15:48:43.397587780Z Cannot connect to server request channel
+2026-10-02T15:48:43.399719000Z jack server is not running or cannot be started
+2026-10-02T15:48:43.399868872Z JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock
+2026-10-02T15:48:43.399874651Z JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock
+2026-10-02T15:48:43.401679906Z [Oct  2 15:48:43]   == Binding IAX2 to default address 0.0.0.0:4569
+2026-10-02T15:48:43.402447598Z [Oct  2 15:48:43]   == 10 helper threads started
+2026-10-02T15:48:43.402456251Z [Oct  2 15:48:43]   == IAX Ready and Listening
+2026-10-02T15:48:43.402565743Z [Oct  2 15:48:43]     -- Loaded provisioning template 'default'
+2026-10-02T15:48:43.430558176Z [Oct  2 15:48:43] NOTICE[1]: confbridge/conf_config_parser.c:2601 verify_default_profiles: Adding default_menu menu to app_confbridge
+2026-10-02T15:48:43.435105349Z [Oct  2 15:48:43] WARNING[1]: cel_pgsql.c:476 process_my_load_module: CEL pgsql config file missing global section.
+2026-10-02T15:48:43.435232418Z [Oct  2 15:48:43] NOTICE[1]: cdr_pgsql.c:541 config_module: cdr_pgsql configuration contains no global section, skipping module load.
+2026-10-02T15:48:43.435897907Z [Oct  2 15:48:43] NOTICE[1]: cdrel_custom/config.c:1352 load_text_file_config_file: cdr_custom.conf: Loaded 0 configs
+2026-10-02T15:48:43.436343089Z [Oct  2 15:48:43] NOTICE[1]: cdrel_custom/config.c:1352 load_text_file_config_file: cel_custom.conf: Loaded 0 configs
+2026-10-02T15:48:43.436752769Z [Oct  2 15:48:43] NOTICE[1]: cdrel_custom/config.c:1079 load_database_config_file: cdr_sqlite3_custom.conf: Loaded 0 configs
+2026-10-02T15:48:43.437158652Z [Oct  2 15:48:43] WARNING[1]: config.c:2255 process_text_line: parse error: No category context for line 64 of /etc/asterisk/cel_sqlite3_custom.conf
+2026-10-02T15:48:43.437165022Z [Oct  2 15:48:43] ERROR[1]: cdrel_custom/config.c:1055 load_database_config_file: Unable to load cel_sqlite3_custom.conf. Not logging CELs to custom database
+2026-10-02T15:48:43.454593262Z [Oct  2 15:48:43]     -- Security Logging Enabled
+2026-10-02T15:48:43.456901005Z [Oct  2 15:48:43]   == DUNDi Ready and Listening on 0.0.0.0:4520
+2026-10-02T15:48:43.470323387Z [Oct  2 15:48:43]   == UNISTIM Listening on 0.0.0.0:5000
+2026-10-02T15:48:43.475345507Z [Oct  2 15:48:43] WARNING[1]: ael/pval.c:2451 check_pval_item: Warning: file /etc/asterisk/extensions.ael, line 196-196: macro call to ael-dundi-e164 cannot be found in the AEL code!
+2026-10-02T15:48:43.475432937Z [Oct  2 15:48:43] WARNING[1]: ael/pval.c:2451 check_pval_item: Warning: file /etc/asterisk/extensions.ael, line 209-209: macro call to ael-dundi-e164 cannot be found in the AEL code!
+2026-10-02T15:48:43.475436632Z [Oct  2 15:48:43] WARNING[1]: ael/pval.c:2451 check_pval_item: Warning: file /etc/asterisk/extensions.ael, line 328-328: macro call to ael-std-exten-ael cannot be found in the AEL code!
+2026-10-02T15:48:43.475442801Z [Oct  2 15:48:43]   == Setting global variable 'CONSOLE-AEL' to '"Console/dsp"'
+2026-10-02T15:48:43.475445716Z [Oct  2 15:48:43]   == Setting global variable 'OUTBOUND-TRUNK' to '"Zap/g2"'
+2026-10-02T15:48:43.475448380Z [Oct  2 15:48:43]   == Setting global variable 'OUTBOUND-TRUNKMSD' to '1'
+2026-10-02T15:48:43.475451124Z [Oct  2 15:48:43]     -- Including switch 'DUNDi/e164' in context 'ael-dundi-e164-switch'
+2026-10-02T15:48:43.476763856Z [Oct  2 15:48:43]     -- Registered handler for 'Spandsp' (Spandsp FAX Driver)
+2026-10-02T15:48:43.480427695Z [Oct  2 15:48:43] WARNING[1]: loader.c:2572 load_modules: Some non-required modules failed to load.
+2026-10-02T15:48:43.494244354Z [Oct  2 15:48:43] WARNING[1]: loader.c:2666 load_modules: Module 'res_adsi' has been loaded but may be removed in a future release.
+2026-10-02T15:48:43.509192226Z [Oct  2 15:48:43] WARNING[1]: loader.c:2666 load_modules: Module 'app_getcpeid' has been loaded but may be removed in a future release.
+2026-10-02T15:48:43.527532683Z [Oct  2 15:48:43] WARNING[1]: loader.c:2666 load_modules: Module 'app_adsiprog' has been loaded but may be removed in a future release.
+2026-10-02T15:48:43.531390961Z [Oct  2 15:48:43] ERROR[1]: loader.c:2687 load_modules: Error loading module 'format_ogg_vorbis.so': libvorbisenc.so.2: cannot open shared object file: No such file or directory
+2026-10-02T15:48:43.531399784Z [Oct  2 15:48:43] ERROR[1]: loader.c:2687 load_modules: cdr_pgsql declined to load.
+2026-10-02T15:48:43.531402919Z [Oct  2 15:48:43] ERROR[1]: loader.c:2687 load_modules: cdr_custom declined to load.
+2026-10-02T15:48:43.531405863Z [Oct  2 15:48:43] ERROR[1]: loader.c:2687 load_modules: cel_custom declined to load.
+2026-10-02T15:48:43.531408617Z [Oct  2 15:48:43] ERROR[1]: loader.c:2687 load_modules: cdr_sqlite3_custom declined to load.
+2026-10-02T15:48:43.531411332Z [Oct  2 15:48:43] ERROR[1]: loader.c:2687 load_modules: cel_sqlite3_custom declined to load.
+2026-10-02T15:48:43.531869573Z [Oct  2 15:48:43] WARNING[41]: pbx_config.c:2003 startup_event_cb: users.conf is deprecated and will be removed in a future version of Asterisk
+2026-10-02T15:48:43.531975601Z [Oct  2 15:48:43] Asterisk Ready.
+2026-10-02T15:48:44.537776196Z [Oct  2 15:48:44]     -- Remote UNIX connection
+2026-10-02T15:48:44.537939589Z [Oct  2 15:48:44]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:44.603666152Z [Oct  2 15:48:44]     -- Remote UNIX connection
+2026-10-02T15:48:44.603883455Z [Oct  2 15:48:44]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:44.661185138Z [Oct  2 15:48:44]     -- Remote UNIX connection
+2026-10-02T15:48:44.661501719Z [Oct  2 15:48:44]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:44.713528948Z [Oct  2 15:48:44]     -- Remote UNIX connection
+2026-10-02T15:48:44.714015892Z [Oct  2 15:48:44]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:45.764632342Z [Oct  2 15:48:45]     -- Remote UNIX connection
+2026-10-02T15:48:45.764922884Z [Oct  2 15:48:45]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:45.817427142Z [Oct  2 15:48:45]     -- Remote UNIX connection
+2026-10-02T15:48:45.819066861Z [Oct  2 15:48:45]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:46.865288555Z [Oct  2 15:48:46]     -- Remote UNIX connection
+2026-10-02T15:48:46.865308925Z [Oct  2 15:48:46]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:46.918850045Z [Oct  2 15:48:46]     -- Remote UNIX connection
+2026-10-02T15:48:46.919641062Z [Oct  2 15:48:46]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:46.967647831Z [Oct  2 15:48:46]     -- Remote UNIX connection
+2026-10-02T15:48:46.968108075Z [Oct  2 15:48:46]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:48.037379660Z [Oct  2 15:48:48]     -- Remote UNIX connection
+2026-10-02T15:48:48.038350885Z [Oct  2 15:48:48]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:48.050451311Z [Oct  2 15:48:48]     -- Remote UNIX connection
+2026-10-02T15:48:48.050514545Z [Oct  2 15:48:48]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:48.060016938Z [Oct  2 15:48:48]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:48.060151698Z [Oct  2 15:48:48]     -- Remote UNIX connection
+2026-10-02T15:48:48.070002890Z [Oct  2 15:48:48]     -- Remote UNIX connection
+2026-10-02T15:48:48.070025503Z [Oct  2 15:48:48]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:48.082003147Z [Oct  2 15:48:48]     -- Remote UNIX connection
+2026-10-02T15:48:48.083138556Z [Oct  2 15:48:48]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:48.096864821Z [Oct  2 15:48:48]     -- Remote UNIX connection
+2026-10-02T15:48:48.098099697Z [Oct  2 15:48:48]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:48.108104187Z [Oct  2 15:48:48]     -- Remote UNIX connection
+2026-10-02T15:48:48.109324341Z [Oct  2 15:48:48]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:48.112089334Z [Oct  2 15:48:48]     -- Remote UNIX connection
+2026-10-02T15:48:48.112505382Z [Oct  2 15:48:48]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:48.124522996Z [Oct  2 15:48:48]     -- Remote UNIX connection
+2026-10-02T15:48:48.126094713Z [Oct  2 15:48:48]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:48.170065510Z [Oct  2 15:48:48]     -- Remote UNIX connection
+2026-10-02T15:48:48.170110757Z [Oct  2 15:48:48]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:48.220015008Z [Oct  2 15:48:48]     -- Remote UNIX connection
+2026-10-02T15:48:48.220944501Z [Oct  2 15:48:48]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:49.274341877Z [Oct  2 15:48:49]     -- Remote UNIX connection
+2026-10-02T15:48:49.274693180Z [Oct  2 15:48:49]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:49.326939157Z [Oct  2 15:48:49]     -- Remote UNIX connection
+2026-10-02T15:48:49.327827157Z [Oct  2 15:48:49]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:49.377895365Z [Oct  2 15:48:49]     -- Remote UNIX connection
+2026-10-02T15:48:49.378261190Z [Oct  2 15:48:49]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:49.427252866Z [Oct  2 15:48:49]     -- Remote UNIX connection
+2026-10-02T15:48:49.427408919Z [Oct  2 15:48:49]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:49.479736657Z [Oct  2 15:48:49]     -- Remote UNIX connection
+2026-10-02T15:48:49.479945237Z [Oct  2 15:48:49]     -- Remote UNIX connection disconnected
+2026-10-02T15:48:49.567646508Z [Oct  2 15:48:49]     -- Remote UNIX connection
+2026-10-02T15:48:49.567876531Z [Oct  2 15:48:49]     -- Remote UNIX connection disconnected
+2026-10-02T15:49:09.806067189Z [Oct  2 15:49:09] <--- Received SIP request (365 bytes) from UDP:127.0.0.1:53897 --->
+2026-10-02T15:49:09.806099176Z [Oct  2 15:49:09] REGISTER sip:447700900123@127.0.0.1:15060 SIP/2.0
+2026-10-02T15:49:09.806102551Z [Oct  2 15:49:09] Via: SIP/2.0/UDP [::]:53897;branch=z9hG4bK7855098120735691844
+2026-10-02T15:49:09.806105646Z [Oct  2 15:49:09] Max-Forwards: 70
+2026-10-02T15:49:09.806108410Z [Oct  2 15:49:09] From: sip:447700900123@ims.lab.local
+2026-10-02T15:49:09.806111144Z [Oct  2 15:49:09] To: sip:447700900123@ims.lab.local
+2026-10-02T15:49:09.806114018Z [Oct  2 15:49:09] Call-ID: cellrift-1641346418093578092@localhost
+2026-10-02T15:49:09.806116963Z [Oct  2 15:49:09] CSeq: 1 REGISTER
+2026-10-02T15:49:09.806119647Z [Oct  2 15:49:09] Contact: <sip:447700900123@10.0.0.1:5060>
+2026-10-02T15:49:09.806122481Z [Oct  2 15:49:09] Content-Length: 0
+2026-10-02T15:49:09.806125205Z [Oct  2 15:49:09] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:09.806127949Z [Oct  2 15:49:09] 
+2026-10-02T15:49:09.806130543Z [Oct  2 15:49:09] 
+2026-10-02T15:49:09.806642805Z [Oct  2 15:49:09]     -- Added contact 'sip:447700900123@10.0.0.1:5060' to AOR '447700900123' with expiration of 3600 seconds
+2026-10-02T15:49:09.806786559Z [Oct  2 15:49:09]   == Endpoint 447700900123 is now Reachable
+2026-10-02T15:49:09.807258370Z [Oct  2 15:49:09] <--- Transmitting SIP response (431 bytes) to UDP:127.0.0.1:53897 --->
+2026-10-02T15:49:09.807264760Z [Oct  2 15:49:09] SIP/2.0 200 OK
+2026-10-02T15:49:09.807267704Z [Oct  2 15:49:09] Via: SIP/2.0/UDP [::]:53897;rport=53897;received=127.0.0.1;branch=z9hG4bK7855098120735691844
+2026-10-02T15:49:09.807270569Z [Oct  2 15:49:09] Call-ID: cellrift-1641346418093578092@localhost
+2026-10-02T15:49:09.807273383Z [Oct  2 15:49:09] From: <sip:447700900123@ims.lab.local>
+2026-10-02T15:49:09.807276187Z [Oct  2 15:49:09] To: <sip:447700900123@ims.lab.local>;tag=z9hG4bK7855098120735691844
+2026-10-02T15:49:09.807279091Z [Oct  2 15:49:09] CSeq: 1 REGISTER
+2026-10-02T15:49:09.807281685Z [Oct  2 15:49:09] Date: Fri, 02 Oct 2026 15:49:09 GMT
+2026-10-02T15:49:09.807284299Z [Oct  2 15:49:09] Contact: <sip:447700900123@10.0.0.1:5060>;expires=3599
+2026-10-02T15:49:09.807287003Z [Oct  2 15:49:09] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:09.807289657Z [Oct  2 15:49:09] Content-Length:  0
+2026-10-02T15:49:09.807292261Z [Oct  2 15:49:09] 
+2026-10-02T15:49:09.807294805Z [Oct  2 15:49:09] 
+2026-10-02T15:49:10.110649247Z [Oct  2 15:49:10] <--- Received SIP request (365 bytes) from UDP:127.0.0.1:53897 --->
+2026-10-02T15:49:10.110677709Z [Oct  2 15:49:10] REGISTER sip:447700900123@127.0.0.1:15060 SIP/2.0
+2026-10-02T15:49:10.110680323Z [Oct  2 15:49:10] Via: SIP/2.0/UDP [::]:53897;branch=z9hG4bK5107333643050107078
+2026-10-02T15:49:10.110682436Z [Oct  2 15:49:10] Max-Forwards: 70
+2026-10-02T15:49:10.110684429Z [Oct  2 15:49:10] From: sip:447700900123@ims.lab.local
+2026-10-02T15:49:10.110686432Z [Oct  2 15:49:10] To: sip:447700900123@ims.lab.local
+2026-10-02T15:49:10.110688335Z [Oct  2 15:49:10] Call-ID: cellrift-5236420277855298242@localhost
+2026-10-02T15:49:10.110690328Z [Oct  2 15:49:10] CSeq: 1 REGISTER
+2026-10-02T15:49:10.110692161Z [Oct  2 15:49:10] Contact: <sip:447700900123@10.0.0.1:5060>
+2026-10-02T15:49:10.110694184Z [Oct  2 15:49:10] Content-Length: 0
+2026-10-02T15:49:10.110696758Z [Oct  2 15:49:10] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:10.110699281Z [Oct  2 15:49:10] 
+2026-10-02T15:49:10.110701875Z [Oct  2 15:49:10] 
+2026-10-02T15:49:10.111484630Z [Oct  2 15:49:10] <--- Transmitting SIP response (431 bytes) to UDP:127.0.0.1:53897 --->
+2026-10-02T15:49:10.111494845Z [Oct  2 15:49:10] SIP/2.0 200 OK
+2026-10-02T15:49:10.111498380Z [Oct  2 15:49:10] Via: SIP/2.0/UDP [::]:53897;rport=53897;received=127.0.0.1;branch=z9hG4bK5107333643050107078
+2026-10-02T15:49:10.111501294Z [Oct  2 15:49:10] Call-ID: cellrift-5236420277855298242@localhost
+2026-10-02T15:49:10.111512962Z [Oct  2 15:49:10] From: <sip:447700900123@ims.lab.local>
+2026-10-02T15:49:10.111516477Z [Oct  2 15:49:10] To: <sip:447700900123@ims.lab.local>;tag=z9hG4bK5107333643050107078
+2026-10-02T15:49:10.111519612Z [Oct  2 15:49:10] CSeq: 1 REGISTER
+2026-10-02T15:49:10.111522606Z [Oct  2 15:49:10] Date: Fri, 02 Oct 2026 15:49:10 GMT
+2026-10-02T15:49:10.111525781Z [Oct  2 15:49:10] Contact: <sip:447700900123@10.0.0.1:5060>;expires=3599
+2026-10-02T15:49:10.111528946Z [Oct  2 15:49:10] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:10.111531610Z [Oct  2 15:49:10] Content-Length:  0
+2026-10-02T15:49:10.111534564Z [Oct  2 15:49:10] 
+2026-10-02T15:49:10.111537478Z [Oct  2 15:49:10] 
+2026-10-02T15:49:10.111693460Z [Oct  2 15:49:10] <--- Received SIP request (365 bytes) from UDP:127.0.0.1:53897 --->
+2026-10-02T15:49:10.111704577Z [Oct  2 15:49:10] REGISTER sip:447700900123@127.0.0.1:15060 SIP/2.0
+2026-10-02T15:49:10.111707922Z [Oct  2 15:49:10] Via: SIP/2.0/UDP [::]:53897;branch=z9hG4bK8753540579122078278
+2026-10-02T15:49:10.111711026Z [Oct  2 15:49:10] Max-Forwards: 70
+2026-10-02T15:49:10.111713931Z [Oct  2 15:49:10] From: sip:447700900123@ims.lab.local
+2026-10-02T15:49:10.111716985Z [Oct  2 15:49:10] To: sip:447700900123@ims.lab.local
+2026-10-02T15:49:10.111719980Z [Oct  2 15:49:10] Call-ID: cellrift-3858339844281293411@localhost
+2026-10-02T15:49:10.111722934Z [Oct  2 15:49:10] CSeq: 1 REGISTER
+2026-10-02T15:49:10.111725708Z [Oct  2 15:49:10] Contact: <sip:447700900123@10.0.0.1:5060>
+2026-10-02T15:49:10.111728593Z [Oct  2 15:49:10] Content-Length: 0
+2026-10-02T15:49:10.111731277Z [Oct  2 15:49:10] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:10.111733940Z [Oct  2 15:49:10] 
+2026-10-02T15:49:10.111736735Z [Oct  2 15:49:10] 
+2026-10-02T15:49:10.112044943Z [Oct  2 15:49:10] <--- Transmitting SIP response (431 bytes) to UDP:127.0.0.1:53897 --->
+2026-10-02T15:49:10.112051293Z [Oct  2 15:49:10] SIP/2.0 200 OK
+2026-10-02T15:49:10.112054227Z [Oct  2 15:49:10] Via: SIP/2.0/UDP [::]:53897;rport=53897;received=127.0.0.1;branch=z9hG4bK8753540579122078278
+2026-10-02T15:49:10.112060616Z [Oct  2 15:49:10] Call-ID: cellrift-3858339844281293411@localhost
+2026-10-02T15:49:10.112069259Z [Oct  2 15:49:10] From: <sip:447700900123@ims.lab.local>
+2026-10-02T15:49:10.112072033Z [Oct  2 15:49:10] To: <sip:447700900123@ims.lab.local>;tag=z9hG4bK8753540579122078278
+2026-10-02T15:49:10.112075278Z [Oct  2 15:49:10] CSeq: 1 REGISTER
+2026-10-02T15:49:10.112078162Z [Oct  2 15:49:10] Date: Fri, 02 Oct 2026 15:49:10 GMT
+2026-10-02T15:49:10.112080716Z [Oct  2 15:49:10] Contact: <sip:447700900123@10.0.0.1:5060>;expires=3599
+2026-10-02T15:49:10.112082599Z [Oct  2 15:49:10] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:10.112090621Z [Oct  2 15:49:10] Content-Length:  0
+2026-10-02T15:49:10.112092644Z [Oct  2 15:49:10] 
+2026-10-02T15:49:10.112094497Z [Oct  2 15:49:10] 
+2026-10-02T15:49:11.460253010Z [Oct  2 15:49:11] <--- Received SIP request (365 bytes) from UDP:127.0.0.1:46254 --->
+2026-10-02T15:49:11.460294011Z [Oct  2 15:49:11] REGISTER sip:447700900123@127.0.0.1:15060 SIP/2.0
+2026-10-02T15:49:11.460297517Z [Oct  2 15:49:11] Via: SIP/2.0/UDP [::]:46254;branch=z9hG4bK3702642503291686068
+2026-10-02T15:49:11.460300221Z [Oct  2 15:49:11] Max-Forwards: 70
+2026-10-02T15:49:11.460302644Z [Oct  2 15:49:11] From: sip:447700900123@ims.lab.local
+2026-10-02T15:49:11.460305458Z [Oct  2 15:49:11] To: sip:447700900123@ims.lab.local
+2026-10-02T15:49:11.460307942Z [Oct  2 15:49:11] Call-ID: cellrift-6717548331996739472@localhost
+2026-10-02T15:49:11.460310416Z [Oct  2 15:49:11] CSeq: 1 REGISTER
+2026-10-02T15:49:11.460312990Z [Oct  2 15:49:11] Contact: <sip:447700900123@10.0.0.1:5060>
+2026-10-02T15:49:11.460315633Z [Oct  2 15:49:11] Content-Length: 0
+2026-10-02T15:49:11.460318037Z [Oct  2 15:49:11] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:11.460320300Z [Oct  2 15:49:11] 
+2026-10-02T15:49:11.460322514Z [Oct  2 15:49:11] 
+2026-10-02T15:49:11.460962576Z [Oct  2 15:49:11] <--- Transmitting SIP response (431 bytes) to UDP:127.0.0.1:46254 --->
+2026-10-02T15:49:11.460976336Z [Oct  2 15:49:11] SIP/2.0 200 OK
+2026-10-02T15:49:11.460994243Z [Oct  2 15:49:11] Via: SIP/2.0/UDP [::]:46254;rport=46254;received=127.0.0.1;branch=z9hG4bK3702642503291686068
+2026-10-02T15:49:11.460996767Z [Oct  2 15:49:11] Call-ID: cellrift-6717548331996739472@localhost
+2026-10-02T15:49:11.460999551Z [Oct  2 15:49:11] From: <sip:447700900123@ims.lab.local>
+2026-10-02T15:49:11.461002505Z [Oct  2 15:49:11] To: <sip:447700900123@ims.lab.local>;tag=z9hG4bK3702642503291686068
+2026-10-02T15:49:11.461005830Z [Oct  2 15:49:11] CSeq: 1 REGISTER
+2026-10-02T15:49:11.461008624Z [Oct  2 15:49:11] Date: Fri, 02 Oct 2026 15:49:11 GMT
+2026-10-02T15:49:11.461010868Z [Oct  2 15:49:11] Contact: <sip:447700900123@10.0.0.1:5060>;expires=3599
+2026-10-02T15:49:11.461012931Z [Oct  2 15:49:11] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:11.461014813Z [Oct  2 15:49:11] Content-Length:  0
+2026-10-02T15:49:11.461016686Z [Oct  2 15:49:11] 
+2026-10-02T15:49:11.461018539Z [Oct  2 15:49:11] 
+2026-10-02T15:49:11.760724394Z [Oct  2 15:49:11] <--- Received SIP request (365 bytes) from UDP:127.0.0.1:46254 --->
+2026-10-02T15:49:11.760758335Z [Oct  2 15:49:11] REGISTER sip:447700900123@127.0.0.1:15060 SIP/2.0
+2026-10-02T15:49:11.760761249Z [Oct  2 15:49:11] Via: SIP/2.0/UDP [::]:46254;branch=z9hG4bK6751416434344476754
+2026-10-02T15:49:11.760775571Z [Oct  2 15:49:11] Max-Forwards: 70
+2026-10-02T15:49:11.760777704Z [Oct  2 15:49:11] From: sip:447700900123@ims.lab.local
+2026-10-02T15:49:11.760779667Z [Oct  2 15:49:11] To: sip:447700900123@ims.lab.local
+2026-10-02T15:49:11.760781740Z [Oct  2 15:49:11] Call-ID: cellrift-4323539619237611134@localhost
+2026-10-02T15:49:11.760784183Z [Oct  2 15:49:11] CSeq: 1 REGISTER
+2026-10-02T15:49:11.760786126Z [Oct  2 15:49:11] Contact: <sip:447700900123@10.0.0.1:5060>
+2026-10-02T15:49:11.760788249Z [Oct  2 15:49:11] Content-Length: 0
+2026-10-02T15:49:11.760790303Z [Oct  2 15:49:11] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:11.760792255Z [Oct  2 15:49:11] 
+2026-10-02T15:49:11.760794188Z [Oct  2 15:49:11] 
+2026-10-02T15:49:11.761403094Z [Oct  2 15:49:11] <--- Transmitting SIP response (431 bytes) to UDP:127.0.0.1:46254 --->
+2026-10-02T15:49:11.761410515Z [Oct  2 15:49:11] SIP/2.0 200 OK
+2026-10-02T15:49:11.761413800Z [Oct  2 15:49:11] Via: SIP/2.0/UDP [::]:46254;rport=46254;received=127.0.0.1;branch=z9hG4bK6751416434344476754
+2026-10-02T15:49:11.761416704Z [Oct  2 15:49:11] Call-ID: cellrift-4323539619237611134@localhost
+2026-10-02T15:49:11.761419508Z [Oct  2 15:49:11] From: <sip:447700900123@ims.lab.local>
+2026-10-02T15:49:11.761422313Z [Oct  2 15:49:11] To: <sip:447700900123@ims.lab.local>;tag=z9hG4bK6751416434344476754
+2026-10-02T15:49:11.761425237Z [Oct  2 15:49:11] CSeq: 1 REGISTER
+2026-10-02T15:49:11.761428011Z [Oct  2 15:49:11] Date: Fri, 02 Oct 2026 15:49:11 GMT
+2026-10-02T15:49:11.761430895Z [Oct  2 15:49:11] Contact: <sip:447700900123@10.0.0.1:5060>;expires=3599
+2026-10-02T15:49:11.761433790Z [Oct  2 15:49:11] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:11.761484986Z [Oct  2 15:49:11] Content-Length:  0
+2026-10-02T15:49:11.761488431Z [Oct  2 15:49:11] 
+2026-10-02T15:49:11.761490905Z [Oct  2 15:49:11] 
+2026-10-02T15:49:11.761499598Z [Oct  2 15:49:11] <--- Received SIP request (365 bytes) from UDP:127.0.0.1:46254 --->
+2026-10-02T15:49:11.761502782Z [Oct  2 15:49:11] REGISTER sip:447700900123@127.0.0.1:15060 SIP/2.0
+2026-10-02T15:49:11.761514680Z [Oct  2 15:49:11] Via: SIP/2.0/UDP [::]:46254;branch=z9hG4bK3167561351292559946
+2026-10-02T15:49:11.761526828Z [Oct  2 15:49:11] Max-Forwards: 70
+2026-10-02T15:49:11.761529652Z [Oct  2 15:49:11] From: sip:447700900123@ims.lab.local
+2026-10-02T15:49:11.761532547Z [Oct  2 15:49:11] To: sip:447700900123@ims.lab.local
+2026-10-02T15:49:11.761535471Z [Oct  2 15:49:11] Call-ID: cellrift-4998362063775395417@localhost
+2026-10-02T15:49:11.761538475Z [Oct  2 15:49:11] CSeq: 1 REGISTER
+2026-10-02T15:49:11.761541219Z [Oct  2 15:49:11] Contact: <sip:447700900123@10.0.0.1:5060>
+2026-10-02T15:49:11.761543923Z [Oct  2 15:49:11] Content-Length: 0
+2026-10-02T15:49:11.761603773Z [Oct  2 15:49:11] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:11.761607218Z [Oct  2 15:49:11] 
+2026-10-02T15:49:11.761610062Z [Oct  2 15:49:11] 
+2026-10-02T15:49:11.761854526Z [Oct  2 15:49:11] <--- Transmitting SIP response (431 bytes) to UDP:127.0.0.1:46254 --->
+2026-10-02T15:49:11.761861035Z [Oct  2 15:49:11] SIP/2.0 200 OK
+2026-10-02T15:49:11.761864350Z [Oct  2 15:49:11] Via: SIP/2.0/UDP [::]:46254;rport=46254;received=127.0.0.1;branch=z9hG4bK3167561351292559946
+2026-10-02T15:49:11.761866824Z [Oct  2 15:49:11] Call-ID: cellrift-4998362063775395417@localhost
+2026-10-02T15:49:11.761868757Z [Oct  2 15:49:11] From: <sip:447700900123@ims.lab.local>
+2026-10-02T15:49:11.761870820Z [Oct  2 15:49:11] To: <sip:447700900123@ims.lab.local>;tag=z9hG4bK3167561351292559946
+2026-10-02T15:49:11.761872843Z [Oct  2 15:49:11] CSeq: 1 REGISTER
+2026-10-02T15:49:11.761874816Z [Oct  2 15:49:11] Date: Fri, 02 Oct 2026 15:49:11 GMT
+2026-10-02T15:49:11.761876769Z [Oct  2 15:49:11] Contact: <sip:447700900123@10.0.0.1:5060>;expires=3599
+2026-10-02T15:49:11.761878762Z [Oct  2 15:49:11] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:11.761880644Z [Oct  2 15:49:11] Content-Length:  0
+2026-10-02T15:49:11.761882517Z [Oct  2 15:49:11] 
+2026-10-02T15:49:11.761884390Z [Oct  2 15:49:11] 
+2026-10-02T15:49:12.119953586Z [Oct  2 15:49:12] <--- Received SIP request (723 bytes) from UDP:127.0.0.1:60369 --->
+2026-10-02T15:49:12.120015678Z [Oct  2 15:49:12] INVITE sip:447700900002@127.0.0.1:15060 SIP/2.0
+2026-10-02T15:49:12.120019153Z [Oct  2 15:49:12] Via: SIP/2.0/UDP [::]:60369;branch=z9hG4bK778677914644256755
+2026-10-02T15:49:12.120022278Z [Oct  2 15:49:12] Max-Forwards: 70
+2026-10-02T15:49:12.120028136Z [Oct  2 15:49:12] From: sip:447700900001@ims.local
+2026-10-02T15:49:12.120030620Z [Oct  2 15:49:12] To: sip:447700900002@ims.local
+2026-10-02T15:49:12.120033014Z [Oct  2 15:49:12] Call-ID: cellrift-5046045900633407671@localhost
+2026-10-02T15:49:12.120035327Z [Oct  2 15:49:12] CSeq: 1 INVITE
+2026-10-02T15:49:12.120037751Z [Oct  2 15:49:12] Contact: <sip:447700900001@10.0.0.1:5060>
+2026-10-02T15:49:12.120040134Z [Oct  2 15:49:12] Content-Type: application/sdp
+2026-10-02T15:49:12.120042698Z [Oct  2 15:49:12] Content-Length: 212
+2026-10-02T15:49:12.120045222Z [Oct  2 15:49:12] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:12.120047786Z [Oct  2 15:49:12] P-Charging-Vector: icid-value=cellrift-call-001
+2026-10-02T15:49:12.120050329Z [Oct  2 15:49:12] P-Access-Network-Info: 3GPP-E-UTRAN-FDD; utran-cell-id-3gpp=001010001000001
+2026-10-02T15:49:12.120053084Z [Oct  2 15:49:12] 
+2026-10-02T15:49:12.120055497Z [Oct  2 15:49:12] v=0
+2026-10-02T15:49:12.120084080Z [Oct  2 15:49:12] o=cellrift 0 0 IN IP4 0.0.0.0
+2026-10-02T15:49:12.120087084Z [Oct  2 15:49:12] s=cellrift
+2026-10-02T15:49:12.120089748Z [Oct  2 15:49:12] c=IN IP4 0.0.0.0
+2026-10-02T15:49:12.120092192Z [Oct  2 15:49:12] t=0 0
+2026-10-02T15:49:12.120094555Z [Oct  2 15:49:12] m=audio 49170 RTP/AVP 8 0 101
+2026-10-02T15:49:12.120097189Z [Oct  2 15:49:12] a=rtpmap:8 PCMA/8000
+2026-10-02T15:49:12.120099633Z [Oct  2 15:49:12] a=rtpmap:0 PCMU/8000
+2026-10-02T15:49:12.120102277Z [Oct  2 15:49:12] a=rtpmap:101 telephone-event/8000
+2026-10-02T15:49:12.120104851Z [Oct  2 15:49:12] a=fmtp:101 0-15
+2026-10-02T15:49:12.120107284Z [Oct  2 15:49:12] a=sendrecv
+2026-10-02T15:49:12.120109608Z [Oct  2 15:49:12] 
+2026-10-02T15:49:12.120467600Z [Oct  2 15:49:12] <--- Transmitting SIP response (300 bytes) to UDP:127.0.0.1:60369 --->
+2026-10-02T15:49:12.120473529Z [Oct  2 15:49:12] SIP/2.0 100 Trying
+2026-10-02T15:49:12.120475943Z [Oct  2 15:49:12] Via: SIP/2.0/UDP [::]:60369;rport=60369;received=127.0.0.1;branch=z9hG4bK778677914644256755
+2026-10-02T15:49:12.120478056Z [Oct  2 15:49:12] Call-ID: cellrift-5046045900633407671@localhost
+2026-10-02T15:49:12.120480089Z [Oct  2 15:49:12] From: <sip:447700900001@ims.local>
+2026-10-02T15:49:12.120482082Z [Oct  2 15:49:12] To: <sip:447700900002@ims.local>
+2026-10-02T15:49:12.120484125Z [Oct  2 15:49:12] CSeq: 1 INVITE
+2026-10-02T15:49:12.120485997Z [Oct  2 15:49:12] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:12.120487890Z [Oct  2 15:49:12] Content-Length:  0
+2026-10-02T15:49:12.120489793Z [Oct  2 15:49:12] 
+2026-10-02T15:49:12.120491636Z [Oct  2 15:49:12] 
+2026-10-02T15:49:12.122198224Z [Oct  2 15:49:12]     -- Executing [447700900002@from-cellrift:1] NoOp("PJSIP/447700900001-00000000", "cellrift call") in new stack
+2026-10-02T15:49:12.122456428Z [Oct  2 15:49:12]     -- Executing [447700900002@from-cellrift:2] Ringing("PJSIP/447700900001-00000000", "") in new stack
+2026-10-02T15:49:12.122516598Z [Oct  2 15:49:12]     -- Executing [447700900002@from-cellrift:3] Wait("PJSIP/447700900001-00000000", "1") in new stack
+2026-10-02T15:49:12.122521125Z [Oct  2 15:49:12] <--- Transmitting SIP response (491 bytes) to UDP:127.0.0.1:60369 --->
+2026-10-02T15:49:12.122524419Z [Oct  2 15:49:12] SIP/2.0 180 Ringing
+2026-10-02T15:49:12.122527594Z [Oct  2 15:49:12] Via: SIP/2.0/UDP [::]:60369;rport=60369;received=127.0.0.1;branch=z9hG4bK778677914644256755
+2026-10-02T15:49:12.122530418Z [Oct  2 15:49:12] Call-ID: cellrift-5046045900633407671@localhost
+2026-10-02T15:49:12.122533152Z [Oct  2 15:49:12] From: <sip:447700900001@ims.local>
+2026-10-02T15:49:12.122536307Z [Oct  2 15:49:12] To: <sip:447700900002@ims.local>;tag=4e4970c7-f5e2-4854-90aa-8219a55bd2d6
+2026-10-02T15:49:12.122538961Z [Oct  2 15:49:12] CSeq: 1 INVITE
+2026-10-02T15:49:12.122546332Z [Oct  2 15:49:12] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:12.122548345Z [Oct  2 15:49:12] Contact: <sip:127.0.0.1:15060>
+2026-10-02T15:49:12.122550338Z [Oct  2 15:49:12] Allow: OPTIONS, REGISTER, SUBSCRIBE, NOTIFY, PUBLISH, INVITE, ACK, BYE, CANCEL, UPDATE, PRACK, INFO, MESSAGE, REFER
+2026-10-02T15:49:12.122552361Z [Oct  2 15:49:12] Content-Length:  0
+2026-10-02T15:49:12.122554454Z [Oct  2 15:49:12] 
+2026-10-02T15:49:12.122556397Z [Oct  2 15:49:12] 
+2026-10-02T15:49:13.123546838Z [Oct  2 15:49:13]     -- Executing [447700900002@from-cellrift:4] Answer("PJSIP/447700900001-00000000", "") in new stack
+2026-10-02T15:49:13.124099140Z [Oct  2 15:49:13] <--- Transmitting SIP response (805 bytes) to UDP:127.0.0.1:60369 --->
+2026-10-02T15:49:13.124105860Z [Oct  2 15:49:13] SIP/2.0 200 OK
+2026-10-02T15:49:13.124108844Z [Oct  2 15:49:13] Via: SIP/2.0/UDP [::]:60369;rport=60369;received=127.0.0.1;branch=z9hG4bK778677914644256755
+2026-10-02T15:49:13.124111989Z [Oct  2 15:49:13] Call-ID: cellrift-5046045900633407671@localhost
+2026-10-02T15:49:13.124114583Z [Oct  2 15:49:13] From: <sip:447700900001@ims.local>
+2026-10-02T15:49:13.124117457Z [Oct  2 15:49:13] To: <sip:447700900002@ims.local>;tag=4e4970c7-f5e2-4854-90aa-8219a55bd2d6
+2026-10-02T15:49:13.124120331Z [Oct  2 15:49:13] CSeq: 1 INVITE
+2026-10-02T15:49:13.124122925Z [Oct  2 15:49:13] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:13.124125609Z [Oct  2 15:49:13] Allow: OPTIONS, REGISTER, SUBSCRIBE, NOTIFY, PUBLISH, INVITE, ACK, BYE, CANCEL, UPDATE, PRACK, INFO, MESSAGE, REFER
+2026-10-02T15:49:13.124128033Z [Oct  2 15:49:13] Contact: <sip:127.0.0.1:15060>
+2026-10-02T15:49:13.124130647Z [Oct  2 15:49:13] Supported: 100rel, timer, replaces, norefersub
+2026-10-02T15:49:13.124133140Z [Oct  2 15:49:13] Content-Type: application/sdp
+2026-10-02T15:49:13.124135604Z [Oct  2 15:49:13] Content-Length:   237
+2026-10-02T15:49:13.124137968Z [Oct  2 15:49:13] 
+2026-10-02T15:49:13.124140301Z [Oct  2 15:49:13] v=0
+2026-10-02T15:49:13.124143426Z [Oct  2 15:49:13] o=- 0 2 IN IP4 127.0.0.1
+2026-10-02T15:49:13.124146120Z [Oct  2 15:49:13] s=Asterisk
+2026-10-02T15:49:13.124149064Z [Oct  2 15:49:13] c=IN IP4 127.0.0.1
+2026-10-02T15:49:13.124151698Z [Oct  2 15:49:13] t=0 0
+2026-10-02T15:49:13.124154202Z [Oct  2 15:49:13] m=audio 13568 RTP/AVP 0 8 101
+2026-10-02T15:49:13.124156896Z [Oct  2 15:49:13] a=rtpmap:0 PCMU/8000
+2026-10-02T15:49:13.124159600Z [Oct  2 15:49:13] a=rtpmap:8 PCMA/8000
+2026-10-02T15:49:13.124162174Z [Oct  2 15:49:13] a=rtpmap:101 telephone-event/8000
+2026-10-02T15:49:13.124164697Z [Oct  2 15:49:13] a=fmtp:101 0-16
+2026-10-02T15:49:13.124167181Z [Oct  2 15:49:13] a=ptime:20
+2026-10-02T15:49:13.124180931Z [Oct  2 15:49:13] a=maxptime:140
+2026-10-02T15:49:13.124183625Z [Oct  2 15:49:13] a=recvonly
+2026-10-02T15:49:13.124186299Z [Oct  2 15:49:13] 
+2026-10-02T15:49:13.124347910Z [Oct  2 15:49:13] <--- Received SIP request (394 bytes) from UDP:127.0.0.1:60369 --->
+2026-10-02T15:49:13.124354379Z [Oct  2 15:49:13] BYE sip:447700900002@127.0.0.1:15060 SIP/2.0
+2026-10-02T15:49:13.124357594Z [Oct  2 15:49:13] Via: SIP/2.0/UDP [::]:60369;branch=z9hG4bK8422554372488248371
+2026-10-02T15:49:13.124360589Z [Oct  2 15:49:13] Max-Forwards: 70
+2026-10-02T15:49:13.124363333Z [Oct  2 15:49:13] From: sip:447700900001@ims.local
+2026-10-02T15:49:13.124365987Z [Oct  2 15:49:13] To: sip:447700900002@ims.local;tag=4e4970c7-f5e2-4854-90aa-8219a55bd2d6
+2026-10-02T15:49:13.124368761Z [Oct  2 15:49:13] Call-ID: cellrift-5046045900633407671@localhost
+2026-10-02T15:49:13.124371545Z [Oct  2 15:49:13] CSeq: 2 BYE
+2026-10-02T15:49:13.124374750Z [Oct  2 15:49:13] Content-Length: 0
+2026-10-02T15:49:13.124377454Z [Oct  2 15:49:13] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:13.124379827Z [Oct  2 15:49:13] P-Charging-Vector: icid-value=cellrift-call-001
+2026-10-02T15:49:13.124382381Z [Oct  2 15:49:13] 
+2026-10-02T15:49:13.124384975Z [Oct  2 15:49:13] 
+2026-10-02T15:49:13.124552224Z [Oct  2 15:49:13] <--- Transmitting SIP response (335 bytes) to UDP:127.0.0.1:60369 --->
+2026-10-02T15:49:13.124558713Z [Oct  2 15:49:13] SIP/2.0 200 OK
+2026-10-02T15:49:13.124561868Z [Oct  2 15:49:13] Via: SIP/2.0/UDP [::]:60369;rport=60369;received=127.0.0.1;branch=z9hG4bK8422554372488248371
+2026-10-02T15:49:13.124564742Z [Oct  2 15:49:13] Call-ID: cellrift-5046045900633407671@localhost
+2026-10-02T15:49:13.124567396Z [Oct  2 15:49:13] From: <sip:447700900001@ims.local>
+2026-10-02T15:49:13.124569940Z [Oct  2 15:49:13] To: <sip:447700900002@ims.local>;tag=4e4970c7-f5e2-4854-90aa-8219a55bd2d6
+2026-10-02T15:49:13.124572814Z [Oct  2 15:49:13] CSeq: 2 BYE
+2026-10-02T15:49:13.124575498Z [Oct  2 15:49:13] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:13.124578293Z [Oct  2 15:49:13] Content-Length:  0
+2026-10-02T15:49:13.124580987Z [Oct  2 15:49:13] 
+2026-10-02T15:49:13.124583651Z [Oct  2 15:49:13] 
+2026-10-02T15:49:13.125074991Z [Oct  2 15:49:13]   == Spawn extension (from-cellrift, 447700900002, 4) exited non-zero on 'PJSIP/447700900001-00000000'
+2026-10-02T15:49:13.125577749Z [Oct  2 15:49:13] ERROR[60]: cdr_csv.c:275 writefile: Unable to open file /var/log/asterisk//cdr-csv//Master.csv : No such file or directory
+2026-10-02T15:49:13.125583007Z [Oct  2 15:49:13] WARNING[60]: cdr_csv.c:308 csv_log: Unable to write CSV record to master '/var/log/asterisk//cdr-csv//Master.csv' : No such file or directory
+2026-10-02T15:49:13.262826662Z [Oct  2 15:49:13] <--- Received SIP request (723 bytes) from UDP:127.0.0.1:54476 --->
+2026-10-02T15:49:13.262864948Z [Oct  2 15:49:13] INVITE sip:447700900002@127.0.0.1:15060 SIP/2.0
+2026-10-02T15:49:13.262868384Z [Oct  2 15:49:13] Via: SIP/2.0/UDP [::]:54476;branch=z9hG4bK163860401071632567
+2026-10-02T15:49:13.262871138Z [Oct  2 15:49:13] Max-Forwards: 70
+2026-10-02T15:49:13.262873661Z [Oct  2 15:49:13] From: sip:447700900001@ims.local
+2026-10-02T15:49:13.262895564Z [Oct  2 15:49:13] To: sip:447700900002@ims.local
+2026-10-02T15:49:13.262898228Z [Oct  2 15:49:13] Call-ID: cellrift-8661720542622667429@localhost
+2026-10-02T15:49:13.262900882Z [Oct  2 15:49:13] CSeq: 1 INVITE
+2026-10-02T15:49:13.262903436Z [Oct  2 15:49:13] Contact: <sip:447700900001@10.0.0.1:5060>
+2026-10-02T15:49:13.262906000Z [Oct  2 15:49:13] Content-Type: application/sdp
+2026-10-02T15:49:13.262908463Z [Oct  2 15:49:13] Content-Length: 212
+2026-10-02T15:49:13.262910897Z [Oct  2 15:49:13] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:13.262913581Z [Oct  2 15:49:13] P-Charging-Vector: icid-value=cellrift-call-001
+2026-10-02T15:49:13.262916195Z [Oct  2 15:49:13] P-Access-Network-Info: 3GPP-E-UTRAN-FDD; utran-cell-id-3gpp=001010001000001
+2026-10-02T15:49:13.262923215Z [Oct  2 15:49:13] 
+2026-10-02T15:49:13.262925689Z [Oct  2 15:49:13] v=0
+2026-10-02T15:49:13.262928393Z [Oct  2 15:49:13] o=cellrift 0 0 IN IP4 0.0.0.0
+2026-10-02T15:49:13.262930927Z [Oct  2 15:49:13] s=cellrift
+2026-10-02T15:49:13.262933350Z [Oct  2 15:49:13] c=IN IP4 0.0.0.0
+2026-10-02T15:49:13.262935894Z [Oct  2 15:49:13] t=0 0
+2026-10-02T15:49:13.262938578Z [Oct  2 15:49:13] m=audio 49170 RTP/AVP 8 0 101
+2026-10-02T15:49:13.262951137Z [Oct  2 15:49:13] a=rtpmap:8 PCMA/8000
+2026-10-02T15:49:13.262953510Z [Oct  2 15:49:13] a=rtpmap:0 PCMU/8000
+2026-10-02T15:49:13.262955824Z [Oct  2 15:49:13] a=rtpmap:101 telephone-event/8000
+2026-10-02T15:49:13.262958097Z [Oct  2 15:49:13] a=fmtp:101 0-15
+2026-10-02T15:49:13.262988542Z [Oct  2 15:49:13] a=sendrecv
+2026-10-02T15:49:13.262996033Z [Oct  2 15:49:13] 
+2026-10-02T15:49:13.263162842Z [Oct  2 15:49:13] <--- Transmitting SIP response (300 bytes) to UDP:127.0.0.1:54476 --->
+2026-10-02T15:49:13.263168360Z [Oct  2 15:49:13] SIP/2.0 100 Trying
+2026-10-02T15:49:13.263171224Z [Oct  2 15:49:13] Via: SIP/2.0/UDP [::]:54476;rport=54476;received=127.0.0.1;branch=z9hG4bK163860401071632567
+2026-10-02T15:49:13.263174128Z [Oct  2 15:49:13] Call-ID: cellrift-8661720542622667429@localhost
+2026-10-02T15:49:13.263176852Z [Oct  2 15:49:13] From: <sip:447700900001@ims.local>
+2026-10-02T15:49:13.263179757Z [Oct  2 15:49:13] To: <sip:447700900002@ims.local>
+2026-10-02T15:49:13.263182561Z [Oct  2 15:49:13] CSeq: 1 INVITE
+2026-10-02T15:49:13.263189521Z [Oct  2 15:49:13] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:13.263192175Z [Oct  2 15:49:13] Content-Length:  0
+2026-10-02T15:49:13.263194689Z [Oct  2 15:49:13] 
+2026-10-02T15:49:13.263197133Z [Oct  2 15:49:13] 
+2026-10-02T15:49:13.264374944Z [Oct  2 15:49:13]     -- Executing [447700900002@from-cellrift:1] NoOp("PJSIP/447700900001-00000001", "cellrift call") in new stack
+2026-10-02T15:49:13.264452890Z [Oct  2 15:49:13]     -- Executing [447700900002@from-cellrift:2] Ringing("PJSIP/447700900001-00000001", "") in new stack
+2026-10-02T15:49:13.264457046Z [Oct  2 15:49:13]     -- Executing [447700900002@from-cellrift:3] Wait("PJSIP/447700900001-00000001", "1") in new stack
+2026-10-02T15:49:13.264460171Z [Oct  2 15:49:13] <--- Transmitting SIP response (491 bytes) to UDP:127.0.0.1:54476 --->
+2026-10-02T15:49:13.264463256Z [Oct  2 15:49:13] SIP/2.0 180 Ringing
+2026-10-02T15:49:13.264466410Z [Oct  2 15:49:13] Via: SIP/2.0/UDP [::]:54476;rport=54476;received=127.0.0.1;branch=z9hG4bK163860401071632567
+2026-10-02T15:49:13.264469465Z [Oct  2 15:49:13] Call-ID: cellrift-8661720542622667429@localhost
+2026-10-02T15:49:13.264471388Z [Oct  2 15:49:13] From: <sip:447700900001@ims.local>
+2026-10-02T15:49:13.264473391Z [Oct  2 15:49:13] To: <sip:447700900002@ims.local>;tag=4787bdda-626d-405c-ad74-0df3b2a77e5a
+2026-10-02T15:49:13.264475624Z [Oct  2 15:49:13] CSeq: 1 INVITE
+2026-10-02T15:49:13.264477557Z [Oct  2 15:49:13] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:13.264479440Z [Oct  2 15:49:13] Contact: <sip:127.0.0.1:15060>
+2026-10-02T15:49:13.264481613Z [Oct  2 15:49:13] Allow: OPTIONS, REGISTER, SUBSCRIBE, NOTIFY, PUBLISH, INVITE, ACK, BYE, CANCEL, UPDATE, PRACK, INFO, MESSAGE, REFER
+2026-10-02T15:49:13.264483766Z [Oct  2 15:49:13] Content-Length:  0
+2026-10-02T15:49:13.264485609Z [Oct  2 15:49:13] 
+2026-10-02T15:49:13.264487472Z [Oct  2 15:49:13] 
+2026-10-02T15:49:13.624227799Z [Oct  2 15:49:13] <--- Transmitting SIP response (805 bytes) to UDP:127.0.0.1:60369 --->
+2026-10-02T15:49:13.624257884Z [Oct  2 15:49:13] SIP/2.0 200 OK
+2026-10-02T15:49:13.624261029Z [Oct  2 15:49:13] Via: SIP/2.0/UDP [::]:60369;rport=60369;received=127.0.0.1;branch=z9hG4bK778677914644256755
+2026-10-02T15:49:13.624263202Z [Oct  2 15:49:13] Call-ID: cellrift-5046045900633407671@localhost
+2026-10-02T15:49:13.624265185Z [Oct  2 15:49:13] From: <sip:447700900001@ims.local>
+2026-10-02T15:49:13.624267318Z [Oct  2 15:49:13] To: <sip:447700900002@ims.local>;tag=4e4970c7-f5e2-4854-90aa-8219a55bd2d6
+2026-10-02T15:49:13.624269371Z [Oct  2 15:49:13] CSeq: 1 INVITE
+2026-10-02T15:49:13.624271304Z [Oct  2 15:49:13] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:13.624273397Z [Oct  2 15:49:13] Allow: OPTIONS, REGISTER, SUBSCRIBE, NOTIFY, PUBLISH, INVITE, ACK, BYE, CANCEL, UPDATE, PRACK, INFO, MESSAGE, REFER
+2026-10-02T15:49:13.624275500Z [Oct  2 15:49:13] Contact: <sip:127.0.0.1:15060>
+2026-10-02T15:49:13.624289181Z [Oct  2 15:49:13] Supported: 100rel, timer, replaces, norefersub
+2026-10-02T15:49:13.624291244Z [Oct  2 15:49:13] Content-Type: application/sdp
+2026-10-02T15:49:13.624293106Z [Oct  2 15:49:13] Content-Length:   237
+2026-10-02T15:49:13.624294999Z [Oct  2 15:49:13] 
+2026-10-02T15:49:13.624296812Z [Oct  2 15:49:13] v=0
+2026-10-02T15:49:13.624298665Z [Oct  2 15:49:13] o=- 0 2 IN IP4 127.0.0.1
+2026-10-02T15:49:13.624300668Z [Oct  2 15:49:13] s=Asterisk
+2026-10-02T15:49:13.624302500Z [Oct  2 15:49:13] c=IN IP4 127.0.0.1
+2026-10-02T15:49:13.624304363Z [Oct  2 15:49:13] t=0 0
+2026-10-02T15:49:13.624306166Z [Oct  2 15:49:13] m=audio 13568 RTP/AVP 0 8 101
+2026-10-02T15:49:13.624308069Z [Oct  2 15:49:13] a=rtpmap:0 PCMU/8000
+2026-10-02T15:49:13.624309891Z [Oct  2 15:49:13] a=rtpmap:8 PCMA/8000
+2026-10-02T15:49:13.624311694Z [Oct  2 15:49:13] a=rtpmap:101 telephone-event/8000
+2026-10-02T15:49:13.624313537Z [Oct  2 15:49:13] a=fmtp:101 0-16
+2026-10-02T15:49:13.624315380Z [Oct  2 15:49:13] a=ptime:20
+2026-10-02T15:49:13.624320217Z [Oct  2 15:49:13] a=maxptime:140
+2026-10-02T15:49:13.624323271Z [Oct  2 15:49:13] a=recvonly
+2026-10-02T15:49:13.624326326Z [Oct  2 15:49:13] 
+2026-10-02T15:49:14.265071009Z [Oct  2 15:49:14]     -- Executing [447700900002@from-cellrift:4] Answer("PJSIP/447700900001-00000001", "") in new stack
+2026-10-02T15:49:14.265642358Z [Oct  2 15:49:14] <--- Transmitting SIP response (805 bytes) to UDP:127.0.0.1:54476 --->
+2026-10-02T15:49:14.265651863Z [Oct  2 15:49:14] SIP/2.0 200 OK
+2026-10-02T15:49:14.265655839Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:54476;rport=54476;received=127.0.0.1;branch=z9hG4bK163860401071632567
+2026-10-02T15:49:14.265659564Z [Oct  2 15:49:14] Call-ID: cellrift-8661720542622667429@localhost
+2026-10-02T15:49:14.265663129Z [Oct  2 15:49:14] From: <sip:447700900001@ims.local>
+2026-10-02T15:49:14.265666745Z [Oct  2 15:49:14] To: <sip:447700900002@ims.local>;tag=4787bdda-626d-405c-ad74-0df3b2a77e5a
+2026-10-02T15:49:14.265670410Z [Oct  2 15:49:14] CSeq: 1 INVITE
+2026-10-02T15:49:14.265674146Z [Oct  2 15:49:14] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:14.265677831Z [Oct  2 15:49:14] Allow: OPTIONS, REGISTER, SUBSCRIBE, NOTIFY, PUBLISH, INVITE, ACK, BYE, CANCEL, UPDATE, PRACK, INFO, MESSAGE, REFER
+2026-10-02T15:49:14.265681567Z [Oct  2 15:49:14] Contact: <sip:127.0.0.1:15060>
+2026-10-02T15:49:14.265685192Z [Oct  2 15:49:14] Supported: 100rel, timer, replaces, norefersub
+2026-10-02T15:49:14.265688707Z [Oct  2 15:49:14] Content-Type: application/sdp
+2026-10-02T15:49:14.265692283Z [Oct  2 15:49:14] Content-Length:   237
+2026-10-02T15:49:14.265695658Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.265711401Z [Oct  2 15:49:14] v=0
+2026-10-02T15:49:14.265713845Z [Oct  2 15:49:14] o=- 0 2 IN IP4 127.0.0.1
+2026-10-02T15:49:14.265716308Z [Oct  2 15:49:14] s=Asterisk
+2026-10-02T15:49:14.265718792Z [Oct  2 15:49:14] c=IN IP4 127.0.0.1
+2026-10-02T15:49:14.265721066Z [Oct  2 15:49:14] t=0 0
+2026-10-02T15:49:14.265723429Z [Oct  2 15:49:14] m=audio 11774 RTP/AVP 0 8 101
+2026-10-02T15:49:14.265725823Z [Oct  2 15:49:14] a=rtpmap:0 PCMU/8000
+2026-10-02T15:49:14.265728346Z [Oct  2 15:49:14] a=rtpmap:8 PCMA/8000
+2026-10-02T15:49:14.265730900Z [Oct  2 15:49:14] a=rtpmap:101 telephone-event/8000
+2026-10-02T15:49:14.265733494Z [Oct  2 15:49:14] a=fmtp:101 0-16
+2026-10-02T15:49:14.265735878Z [Oct  2 15:49:14] a=ptime:20
+2026-10-02T15:49:14.265738381Z [Oct  2 15:49:14] a=maxptime:140
+2026-10-02T15:49:14.265741316Z [Oct  2 15:49:14] a=recvonly
+2026-10-02T15:49:14.265743879Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.266016305Z [Oct  2 15:49:14] <--- Received SIP request (394 bytes) from UDP:127.0.0.1:54476 --->
+2026-10-02T15:49:14.266025969Z [Oct  2 15:49:14] BYE sip:447700900002@127.0.0.1:15060 SIP/2.0
+2026-10-02T15:49:14.266097726Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:54476;branch=z9hG4bK8989310869556198914
+2026-10-02T15:49:14.266101742Z [Oct  2 15:49:14] Max-Forwards: 70
+2026-10-02T15:49:14.266104245Z [Oct  2 15:49:14] From: sip:447700900001@ims.local
+2026-10-02T15:49:14.266106859Z [Oct  2 15:49:14] To: sip:447700900002@ims.local;tag=4787bdda-626d-405c-ad74-0df3b2a77e5a
+2026-10-02T15:49:14.266109403Z [Oct  2 15:49:14] Call-ID: cellrift-8661720542622667429@localhost
+2026-10-02T15:49:14.266111867Z [Oct  2 15:49:14] CSeq: 2 BYE
+2026-10-02T15:49:14.266114150Z [Oct  2 15:49:14] Content-Length: 0
+2026-10-02T15:49:14.266138386Z [Oct  2 15:49:14] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:14.266141170Z [Oct  2 15:49:14] P-Charging-Vector: icid-value=cellrift-call-001
+2026-10-02T15:49:14.266143774Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.266146268Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.266155492Z [Oct  2 15:49:14] <--- Transmitting SIP response (335 bytes) to UDP:127.0.0.1:54476 --->
+2026-10-02T15:49:14.266158406Z [Oct  2 15:49:14] SIP/2.0 200 OK
+2026-10-02T15:49:14.266160920Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:54476;rport=54476;received=127.0.0.1;branch=z9hG4bK8989310869556198914
+2026-10-02T15:49:14.266163614Z [Oct  2 15:49:14] Call-ID: cellrift-8661720542622667429@localhost
+2026-10-02T15:49:14.266166027Z [Oct  2 15:49:14] From: <sip:447700900001@ims.local>
+2026-10-02T15:49:14.266168561Z [Oct  2 15:49:14] To: <sip:447700900002@ims.local>;tag=4787bdda-626d-405c-ad74-0df3b2a77e5a
+2026-10-02T15:49:14.266176253Z [Oct  2 15:49:14] CSeq: 2 BYE
+2026-10-02T15:49:14.266178916Z [Oct  2 15:49:14] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:14.266181340Z [Oct  2 15:49:14] Content-Length:  0
+2026-10-02T15:49:14.266183784Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.266186378Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.266820411Z [Oct  2 15:49:14]   == Spawn extension (from-cellrift, 447700900002, 4) exited non-zero on 'PJSIP/447700900001-00000001'
+2026-10-02T15:49:14.267073978Z [Oct  2 15:49:14] ERROR[60]: cdr_csv.c:275 writefile: Unable to open file /var/log/asterisk//cdr-csv//Master.csv : No such file or directory
+2026-10-02T15:49:14.267350689Z [Oct  2 15:49:14] WARNING[60]: cdr_csv.c:308 csv_log: Unable to write CSV record to master '/var/log/asterisk//cdr-csv//Master.csv' : No such file or directory
+2026-10-02T15:49:14.424665182Z [Oct  2 15:49:14] <--- Received SIP request (365 bytes) from UDP:127.0.0.1:37539 --->
+2026-10-02T15:49:14.424735025Z [Oct  2 15:49:14] REGISTER sip:447700900201@127.0.0.1:15060 SIP/2.0
+2026-10-02T15:49:14.424738320Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:37539;branch=z9hG4bK8630304982351672267
+2026-10-02T15:49:14.424741625Z [Oct  2 15:49:14] Max-Forwards: 70
+2026-10-02T15:49:14.424752882Z [Oct  2 15:49:14] From: sip:447700900201@ims.lab.local
+2026-10-02T15:49:14.424756047Z [Oct  2 15:49:14] To: sip:447700900201@ims.lab.local
+2026-10-02T15:49:14.424758731Z [Oct  2 15:49:14] Call-ID: cellrift-8869329070812661038@localhost
+2026-10-02T15:49:14.424761274Z [Oct  2 15:49:14] CSeq: 1 REGISTER
+2026-10-02T15:49:14.424779341Z [Oct  2 15:49:14] Contact: <sip:447700900201@10.0.0.1:5060>
+2026-10-02T15:49:14.424782366Z [Oct  2 15:49:14] Content-Length: 0
+2026-10-02T15:49:14.424784900Z [Oct  2 15:49:14] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:14.424787383Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.424789797Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.424945849Z [Oct  2 15:49:14] <--- Transmitting SIP response (502 bytes) to UDP:127.0.0.1:37539 --->
+2026-10-02T15:49:14.424952319Z [Oct  2 15:49:14] SIP/2.0 401 Unauthorized
+2026-10-02T15:49:14.424955383Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:37539;rport=37539;received=127.0.0.1;branch=z9hG4bK8630304982351672267
+2026-10-02T15:49:14.424958277Z [Oct  2 15:49:14] Call-ID: cellrift-8869329070812661038@localhost
+2026-10-02T15:49:14.424960941Z [Oct  2 15:49:14] From: <sip:447700900201@ims.lab.local>
+2026-10-02T15:49:14.424963886Z [Oct  2 15:49:14] To: <sip:447700900201@ims.lab.local>;tag=z9hG4bK8630304982351672267
+2026-10-02T15:49:14.424967111Z [Oct  2 15:49:14] CSeq: 1 REGISTER
+2026-10-02T15:49:14.424972198Z [Oct  2 15:49:14] WWW-Authenticate: Digest realm="cellrift.interop",nonce="1790956154/a8c554820bd8a476426ae712cd95a1e9",opaque="27a69dd04dc503a1",algorithm=MD5,qop="auth"
+2026-10-02T15:49:14.424975523Z [Oct  2 15:49:14] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:14.425006900Z [Oct  2 15:49:14] Content-Length:  0
+2026-10-02T15:49:14.425010085Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.425012718Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.425151925Z [Oct  2 15:49:14] <--- Received SIP request (665 bytes) from UDP:127.0.0.1:37539 --->
+2026-10-02T15:49:14.425158015Z [Oct  2 15:49:14] REGISTER sip:447700900201@127.0.0.1:15060 SIP/2.0
+2026-10-02T15:49:14.425160879Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:37539;branch=z9hG4bK6480356088420065141
+2026-10-02T15:49:14.425163553Z [Oct  2 15:49:14] Max-Forwards: 70
+2026-10-02T15:49:14.425166257Z [Oct  2 15:49:14] From: sip:447700900201@ims.lab.local
+2026-10-02T15:49:14.425192366Z [Oct  2 15:49:14] To: sip:447700900201@ims.lab.local
+2026-10-02T15:49:14.425204414Z [Oct  2 15:49:14] Call-ID: cellrift-8869329070812661038@localhost
+2026-10-02T15:49:14.425207268Z [Oct  2 15:49:14] CSeq: 2 REGISTER
+2026-10-02T15:49:14.425209942Z [Oct  2 15:49:14] Contact: <sip:447700900201@10.0.0.1:5060>
+2026-10-02T15:49:14.425213157Z [Oct  2 15:49:14] Authorization: Digest username="impi-user", realm="cellrift.interop", nonce="1790956154/a8c554820bd8a476426ae712cd95a1e9", uri="sip:447700900201@127.0.0.1:15060", response="8dfac9d38537b57a23cf7fecde20b1f9", algorithm=MD5, cnonce="20ce2ac4f381a4a9", opaque="27a69dd04dc503a1", qop=auth, nc=00000001
+2026-10-02T15:49:14.425218124Z [Oct  2 15:49:14] Content-Length: 0
+2026-10-02T15:49:14.425221098Z [Oct  2 15:49:14] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:14.425224163Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.425227167Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.426384208Z [Oct  2 15:49:14]     -- Added contact 'sip:447700900201@10.0.0.1:5060' to AOR '447700900201' with expiration of 3600 seconds
+2026-10-02T15:49:14.426396016Z [Oct  2 15:49:14] <--- Transmitting SIP response (431 bytes) to UDP:127.0.0.1:37539 --->
+2026-10-02T15:49:14.426399331Z [Oct  2 15:49:14] SIP/2.0 200 OK
+2026-10-02T15:49:14.426402165Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:37539;rport=37539;received=127.0.0.1;branch=z9hG4bK6480356088420065141
+2026-10-02T15:49:14.426404719Z [Oct  2 15:49:14] Call-ID: cellrift-8869329070812661038@localhost
+2026-10-02T15:49:14.426407152Z [Oct  2 15:49:14] From: <sip:447700900201@ims.lab.local>
+2026-10-02T15:49:14.426409876Z [Oct  2 15:49:14] To: <sip:447700900201@ims.lab.local>;tag=z9hG4bK6480356088420065141
+2026-10-02T15:49:14.426412460Z [Oct  2 15:49:14] CSeq: 2 REGISTER
+2026-10-02T15:49:14.426414894Z [Oct  2 15:49:14] Date: Fri, 02 Oct 2026 15:49:14 GMT
+2026-10-02T15:49:14.426417367Z [Oct  2 15:49:14] Contact: <sip:447700900201@10.0.0.1:5060>;expires=3599
+2026-10-02T15:49:14.426419961Z [Oct  2 15:49:14] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:14.426684254Z [Oct  2 15:49:14] Content-Length:  0
+2026-10-02T15:49:14.426688961Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.426701500Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.426703523Z [Oct  2 15:49:14]   == Endpoint 447700900201 is now Reachable
+2026-10-02T15:49:14.426705496Z [Oct  2 15:49:14] <--- Received SIP request (364 bytes) from UDP:127.0.0.1:37539 --->
+2026-10-02T15:49:14.426707599Z [Oct  2 15:49:14] REGISTER sip:447700900202@127.0.0.1:15060 SIP/2.0
+2026-10-02T15:49:14.426709552Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:37539;branch=z9hG4bK112655462650407011
+2026-10-02T15:49:14.426711565Z [Oct  2 15:49:14] Max-Forwards: 70
+2026-10-02T15:49:14.426713428Z [Oct  2 15:49:14] From: sip:447700900202@ims.lab.local
+2026-10-02T15:49:14.426715281Z [Oct  2 15:49:14] To: sip:447700900202@ims.lab.local
+2026-10-02T15:49:14.426717133Z [Oct  2 15:49:14] Call-ID: cellrift-6854692965843125146@localhost
+2026-10-02T15:49:14.426719036Z [Oct  2 15:49:14] CSeq: 1 REGISTER
+2026-10-02T15:49:14.426720879Z [Oct  2 15:49:14] Contact: <sip:447700900202@10.0.0.1:5060>
+2026-10-02T15:49:14.426722852Z [Oct  2 15:49:14] Content-Length: 0
+2026-10-02T15:49:14.426724715Z [Oct  2 15:49:14] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:14.426726617Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.426728490Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.427032402Z [Oct  2 15:49:14] <--- Transmitting SIP response (504 bytes) to UDP:127.0.0.1:37539 --->
+2026-10-02T15:49:14.476039661Z [Oct  2 15:49:14] SIP/2.0 401 Unauthorized
+2026-10-02T15:49:14.476055264Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:37539;rport=37539;received=127.0.0.1;branch=z9hG4bK112655462650407011
+2026-10-02T15:49:14.476058258Z [Oct  2 15:49:14] Call-ID: cellrift-6854692965843125146@localhost
+2026-10-02T15:49:14.476060792Z [Oct  2 15:49:14] From: <sip:447700900202@ims.lab.local>
+2026-10-02T15:49:14.476063726Z [Oct  2 15:49:14] To: <sip:447700900202@ims.lab.local>;tag=z9hG4bK112655462650407011
+2026-10-02T15:49:14.476066310Z [Oct  2 15:49:14] CSeq: 1 REGISTER
+2026-10-02T15:49:14.476069064Z [Oct  2 15:49:14] WWW-Authenticate: Digest realm="cellrift.interop",nonce="1790956154/a8c554820bd8a476426ae712cd95a1e9",opaque="29926aa31545e89a",algorithm=SHA-256,qop="auth"
+2026-10-02T15:49:14.476072069Z [Oct  2 15:49:14] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:14.476074502Z [Oct  2 15:49:14] Content-Length:  0
+2026-10-02T15:49:14.476076866Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.476079179Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.476081523Z [Oct  2 15:49:14] <--- Received SIP request (701 bytes) from UDP:127.0.0.1:37539 --->
+2026-10-02T15:49:14.476084427Z [Oct  2 15:49:14] REGISTER sip:447700900202@127.0.0.1:15060 SIP/2.0
+2026-10-02T15:49:14.476087101Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:37539;branch=z9hG4bK6629204515072341148
+2026-10-02T15:49:14.476089785Z [Oct  2 15:49:14] Max-Forwards: 70
+2026-10-02T15:49:14.476105148Z [Oct  2 15:49:14] From: sip:447700900202@ims.lab.local
+2026-10-02T15:49:14.476107411Z [Oct  2 15:49:14] To: sip:447700900202@ims.lab.local
+2026-10-02T15:49:14.476109324Z [Oct  2 15:49:14] Call-ID: cellrift-6854692965843125146@localhost
+2026-10-02T15:49:14.476111237Z [Oct  2 15:49:14] CSeq: 2 REGISTER
+2026-10-02T15:49:14.476113100Z [Oct  2 15:49:14] Contact: <sip:447700900202@10.0.0.1:5060>
+2026-10-02T15:49:14.476116044Z [Oct  2 15:49:14] Authorization: Digest username="impi-user", realm="cellrift.interop", nonce="1790956154/a8c554820bd8a476426ae712cd95a1e9", uri="sip:447700900202@127.0.0.1:15060", response="983ebe8ea8bc163437b7040eb13bf8c88b1ae8fdbdffefe9b5ef785713ab6a0a", algorithm=SHA-256, cnonce="8fbe4831ab216500", opaque="29926aa31545e89a", qop=auth, nc=00000001
+2026-10-02T15:49:14.476119910Z [Oct  2 15:49:14] Content-Length: 0
+2026-10-02T15:49:14.476121823Z [Oct  2 15:49:14] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:14.476123746Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.476125729Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.476961962Z [Oct  2 15:49:14]   == Endpoint 447700900202 is now Reachable
+2026-10-02T15:49:14.476970935Z [Oct  2 15:49:14]     -- Added contact 'sip:447700900202@10.0.0.1:5060' to AOR '447700900202' with expiration of 3600 seconds
+2026-10-02T15:49:14.477375687Z [Oct  2 15:49:14] <--- Transmitting SIP response (431 bytes) to UDP:127.0.0.1:37539 --->
+2026-10-02T15:49:14.477382868Z [Oct  2 15:49:14] SIP/2.0 200 OK
+2026-10-02T15:49:14.477385812Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:37539;rport=37539;received=127.0.0.1;branch=z9hG4bK6629204515072341148
+2026-10-02T15:49:14.477392502Z [Oct  2 15:49:14] Call-ID: cellrift-6854692965843125146@localhost
+2026-10-02T15:49:14.477395247Z [Oct  2 15:49:14] From: <sip:447700900202@ims.lab.local>
+2026-10-02T15:49:14.477397870Z [Oct  2 15:49:14] To: <sip:447700900202@ims.lab.local>;tag=z9hG4bK6629204515072341148
+2026-10-02T15:49:14.477400625Z [Oct  2 15:49:14] CSeq: 2 REGISTER
+2026-10-02T15:49:14.477403339Z [Oct  2 15:49:14] Date: Fri, 02 Oct 2026 15:49:14 GMT
+2026-10-02T15:49:14.477406253Z [Oct  2 15:49:14] Contact: <sip:447700900202@10.0.0.1:5060>;expires=3599
+2026-10-02T15:49:14.477409448Z [Oct  2 15:49:14] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:14.477412532Z [Oct  2 15:49:14] Content-Length:  0
+2026-10-02T15:49:14.477415386Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.477434505Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.477466773Z [Oct  2 15:49:14] <--- Received SIP request (365 bytes) from UDP:127.0.0.1:37539 --->
+2026-10-02T15:49:14.477470158Z [Oct  2 15:49:14] REGISTER sip:447700900203@127.0.0.1:15060 SIP/2.0
+2026-10-02T15:49:14.477473042Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:37539;branch=z9hG4bK2201303237101896259
+2026-10-02T15:49:14.477475967Z [Oct  2 15:49:14] Max-Forwards: 70
+2026-10-02T15:49:14.477478881Z [Oct  2 15:49:14] From: sip:447700900203@ims.lab.local
+2026-10-02T15:49:14.477487414Z [Oct  2 15:49:14] To: sip:447700900203@ims.lab.local
+2026-10-02T15:49:14.477490268Z [Oct  2 15:49:14] Call-ID: cellrift-2929699739126924599@localhost
+2026-10-02T15:49:14.477492862Z [Oct  2 15:49:14] CSeq: 1 REGISTER
+2026-10-02T15:49:14.477495726Z [Oct  2 15:49:14] Contact: <sip:447700900203@10.0.0.1:5060>
+2026-10-02T15:49:14.477498941Z [Oct  2 15:49:14] Content-Length: 0
+2026-10-02T15:49:14.477518019Z [Oct  2 15:49:14] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:14.477520863Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.477523718Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.477740961Z [Oct  2 15:49:14] <--- Transmitting SIP response (660 bytes) to UDP:127.0.0.1:37539 --->
+2026-10-02T15:49:14.477747010Z [Oct  2 15:49:14] SIP/2.0 401 Unauthorized
+2026-10-02T15:49:14.477750274Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:37539;rport=37539;received=127.0.0.1;branch=z9hG4bK2201303237101896259
+2026-10-02T15:49:14.477753179Z [Oct  2 15:49:14] Call-ID: cellrift-2929699739126924599@localhost
+2026-10-02T15:49:14.477755542Z [Oct  2 15:49:14] From: <sip:447700900203@ims.lab.local>
+2026-10-02T15:49:14.477757565Z [Oct  2 15:49:14] To: <sip:447700900203@ims.lab.local>;tag=z9hG4bK2201303237101896259
+2026-10-02T15:49:14.477759578Z [Oct  2 15:49:14] CSeq: 1 REGISTER
+2026-10-02T15:49:14.477761491Z [Oct  2 15:49:14] WWW-Authenticate: Digest realm="cellrift.interop",nonce="1790956154/a8c554820bd8a476426ae712cd95a1e9",opaque="218637b60f4fa546",algorithm=SHA-256,qop="auth"
+2026-10-02T15:49:14.477764005Z [Oct  2 15:49:14] WWW-Authenticate: Digest realm="cellrift.interop",nonce="1790956154/a8c554820bd8a476426ae712cd95a1e9",opaque="3835fd1d07cdeb2b",algorithm=MD5,qop="auth"
+2026-10-02T15:49:14.477766208Z [Oct  2 15:49:14] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:14.477768071Z [Oct  2 15:49:14] Content-Length:  0
+2026-10-02T15:49:14.477770014Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.477771917Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.478011523Z [Oct  2 15:49:14] <--- Received SIP request (701 bytes) from UDP:127.0.0.1:37539 --->
+2026-10-02T15:49:14.478022189Z [Oct  2 15:49:14] REGISTER sip:447700900203@127.0.0.1:15060 SIP/2.0
+2026-10-02T15:49:14.478025293Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:37539;branch=z9hG4bK7587132502895582536
+2026-10-02T15:49:14.478030962Z [Oct  2 15:49:14] Max-Forwards: 70
+2026-10-02T15:49:14.478033806Z [Oct  2 15:49:14] From: sip:447700900203@ims.lab.local
+2026-10-02T15:49:14.478036941Z [Oct  2 15:49:14] To: sip:447700900203@ims.lab.local
+2026-10-02T15:49:14.478039775Z [Oct  2 15:49:14] Call-ID: cellrift-2929699739126924599@localhost
+2026-10-02T15:49:14.478042900Z [Oct  2 15:49:14] CSeq: 2 REGISTER
+2026-10-02T15:49:14.478045453Z [Oct  2 15:49:14] Contact: <sip:447700900203@10.0.0.1:5060>
+2026-10-02T15:49:14.478055098Z [Oct  2 15:49:14] Authorization: Digest username="impi-user", realm="cellrift.interop", nonce="1790956154/a8c554820bd8a476426ae712cd95a1e9", uri="sip:447700900203@127.0.0.1:15060", response="a081add849ff9932088da4153ddfe324c2563cf66177d6fc348c13f4aae743e6", algorithm=SHA-256, cnonce="df4e61f064322364", opaque="218637b60f4fa546", qop=auth, nc=00000001
+2026-10-02T15:49:14.478059474Z [Oct  2 15:49:14] Content-Length: 0
+2026-10-02T15:49:14.478062469Z [Oct  2 15:49:14] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:14.478064322Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.478066204Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.478395835Z [Oct  2 15:49:14]     -- Added contact 'sip:447700900203@10.0.0.1:5060' to AOR '447700900203' with expiration of 3600 seconds
+2026-10-02T15:49:14.478645826Z [Oct  2 15:49:14]   == Endpoint 447700900203 is now Reachable
+2026-10-02T15:49:14.478651605Z [Oct  2 15:49:14] <--- Transmitting SIP response (431 bytes) to UDP:127.0.0.1:37539 --->
+2026-10-02T15:49:14.478654890Z [Oct  2 15:49:14] SIP/2.0 200 OK
+2026-10-02T15:49:14.478657714Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:37539;rport=37539;received=127.0.0.1;branch=z9hG4bK7587132502895582536
+2026-10-02T15:49:14.478660538Z [Oct  2 15:49:14] Call-ID: cellrift-2929699739126924599@localhost
+2026-10-02T15:49:14.478663122Z [Oct  2 15:49:14] From: <sip:447700900203@ims.lab.local>
+2026-10-02T15:49:14.478665946Z [Oct  2 15:49:14] To: <sip:447700900203@ims.lab.local>;tag=z9hG4bK7587132502895582536
+2026-10-02T15:49:14.478668460Z [Oct  2 15:49:14] CSeq: 2 REGISTER
+2026-10-02T15:49:14.478670804Z [Oct  2 15:49:14] Date: Fri, 02 Oct 2026 15:49:14 GMT
+2026-10-02T15:49:14.478673087Z [Oct  2 15:49:14] Contact: <sip:447700900203@10.0.0.1:5060>;expires=3599
+2026-10-02T15:49:14.478675621Z [Oct  2 15:49:14] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:14.478678054Z [Oct  2 15:49:14] Content-Length:  0
+2026-10-02T15:49:14.478680438Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.478682902Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.621372552Z [Oct  2 15:49:14] <--- Received SIP request (365 bytes) from UDP:127.0.0.1:52694 --->
+2026-10-02T15:49:14.621410599Z [Oct  2 15:49:14] REGISTER sip:447700900201@127.0.0.1:15060 SIP/2.0
+2026-10-02T15:49:14.621413864Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:52694;branch=z9hG4bK2388454836160922214
+2026-10-02T15:49:14.621416488Z [Oct  2 15:49:14] Max-Forwards: 70
+2026-10-02T15:49:14.621419122Z [Oct  2 15:49:14] From: sip:447700900201@ims.lab.local
+2026-10-02T15:49:14.621421676Z [Oct  2 15:49:14] To: sip:447700900201@ims.lab.local
+2026-10-02T15:49:14.621424430Z [Oct  2 15:49:14] Call-ID: cellrift-6662971802563610802@localhost
+2026-10-02T15:49:14.621427194Z [Oct  2 15:49:14] CSeq: 1 REGISTER
+2026-10-02T15:49:14.621429988Z [Oct  2 15:49:14] Contact: <sip:447700900201@10.0.0.1:5060>
+2026-10-02T15:49:14.621443218Z [Oct  2 15:49:14] Content-Length: 0
+2026-10-02T15:49:14.621445962Z [Oct  2 15:49:14] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:14.621448395Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.621451079Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.621527273Z [Oct  2 15:49:14] <--- Transmitting SIP response (502 bytes) to UDP:127.0.0.1:52694 --->
+2026-10-02T15:49:14.621532380Z [Oct  2 15:49:14] SIP/2.0 401 Unauthorized
+2026-10-02T15:49:14.621535415Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:52694;rport=52694;received=127.0.0.1;branch=z9hG4bK2388454836160922214
+2026-10-02T15:49:14.621538489Z [Oct  2 15:49:14] Call-ID: cellrift-6662971802563610802@localhost
+2026-10-02T15:49:14.621541083Z [Oct  2 15:49:14] From: <sip:447700900201@ims.lab.local>
+2026-10-02T15:49:14.621543076Z [Oct  2 15:49:14] To: <sip:447700900201@ims.lab.local>;tag=z9hG4bK2388454836160922214
+2026-10-02T15:49:14.621545239Z [Oct  2 15:49:14] CSeq: 1 REGISTER
+2026-10-02T15:49:14.621547192Z [Oct  2 15:49:14] WWW-Authenticate: Digest realm="cellrift.interop",nonce="1790956154/a8c554820bd8a476426ae712cd95a1e9",opaque="59e7239e0af5aa26",algorithm=MD5,qop="auth"
+2026-10-02T15:49:14.621549586Z [Oct  2 15:49:14] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:14.621551469Z [Oct  2 15:49:14] Content-Length:  0
+2026-10-02T15:49:14.621553301Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.621555134Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.621809953Z [Oct  2 15:49:14] <--- Received SIP request (665 bytes) from UDP:127.0.0.1:52694 --->
+2026-10-02T15:49:14.621816242Z [Oct  2 15:49:14] REGISTER sip:447700900201@127.0.0.1:15060 SIP/2.0
+2026-10-02T15:49:14.621818956Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:52694;branch=z9hG4bK5279467033265040760
+2026-10-02T15:49:14.621821360Z [Oct  2 15:49:14] Max-Forwards: 70
+2026-10-02T15:49:14.621823713Z [Oct  2 15:49:14] From: sip:447700900201@ims.lab.local
+2026-10-02T15:49:14.621826147Z [Oct  2 15:49:14] To: sip:447700900201@ims.lab.local
+2026-10-02T15:49:14.621828841Z [Oct  2 15:49:14] Call-ID: cellrift-6662971802563610802@localhost
+2026-10-02T15:49:14.621831605Z [Oct  2 15:49:14] CSeq: 2 REGISTER
+2026-10-02T15:49:14.621834469Z [Oct  2 15:49:14] Contact: <sip:447700900201@10.0.0.1:5060>
+2026-10-02T15:49:14.621837854Z [Oct  2 15:49:14] Authorization: Digest username="impi-user", realm="cellrift.interop", nonce="1790956154/a8c554820bd8a476426ae712cd95a1e9", uri="sip:447700900201@127.0.0.1:15060", response="dd556c61ac5358d97c539310884497e8", algorithm=MD5, cnonce="31c50ba97a608036", opaque="59e7239e0af5aa26", qop=auth, nc=00000001
+2026-10-02T15:49:14.621841690Z [Oct  2 15:49:14] Content-Length: 0
+2026-10-02T15:49:14.621844454Z [Oct  2 15:49:14] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:14.621847148Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.621849732Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.622285270Z [Oct  2 15:49:14] <--- Transmitting SIP response (431 bytes) to UDP:127.0.0.1:52694 --->
+2026-10-02T15:49:14.622295215Z [Oct  2 15:49:14] SIP/2.0 200 OK
+2026-10-02T15:49:14.622298500Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:52694;rport=52694;received=127.0.0.1;branch=z9hG4bK5279467033265040760
+2026-10-02T15:49:14.622301364Z [Oct  2 15:49:14] Call-ID: cellrift-6662971802563610802@localhost
+2026-10-02T15:49:14.622304198Z [Oct  2 15:49:14] From: <sip:447700900201@ims.lab.local>
+2026-10-02T15:49:14.622306982Z [Oct  2 15:49:14] To: <sip:447700900201@ims.lab.local>;tag=z9hG4bK5279467033265040760
+2026-10-02T15:49:14.622309947Z [Oct  2 15:49:14] CSeq: 2 REGISTER
+2026-10-02T15:49:14.622312841Z [Oct  2 15:49:14] Date: Fri, 02 Oct 2026 15:49:14 GMT
+2026-10-02T15:49:14.622315885Z [Oct  2 15:49:14] Contact: <sip:447700900201@10.0.0.1:5060>;expires=3599
+2026-10-02T15:49:14.622318740Z [Oct  2 15:49:14] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:14.622321544Z [Oct  2 15:49:14] Content-Length:  0
+2026-10-02T15:49:14.622324138Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.622326962Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.622482744Z [Oct  2 15:49:14] <--- Received SIP request (364 bytes) from UDP:127.0.0.1:52694 --->
+2026-10-02T15:49:14.622488753Z [Oct  2 15:49:14] REGISTER sip:447700900202@127.0.0.1:15060 SIP/2.0
+2026-10-02T15:49:14.622491887Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:52694;branch=z9hG4bK1986199824004556739
+2026-10-02T15:49:14.622495132Z [Oct  2 15:49:14] Max-Forwards: 70
+2026-10-02T15:49:14.622497165Z [Oct  2 15:49:14] From: sip:447700900202@ims.lab.local
+2026-10-02T15:49:14.622499128Z [Oct  2 15:49:14] To: sip:447700900202@ims.lab.local
+2026-10-02T15:49:14.622501011Z [Oct  2 15:49:14] Call-ID: cellrift-494398768537964382@localhost
+2026-10-02T15:49:14.622502904Z [Oct  2 15:49:14] CSeq: 1 REGISTER
+2026-10-02T15:49:14.622504746Z [Oct  2 15:49:14] Contact: <sip:447700900202@10.0.0.1:5060>
+2026-10-02T15:49:14.622506799Z [Oct  2 15:49:14] Content-Length: 0
+2026-10-02T15:49:14.622508682Z [Oct  2 15:49:14] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:14.622510565Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.622512458Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.622689020Z [Oct  2 15:49:14] <--- Transmitting SIP response (505 bytes) to UDP:127.0.0.1:52694 --->
+2026-10-02T15:49:14.622695480Z [Oct  2 15:49:14] SIP/2.0 401 Unauthorized
+2026-10-02T15:49:14.622698535Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:52694;rport=52694;received=127.0.0.1;branch=z9hG4bK1986199824004556739
+2026-10-02T15:49:14.622701649Z [Oct  2 15:49:14] Call-ID: cellrift-494398768537964382@localhost
+2026-10-02T15:49:14.622704423Z [Oct  2 15:49:14] From: <sip:447700900202@ims.lab.local>
+2026-10-02T15:49:14.622707428Z [Oct  2 15:49:14] To: <sip:447700900202@ims.lab.local>;tag=z9hG4bK1986199824004556739
+2026-10-02T15:49:14.622716842Z [Oct  2 15:49:14] CSeq: 1 REGISTER
+2026-10-02T15:49:14.622719916Z [Oct  2 15:49:14] WWW-Authenticate: Digest realm="cellrift.interop",nonce="1790956154/a8c554820bd8a476426ae712cd95a1e9",opaque="323436e660685cf0",algorithm=SHA-256,qop="auth"
+2026-10-02T15:49:14.622723512Z [Oct  2 15:49:14] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:14.622726276Z [Oct  2 15:49:14] Content-Length:  0
+2026-10-02T15:49:14.622729030Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.622731704Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.622807837Z [Oct  2 15:49:14] <--- Received SIP request (700 bytes) from UDP:127.0.0.1:52694 --->
+2026-10-02T15:49:14.622864952Z [Oct  2 15:49:14] REGISTER sip:447700900202@127.0.0.1:15060 SIP/2.0
+2026-10-02T15:49:14.622868217Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:52694;branch=z9hG4bK5842005925266244082
+2026-10-02T15:49:14.622871352Z [Oct  2 15:49:14] Max-Forwards: 70
+2026-10-02T15:49:14.622874066Z [Oct  2 15:49:14] From: sip:447700900202@ims.lab.local
+2026-10-02T15:49:14.622876730Z [Oct  2 15:49:14] To: sip:447700900202@ims.lab.local
+2026-10-02T15:49:14.622879504Z [Oct  2 15:49:14] Call-ID: cellrift-494398768537964382@localhost
+2026-10-02T15:49:14.622882148Z [Oct  2 15:49:14] CSeq: 2 REGISTER
+2026-10-02T15:49:14.622885012Z [Oct  2 15:49:14] Contact: <sip:447700900202@10.0.0.1:5060>
+2026-10-02T15:49:14.622887996Z [Oct  2 15:49:14] Authorization: Digest username="impi-user", realm="cellrift.interop", nonce="1790956154/a8c554820bd8a476426ae712cd95a1e9", uri="sip:447700900202@127.0.0.1:15060", response="d84c838ed82ffa635310a3cb6c4cd63c7c02cf193c4fb16411fbb6fe538fd25c", algorithm=SHA-256, cnonce="662dc19e6edae289", opaque="323436e660685cf0", qop=auth, nc=00000001
+2026-10-02T15:49:14.622891842Z [Oct  2 15:49:14] Content-Length: 0
+2026-10-02T15:49:14.622894506Z [Oct  2 15:49:14] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:14.622897280Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.622899974Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.623237176Z [Oct  2 15:49:14] <--- Transmitting SIP response (430 bytes) to UDP:127.0.0.1:52694 --->
+2026-10-02T15:49:14.623246780Z [Oct  2 15:49:14] SIP/2.0 200 OK
+2026-10-02T15:49:14.623250065Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:52694;rport=52694;received=127.0.0.1;branch=z9hG4bK5842005925266244082
+2026-10-02T15:49:14.623252969Z [Oct  2 15:49:14] Call-ID: cellrift-494398768537964382@localhost
+2026-10-02T15:49:14.623255733Z [Oct  2 15:49:14] From: <sip:447700900202@ims.lab.local>
+2026-10-02T15:49:14.623258547Z [Oct  2 15:49:14] To: <sip:447700900202@ims.lab.local>;tag=z9hG4bK5842005925266244082
+2026-10-02T15:49:14.623261652Z [Oct  2 15:49:14] CSeq: 2 REGISTER
+2026-10-02T15:49:14.623264677Z [Oct  2 15:49:14] Date: Fri, 02 Oct 2026 15:49:14 GMT
+2026-10-02T15:49:14.623279759Z [Oct  2 15:49:14] Contact: <sip:447700900202@10.0.0.1:5060>;expires=3599
+2026-10-02T15:49:14.623282944Z [Oct  2 15:49:14] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:14.623285748Z [Oct  2 15:49:14] Content-Length:  0
+2026-10-02T15:49:14.623288362Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.623338717Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.623371385Z [Oct  2 15:49:14] <--- Received SIP request (365 bytes) from UDP:127.0.0.1:52694 --->
+2026-10-02T15:49:14.623375091Z [Oct  2 15:49:14] REGISTER sip:447700900203@127.0.0.1:15060 SIP/2.0
+2026-10-02T15:49:14.623418005Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:52694;branch=z9hG4bK3277493559459019697
+2026-10-02T15:49:14.623430193Z [Oct  2 15:49:14] Max-Forwards: 70
+2026-10-02T15:49:14.623433337Z [Oct  2 15:49:14] From: sip:447700900203@ims.lab.local
+2026-10-02T15:49:14.623436412Z [Oct  2 15:49:14] To: sip:447700900203@ims.lab.local
+2026-10-02T15:49:14.623439116Z [Oct  2 15:49:14] Call-ID: cellrift-2643020971065220368@localhost
+2026-10-02T15:49:14.623441870Z [Oct  2 15:49:14] CSeq: 1 REGISTER
+2026-10-02T15:49:14.623444494Z [Oct  2 15:49:14] Contact: <sip:447700900203@10.0.0.1:5060>
+2026-10-02T15:49:14.623464574Z [Oct  2 15:49:14] Content-Length: 0
+2026-10-02T15:49:14.623467268Z [Oct  2 15:49:14] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:14.623470072Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.623485545Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.623573085Z [Oct  2 15:49:14] <--- Transmitting SIP response (805 bytes) to UDP:127.0.0.1:60369 --->
+2026-10-02T15:49:14.623578173Z [Oct  2 15:49:14] SIP/2.0 200 OK
+2026-10-02T15:49:14.623581057Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:60369;rport=60369;received=127.0.0.1;branch=z9hG4bK778677914644256755
+2026-10-02T15:49:14.623583941Z [Oct  2 15:49:14] Call-ID: cellrift-5046045900633407671@localhost
+2026-10-02T15:49:14.623586756Z [Oct  2 15:49:14] From: <sip:447700900001@ims.local>
+2026-10-02T15:49:14.623589590Z [Oct  2 15:49:14] To: <sip:447700900002@ims.local>;tag=4e4970c7-f5e2-4854-90aa-8219a55bd2d6
+2026-10-02T15:49:14.623655738Z [Oct  2 15:49:14] CSeq: 1 INVITE
+2026-10-02T15:49:14.623659824Z [Oct  2 15:49:14] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:14.623662598Z [Oct  2 15:49:14] Allow: OPTIONS, REGISTER, SUBSCRIBE, NOTIFY, PUBLISH, INVITE, ACK, BYE, CANCEL, UPDATE, PRACK, INFO, MESSAGE, REFER
+2026-10-02T15:49:14.623665683Z [Oct  2 15:49:14] Contact: <sip:127.0.0.1:15060>
+2026-10-02T15:49:14.623668788Z [Oct  2 15:49:14] Supported: 100rel, timer, replaces, norefersub
+2026-10-02T15:49:14.623671592Z [Oct  2 15:49:14] Content-Type: application/sdp
+2026-10-02T15:49:14.623674486Z [Oct  2 15:49:14] Content-Length:   237
+2026-10-02T15:49:14.623677220Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.623685482Z [Oct  2 15:49:14] v=0
+2026-10-02T15:49:14.623688257Z [Oct  2 15:49:14] o=- 0 2 IN IP4 127.0.0.1
+2026-10-02T15:49:14.623701596Z [Oct  2 15:49:14] s=Asterisk
+2026-10-02T15:49:14.623704270Z [Oct  2 15:49:14] c=IN IP4 127.0.0.1
+2026-10-02T15:49:14.623722377Z [Oct  2 15:49:14] t=0 0
+2026-10-02T15:49:14.623725101Z [Oct  2 15:49:14] m=audio 13568 RTP/AVP 0 8 101
+2026-10-02T15:49:14.623727976Z [Oct  2 15:49:14] a=rtpmap:0 PCMU/8000
+2026-10-02T15:49:14.623730780Z [Oct  2 15:49:14] a=rtpmap:8 PCMA/8000
+2026-10-02T15:49:14.623733594Z [Oct  2 15:49:14] a=rtpmap:101 telephone-event/8000
+2026-10-02T15:49:14.623736699Z [Oct  2 15:49:14] a=fmtp:101 0-16
+2026-10-02T15:49:14.623739453Z [Oct  2 15:49:14] a=ptime:20
+2026-10-02T15:49:14.623742187Z [Oct  2 15:49:14] a=maxptime:140
+2026-10-02T15:49:14.623745091Z [Oct  2 15:49:14] a=recvonly
+2026-10-02T15:49:14.623747765Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.623753824Z [Oct  2 15:49:14] <--- Transmitting SIP response (660 bytes) to UDP:127.0.0.1:52694 --->
+2026-10-02T15:49:14.623756829Z [Oct  2 15:49:14] SIP/2.0 401 Unauthorized
+2026-10-02T15:49:14.623759573Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:52694;rport=52694;received=127.0.0.1;branch=z9hG4bK3277493559459019697
+2026-10-02T15:49:14.623762427Z [Oct  2 15:49:14] Call-ID: cellrift-2643020971065220368@localhost
+2026-10-02T15:49:14.623765181Z [Oct  2 15:49:14] From: <sip:447700900203@ims.lab.local>
+2026-10-02T15:49:14.623768316Z [Oct  2 15:49:14] To: <sip:447700900203@ims.lab.local>;tag=z9hG4bK3277493559459019697
+2026-10-02T15:49:14.623771430Z [Oct  2 15:49:14] CSeq: 1 REGISTER
+2026-10-02T15:49:14.623774224Z [Oct  2 15:49:14] WWW-Authenticate: Digest realm="cellrift.interop",nonce="1790956154/a8c554820bd8a476426ae712cd95a1e9",opaque="17ee2c7c67450f0d",algorithm=SHA-256,qop="auth"
+2026-10-02T15:49:14.623777619Z [Oct  2 15:49:14] WWW-Authenticate: Digest realm="cellrift.interop",nonce="1790956154/a8c554820bd8a476426ae712cd95a1e9",opaque="367ad17429489947",algorithm=MD5,qop="auth"
+2026-10-02T15:49:14.623780894Z [Oct  2 15:49:14] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:14.623783909Z [Oct  2 15:49:14] Content-Length:  0
+2026-10-02T15:49:14.623786693Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.623859601Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.623873893Z [Oct  2 15:49:14] <--- Received SIP request (700 bytes) from UDP:127.0.0.1:52694 --->
+2026-10-02T15:49:14.623885320Z [Oct  2 15:49:14] REGISTER sip:447700900203@127.0.0.1:15060 SIP/2.0
+2026-10-02T15:49:14.623896196Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:52694;branch=z9hG4bK512376953841150084
+2026-10-02T15:49:14.623899150Z [Oct  2 15:49:14] Max-Forwards: 70
+2026-10-02T15:49:14.623910347Z [Oct  2 15:49:14] From: sip:447700900203@ims.lab.local
+2026-10-02T15:49:14.623934403Z [Oct  2 15:49:14] To: sip:447700900203@ims.lab.local
+2026-10-02T15:49:14.623937057Z [Oct  2 15:49:14] Call-ID: cellrift-2643020971065220368@localhost
+2026-10-02T15:49:14.623939691Z [Oct  2 15:49:14] CSeq: 2 REGISTER
+2026-10-02T15:49:14.623942445Z [Oct  2 15:49:14] Contact: <sip:447700900203@10.0.0.1:5060>
+2026-10-02T15:49:14.623945359Z [Oct  2 15:49:14] Authorization: Digest username="impi-user", realm="cellrift.interop", nonce="1790956154/a8c554820bd8a476426ae712cd95a1e9", uri="sip:447700900203@127.0.0.1:15060", response="ce3ba284f2cbe5a921b84e01a9acaa63c18cb0b45a1434ca7c638ad782ba1d18", algorithm=SHA-256, cnonce="d4653ae0dc63cae4", opaque="17ee2c7c67450f0d", qop=auth, nc=00000001
+2026-10-02T15:49:14.623949505Z [Oct  2 15:49:14] Content-Length: 0
+2026-10-02T15:49:14.623952399Z [Oct  2 15:49:14] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:14.623964207Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.623966971Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.624385193Z [Oct  2 15:49:14] <--- Transmitting SIP response (429 bytes) to UDP:127.0.0.1:52694 --->
+2026-10-02T15:49:14.624393966Z [Oct  2 15:49:14] SIP/2.0 200 OK
+2026-10-02T15:49:14.624396380Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:52694;rport=52694;received=127.0.0.1;branch=z9hG4bK512376953841150084
+2026-10-02T15:49:14.624398503Z [Oct  2 15:49:14] Call-ID: cellrift-2643020971065220368@localhost
+2026-10-02T15:49:14.624400416Z [Oct  2 15:49:14] From: <sip:447700900203@ims.lab.local>
+2026-10-02T15:49:14.624402529Z [Oct  2 15:49:14] To: <sip:447700900203@ims.lab.local>;tag=z9hG4bK512376953841150084
+2026-10-02T15:49:14.624404662Z [Oct  2 15:49:14] CSeq: 2 REGISTER
+2026-10-02T15:49:14.624406555Z [Oct  2 15:49:14] Date: Fri, 02 Oct 2026 15:49:14 GMT
+2026-10-02T15:49:14.624408458Z [Oct  2 15:49:14] Contact: <sip:447700900203@10.0.0.1:5060>;expires=3599
+2026-10-02T15:49:14.624410411Z [Oct  2 15:49:14] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:14.624412273Z [Oct  2 15:49:14] Content-Length:  0
+2026-10-02T15:49:14.624414106Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.624415969Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.766754508Z [Oct  2 15:49:14] <--- Transmitting SIP response (805 bytes) to UDP:127.0.0.1:54476 --->
+2026-10-02T15:49:14.766787787Z [Oct  2 15:49:14] SIP/2.0 200 OK
+2026-10-02T15:49:14.766791302Z [Oct  2 15:49:14] Via: SIP/2.0/UDP [::]:54476;rport=54476;received=127.0.0.1;branch=z9hG4bK163860401071632567
+2026-10-02T15:49:14.766794277Z [Oct  2 15:49:14] Call-ID: cellrift-8661720542622667429@localhost
+2026-10-02T15:49:14.766796971Z [Oct  2 15:49:14] From: <sip:447700900001@ims.local>
+2026-10-02T15:49:14.766799765Z [Oct  2 15:49:14] To: <sip:447700900002@ims.local>;tag=4787bdda-626d-405c-ad74-0df3b2a77e5a
+2026-10-02T15:49:14.766802769Z [Oct  2 15:49:14] CSeq: 1 INVITE
+2026-10-02T15:49:14.766805273Z [Oct  2 15:49:14] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:14.766818913Z [Oct  2 15:49:14] Allow: OPTIONS, REGISTER, SUBSCRIBE, NOTIFY, PUBLISH, INVITE, ACK, BYE, CANCEL, UPDATE, PRACK, INFO, MESSAGE, REFER
+2026-10-02T15:49:14.766821888Z [Oct  2 15:49:14] Contact: <sip:127.0.0.1:15060>
+2026-10-02T15:49:14.766824662Z [Oct  2 15:49:14] Supported: 100rel, timer, replaces, norefersub
+2026-10-02T15:49:14.766827336Z [Oct  2 15:49:14] Content-Type: application/sdp
+2026-10-02T15:49:14.766829870Z [Oct  2 15:49:14] Content-Length:   237
+2026-10-02T15:49:14.766832393Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.766834927Z [Oct  2 15:49:14] v=0
+2026-10-02T15:49:14.766837451Z [Oct  2 15:49:14] o=- 0 2 IN IP4 127.0.0.1
+2026-10-02T15:49:14.766840035Z [Oct  2 15:49:14] s=Asterisk
+2026-10-02T15:49:14.766842508Z [Oct  2 15:49:14] c=IN IP4 127.0.0.1
+2026-10-02T15:49:14.766844972Z [Oct  2 15:49:14] t=0 0
+2026-10-02T15:49:14.766847376Z [Oct  2 15:49:14] m=audio 11774 RTP/AVP 0 8 101
+2026-10-02T15:49:14.766849819Z [Oct  2 15:49:14] a=rtpmap:0 PCMU/8000
+2026-10-02T15:49:14.766852253Z [Oct  2 15:49:14] a=rtpmap:8 PCMA/8000
+2026-10-02T15:49:14.766854727Z [Oct  2 15:49:14] a=rtpmap:101 telephone-event/8000
+2026-10-02T15:49:14.766857300Z [Oct  2 15:49:14] a=fmtp:101 0-16
+2026-10-02T15:49:14.766859864Z [Oct  2 15:49:14] a=ptime:20
+2026-10-02T15:49:14.766862328Z [Oct  2 15:49:14] a=maxptime:140
+2026-10-02T15:49:14.766864812Z [Oct  2 15:49:14] a=recvonly
+2026-10-02T15:49:14.766867466Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.811671893Z [Oct  2 15:49:14] <--- Received SIP request (741 bytes) from TLS:127.0.0.1:34126 --->
+2026-10-02T15:49:14.811700385Z [Oct  2 15:49:14] INVITE sip:447700900002@127.0.0.1:15061 SIP/2.0
+2026-10-02T15:49:14.811703159Z [Oct  2 15:49:14] Via: SIP/2.0/TLS [::]:39953;branch=z9hG4bK2877502797475536093
+2026-10-02T15:49:14.811705443Z [Oct  2 15:49:14] Max-Forwards: 70
+2026-10-02T15:49:14.811707385Z [Oct  2 15:49:14] From: sip:447700900001@ims.local
+2026-10-02T15:49:14.811709639Z [Oct  2 15:49:14] To: sip:447700900002@ims.local
+2026-10-02T15:49:14.811711622Z [Oct  2 15:49:14] Call-ID: cellrift-816039743674851129@localhost
+2026-10-02T15:49:14.811713625Z [Oct  2 15:49:14] CSeq: 1 INVITE
+2026-10-02T15:49:14.811715427Z [Oct  2 15:49:14] Contact: <sip:447700900001@10.0.0.1:5061;transport=TLS>
+2026-10-02T15:49:14.811717450Z [Oct  2 15:49:14] Content-Type: application/sdp
+2026-10-02T15:49:14.811719734Z [Oct  2 15:49:14] Content-Length: 212
+2026-10-02T15:49:14.811724371Z [Oct  2 15:49:14] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:14.811727415Z [Oct  2 15:49:14] P-Charging-Vector: icid-value=cellrift-call-tls-001
+2026-10-02T15:49:14.811730219Z [Oct  2 15:49:14] P-Access-Network-Info: 3GPP-E-UTRAN-FDD; utran-cell-id-3gpp=001010001000001
+2026-10-02T15:49:14.811742648Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.811744611Z [Oct  2 15:49:14] v=0
+2026-10-02T15:49:14.811746464Z [Oct  2 15:49:14] o=cellrift 0 0 IN IP4 0.0.0.0
+2026-10-02T15:49:14.811748326Z [Oct  2 15:49:14] s=cellrift
+2026-10-02T15:49:14.811750159Z [Oct  2 15:49:14] c=IN IP4 0.0.0.0
+2026-10-02T15:49:14.811752032Z [Oct  2 15:49:14] t=0 0
+2026-10-02T15:49:14.811753865Z [Oct  2 15:49:14] m=audio 49170 RTP/AVP 8 0 101
+2026-10-02T15:49:14.811755707Z [Oct  2 15:49:14] a=rtpmap:8 PCMA/8000
+2026-10-02T15:49:14.811757540Z [Oct  2 15:49:14] a=rtpmap:0 PCMU/8000
+2026-10-02T15:49:14.811759383Z [Oct  2 15:49:14] a=rtpmap:101 telephone-event/8000
+2026-10-02T15:49:14.811761246Z [Oct  2 15:49:14] a=fmtp:101 0-15
+2026-10-02T15:49:14.811763098Z [Oct  2 15:49:14] a=sendrecv
+2026-10-02T15:49:14.811764941Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.812217524Z [Oct  2 15:49:14] <--- Transmitting SIP response (300 bytes) to TLS:127.0.0.1:34126 --->
+2026-10-02T15:49:14.812231505Z [Oct  2 15:49:14] SIP/2.0 100 Trying
+2026-10-02T15:49:14.812234580Z [Oct  2 15:49:14] Via: SIP/2.0/TLS [::]:39953;rport=34126;received=127.0.0.1;branch=z9hG4bK2877502797475536093
+2026-10-02T15:49:14.812237574Z [Oct  2 15:49:14] Call-ID: cellrift-816039743674851129@localhost
+2026-10-02T15:49:14.812240218Z [Oct  2 15:49:14] From: <sip:447700900001@ims.local>
+2026-10-02T15:49:14.812242982Z [Oct  2 15:49:14] To: <sip:447700900002@ims.local>
+2026-10-02T15:49:14.812246147Z [Oct  2 15:49:14] CSeq: 1 INVITE
+2026-10-02T15:49:14.812249231Z [Oct  2 15:49:14] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:14.812252236Z [Oct  2 15:49:14] Content-Length:  0
+2026-10-02T15:49:14.812254940Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.812258024Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.813428846Z [Oct  2 15:49:14]     -- Executing [447700900002@from-cellrift:1] NoOp("PJSIP/447700900001-00000002", "cellrift call") in new stack
+2026-10-02T15:49:14.813441234Z [Oct  2 15:49:14]     -- Executing [447700900002@from-cellrift:2] Ringing("PJSIP/447700900001-00000002", "") in new stack
+2026-10-02T15:49:14.813444980Z [Oct  2 15:49:14]     -- Executing [447700900002@from-cellrift:3] Wait("PJSIP/447700900001-00000002", "1") in new stack
+2026-10-02T15:49:14.813529866Z [Oct  2 15:49:14] <--- Transmitting SIP response (505 bytes) to TLS:127.0.0.1:34126 --->
+2026-10-02T15:49:14.813551819Z [Oct  2 15:49:14] SIP/2.0 180 Ringing
+2026-10-02T15:49:14.813554673Z [Oct  2 15:49:14] Via: SIP/2.0/TLS [::]:39953;rport=34126;received=127.0.0.1;branch=z9hG4bK2877502797475536093
+2026-10-02T15:49:14.813557677Z [Oct  2 15:49:14] Call-ID: cellrift-816039743674851129@localhost
+2026-10-02T15:49:14.813560401Z [Oct  2 15:49:14] From: <sip:447700900001@ims.local>
+2026-10-02T15:49:14.813569956Z [Oct  2 15:49:14] To: <sip:447700900002@ims.local>;tag=2dd190eb-9b76-422f-8a67-8167fb55700f
+2026-10-02T15:49:14.813629184Z [Oct  2 15:49:14] CSeq: 1 INVITE
+2026-10-02T15:49:14.813631307Z [Oct  2 15:49:14] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:14.813633310Z [Oct  2 15:49:14] Contact: <sip:127.0.0.1:15061;transport=TLS>
+2026-10-02T15:49:14.813635563Z [Oct  2 15:49:14] Allow: OPTIONS, REGISTER, SUBSCRIBE, NOTIFY, PUBLISH, INVITE, ACK, BYE, CANCEL, UPDATE, PRACK, INFO, MESSAGE, REFER
+2026-10-02T15:49:14.813637686Z [Oct  2 15:49:14] Content-Length:  0
+2026-10-02T15:49:14.813639649Z [Oct  2 15:49:14] 
+2026-10-02T15:49:14.813641592Z [Oct  2 15:49:14] 
+2026-10-02T15:49:15.765927948Z [Oct  2 15:49:15] <--- Transmitting SIP response (805 bytes) to UDP:127.0.0.1:54476 --->
+2026-10-02T15:49:15.765959044Z [Oct  2 15:49:15] SIP/2.0 200 OK
+2026-10-02T15:49:15.765961768Z [Oct  2 15:49:15] Via: SIP/2.0/UDP [::]:54476;rport=54476;received=127.0.0.1;branch=z9hG4bK163860401071632567
+2026-10-02T15:49:15.765963962Z [Oct  2 15:49:15] Call-ID: cellrift-8661720542622667429@localhost
+2026-10-02T15:49:15.765965925Z [Oct  2 15:49:15] From: <sip:447700900001@ims.local>
+2026-10-02T15:49:15.765968038Z [Oct  2 15:49:15] To: <sip:447700900002@ims.local>;tag=4787bdda-626d-405c-ad74-0df3b2a77e5a
+2026-10-02T15:49:15.765970101Z [Oct  2 15:49:15] CSeq: 1 INVITE
+2026-10-02T15:49:15.765971923Z [Oct  2 15:49:15] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:15.765973836Z [Oct  2 15:49:15] Allow: OPTIONS, REGISTER, SUBSCRIBE, NOTIFY, PUBLISH, INVITE, ACK, BYE, CANCEL, UPDATE, PRACK, INFO, MESSAGE, REFER
+2026-10-02T15:49:15.765976160Z [Oct  2 15:49:15] Contact: <sip:127.0.0.1:15060>
+2026-10-02T15:49:15.765994076Z [Oct  2 15:49:15] Supported: 100rel, timer, replaces, norefersub
+2026-10-02T15:49:15.765996570Z [Oct  2 15:49:15] Content-Type: application/sdp
+2026-10-02T15:49:15.765999294Z [Oct  2 15:49:15] Content-Length:   237
+2026-10-02T15:49:15.766002279Z [Oct  2 15:49:15] 
+2026-10-02T15:49:15.766004893Z [Oct  2 15:49:15] v=0
+2026-10-02T15:49:15.766007847Z [Oct  2 15:49:15] o=- 0 2 IN IP4 127.0.0.1
+2026-10-02T15:49:15.766010130Z [Oct  2 15:49:15] s=Asterisk
+2026-10-02T15:49:15.766012013Z [Oct  2 15:49:15] c=IN IP4 127.0.0.1
+2026-10-02T15:49:15.766013846Z [Oct  2 15:49:15] t=0 0
+2026-10-02T15:49:15.766015769Z [Oct  2 15:49:15] m=audio 11774 RTP/AVP 0 8 101
+2026-10-02T15:49:15.766018132Z [Oct  2 15:49:15] a=rtpmap:0 PCMU/8000
+2026-10-02T15:49:15.766019965Z [Oct  2 15:49:15] a=rtpmap:8 PCMA/8000
+2026-10-02T15:49:15.766021808Z [Oct  2 15:49:15] a=rtpmap:101 telephone-event/8000
+2026-10-02T15:49:15.766023781Z [Oct  2 15:49:15] a=fmtp:101 0-16
+2026-10-02T15:49:15.766039254Z [Oct  2 15:49:15] a=ptime:20
+2026-10-02T15:49:15.766041257Z [Oct  2 15:49:15] a=maxptime:140
+2026-10-02T15:49:15.766043149Z [Oct  2 15:49:15] a=recvonly
+2026-10-02T15:49:15.766044982Z [Oct  2 15:49:15] 
+2026-10-02T15:49:15.814533789Z [Oct  2 15:49:15]     -- Executing [447700900002@from-cellrift:4] Answer("PJSIP/447700900001-00000002", "") in new stack
+2026-10-02T15:49:15.815054073Z [Oct  2 15:49:15] <--- Transmitting SIP response (819 bytes) to TLS:127.0.0.1:34126 --->
+2026-10-02T15:49:15.815061464Z [Oct  2 15:49:15] SIP/2.0 200 OK
+2026-10-02T15:49:15.815065380Z [Oct  2 15:49:15] Via: SIP/2.0/TLS [::]:39953;rport=34126;received=127.0.0.1;branch=z9hG4bK2877502797475536093
+2026-10-02T15:49:15.815068204Z [Oct  2 15:49:15] Call-ID: cellrift-816039743674851129@localhost
+2026-10-02T15:49:15.815070157Z [Oct  2 15:49:15] From: <sip:447700900001@ims.local>
+2026-10-02T15:49:15.815072290Z [Oct  2 15:49:15] To: <sip:447700900002@ims.local>;tag=2dd190eb-9b76-422f-8a67-8167fb55700f
+2026-10-02T15:49:15.815074343Z [Oct  2 15:49:15] CSeq: 1 INVITE
+2026-10-02T15:49:15.815076166Z [Oct  2 15:49:15] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:15.815078239Z [Oct  2 15:49:15] Allow: OPTIONS, REGISTER, SUBSCRIBE, NOTIFY, PUBLISH, INVITE, ACK, BYE, CANCEL, UPDATE, PRACK, INFO, MESSAGE, REFER
+2026-10-02T15:49:15.815080412Z [Oct  2 15:49:15] Contact: <sip:127.0.0.1:15061;transport=TLS>
+2026-10-02T15:49:15.815082435Z [Oct  2 15:49:15] Supported: 100rel, timer, replaces, norefersub
+2026-10-02T15:49:15.815084348Z [Oct  2 15:49:15] Content-Type: application/sdp
+2026-10-02T15:49:15.815086191Z [Oct  2 15:49:15] Content-Length:   237
+2026-10-02T15:49:15.815088063Z [Oct  2 15:49:15] 
+2026-10-02T15:49:15.815089916Z [Oct  2 15:49:15] v=0
+2026-10-02T15:49:15.815091759Z [Oct  2 15:49:15] o=- 0 2 IN IP4 127.0.0.1
+2026-10-02T15:49:15.815093612Z [Oct  2 15:49:15] s=Asterisk
+2026-10-02T15:49:15.815095444Z [Oct  2 15:49:15] c=IN IP4 127.0.0.1
+2026-10-02T15:49:15.815097297Z [Oct  2 15:49:15] t=0 0
+2026-10-02T15:49:15.815099140Z [Oct  2 15:49:15] m=audio 17326 RTP/AVP 0 8 101
+2026-10-02T15:49:15.815103827Z [Oct  2 15:49:15] a=rtpmap:0 PCMU/8000
+2026-10-02T15:49:15.815106681Z [Oct  2 15:49:15] a=rtpmap:8 PCMA/8000
+2026-10-02T15:49:15.815109726Z [Oct  2 15:49:15] a=rtpmap:101 telephone-event/8000
+2026-10-02T15:49:15.815112690Z [Oct  2 15:49:15] a=fmtp:101 0-16
+2026-10-02T15:49:15.815115344Z [Oct  2 15:49:15] a=ptime:20
+2026-10-02T15:49:15.815117928Z [Oct  2 15:49:15] a=maxptime:140
+2026-10-02T15:49:15.815120942Z [Oct  2 15:49:15] a=recvonly
+2026-10-02T15:49:15.815123626Z [Oct  2 15:49:15] 
+2026-10-02T15:49:15.816841281Z [Oct  2 15:49:15] <--- Received SIP request (397 bytes) from TLS:127.0.0.1:34132 --->
+2026-10-02T15:49:15.816864916Z [Oct  2 15:49:15] BYE sip:447700900002@127.0.0.1:15061 SIP/2.0
+2026-10-02T15:49:15.816868441Z [Oct  2 15:49:15] Via: SIP/2.0/TLS [::]:39953;branch=z9hG4bK5969510894654915536
+2026-10-02T15:49:15.816871306Z [Oct  2 15:49:15] Max-Forwards: 70
+2026-10-02T15:49:15.816873939Z [Oct  2 15:49:15] From: sip:447700900001@ims.local
+2026-10-02T15:49:15.816876784Z [Oct  2 15:49:15] To: sip:447700900002@ims.local;tag=2dd190eb-9b76-422f-8a67-8167fb55700f
+2026-10-02T15:49:15.816879548Z [Oct  2 15:49:15] Call-ID: cellrift-816039743674851129@localhost
+2026-10-02T15:49:15.816882262Z [Oct  2 15:49:15] CSeq: 2 BYE
+2026-10-02T15:49:15.816884796Z [Oct  2 15:49:15] Content-Length: 0
+2026-10-02T15:49:15.816907099Z [Oct  2 15:49:15] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:15.816910073Z [Oct  2 15:49:15] P-Charging-Vector: icid-value=cellrift-call-tls-001
+2026-10-02T15:49:15.816912817Z [Oct  2 15:49:15] 
+2026-10-02T15:49:15.816915371Z [Oct  2 15:49:15] 
+2026-10-02T15:49:15.816949562Z [Oct  2 15:49:15] <--- Transmitting SIP response (334 bytes) to TLS:127.0.0.1:34132 --->
+2026-10-02T15:49:15.816953838Z [Oct  2 15:49:15] SIP/2.0 200 OK
+2026-10-02T15:49:15.816956552Z [Oct  2 15:49:15] Via: SIP/2.0/TLS [::]:39953;rport=34132;received=127.0.0.1;branch=z9hG4bK5969510894654915536
+2026-10-02T15:49:15.816958936Z [Oct  2 15:49:15] Call-ID: cellrift-816039743674851129@localhost
+2026-10-02T15:49:15.816961059Z [Oct  2 15:49:15] From: <sip:447700900001@ims.local>
+2026-10-02T15:49:15.816963102Z [Oct  2 15:49:15] To: <sip:447700900002@ims.local>;tag=2dd190eb-9b76-422f-8a67-8167fb55700f
+2026-10-02T15:49:15.816965205Z [Oct  2 15:49:15] CSeq: 2 BYE
+2026-10-02T15:49:15.816967138Z [Oct  2 15:49:15] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:15.816969121Z [Oct  2 15:49:15] Content-Length:  0
+2026-10-02T15:49:15.816970984Z [Oct  2 15:49:15] 
+2026-10-02T15:49:15.816972847Z [Oct  2 15:49:15] 
+2026-10-02T15:49:15.817609824Z [Oct  2 15:49:15]   == Spawn extension (from-cellrift, 447700900002, 4) exited non-zero on 'PJSIP/447700900001-00000002'
+2026-10-02T15:49:15.817877953Z [Oct  2 15:49:15] ERROR[60]: cdr_csv.c:275 writefile: Unable to open file /var/log/asterisk//cdr-csv//Master.csv : No such file or directory
+2026-10-02T15:49:15.817888599Z [Oct  2 15:49:15] WARNING[60]: cdr_csv.c:308 csv_log: Unable to write CSV record to master '/var/log/asterisk//cdr-csv//Master.csv' : No such file or directory
+2026-10-02T15:49:15.965057191Z [Oct  2 15:49:15] <--- Received SIP request (740 bytes) from TLS:127.0.0.1:34140 --->
+2026-10-02T15:49:15.965082969Z [Oct  2 15:49:15] INVITE sip:447700900002@127.0.0.1:15061 SIP/2.0
+2026-10-02T15:49:15.965086735Z [Oct  2 15:49:15] Via: SIP/2.0/TLS [::]:45855;branch=z9hG4bK504377354284046766
+2026-10-02T15:49:15.965115207Z [Oct  2 15:49:15] Max-Forwards: 70
+2026-10-02T15:49:15.965118121Z [Oct  2 15:49:15] From: sip:447700900001@ims.local
+2026-10-02T15:49:15.965121086Z [Oct  2 15:49:15] To: sip:447700900002@ims.local
+2026-10-02T15:49:15.965123650Z [Oct  2 15:49:15] Call-ID: cellrift-416546767300088961@localhost
+2026-10-02T15:49:15.965126564Z [Oct  2 15:49:15] CSeq: 1 INVITE
+2026-10-02T15:49:15.965129198Z [Oct  2 15:49:15] Contact: <sip:447700900001@10.0.0.1:5061;transport=TLS>
+2026-10-02T15:49:15.965132102Z [Oct  2 15:49:15] Content-Type: application/sdp
+2026-10-02T15:49:15.965135107Z [Oct  2 15:49:15] Content-Length: 212
+2026-10-02T15:49:15.965137901Z [Oct  2 15:49:15] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:15.965140915Z [Oct  2 15:49:15] P-Access-Network-Info: 3GPP-E-UTRAN-FDD; utran-cell-id-3gpp=001010001000001
+2026-10-02T15:49:15.965144150Z [Oct  2 15:49:15] P-Charging-Vector: icid-value=cellrift-call-tls-001
+2026-10-02T15:49:15.965146944Z [Oct  2 15:49:15] 
+2026-10-02T15:49:15.965149538Z [Oct  2 15:49:15] v=0
+2026-10-02T15:49:15.965152212Z [Oct  2 15:49:15] o=cellrift 0 0 IN IP4 0.0.0.0
+2026-10-02T15:49:15.965154956Z [Oct  2 15:49:15] s=cellrift
+2026-10-02T15:49:15.965157570Z [Oct  2 15:49:15] c=IN IP4 0.0.0.0
+2026-10-02T15:49:15.965160094Z [Oct  2 15:49:15] t=0 0
+2026-10-02T15:49:15.965162668Z [Oct  2 15:49:15] m=audio 49170 RTP/AVP 8 0 101
+2026-10-02T15:49:15.965165522Z [Oct  2 15:49:15] a=rtpmap:8 PCMA/8000
+2026-10-02T15:49:15.965168216Z [Oct  2 15:49:15] a=rtpmap:0 PCMU/8000
+2026-10-02T15:49:15.965170850Z [Oct  2 15:49:15] a=rtpmap:101 telephone-event/8000
+2026-10-02T15:49:15.965173404Z [Oct  2 15:49:15] a=fmtp:101 0-15
+2026-10-02T15:49:15.965176108Z [Oct  2 15:49:15] a=sendrecv
+2026-10-02T15:49:15.965178682Z [Oct  2 15:49:15] 
+2026-10-02T15:49:15.965226883Z [Oct  2 15:49:15] <--- Transmitting SIP response (299 bytes) to TLS:127.0.0.1:34140 --->
+2026-10-02T15:49:15.965231160Z [Oct  2 15:49:15] SIP/2.0 100 Trying
+2026-10-02T15:49:15.965233944Z [Oct  2 15:49:15] Via: SIP/2.0/TLS [::]:45855;rport=34140;received=127.0.0.1;branch=z9hG4bK504377354284046766
+2026-10-02T15:49:15.965236818Z [Oct  2 15:49:15] Call-ID: cellrift-416546767300088961@localhost
+2026-10-02T15:49:15.965239532Z [Oct  2 15:49:15] From: <sip:447700900001@ims.local>
+2026-10-02T15:49:15.965242396Z [Oct  2 15:49:15] To: <sip:447700900002@ims.local>
+2026-10-02T15:49:15.965245231Z [Oct  2 15:49:15] CSeq: 1 INVITE
+2026-10-02T15:49:15.965247905Z [Oct  2 15:49:15] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:15.965250578Z [Oct  2 15:49:15] Content-Length:  0
+2026-10-02T15:49:15.965253353Z [Oct  2 15:49:15] 
+2026-10-02T15:49:15.965255936Z [Oct  2 15:49:15] 
+2026-10-02T15:49:15.966409923Z [Oct  2 15:49:15]     -- Executing [447700900002@from-cellrift:1] NoOp("PJSIP/447700900001-00000003", "cellrift call") in new stack
+2026-10-02T15:49:15.966426117Z [Oct  2 15:49:15]     -- Executing [447700900002@from-cellrift:2] Ringing("PJSIP/447700900001-00000003", "") in new stack
+2026-10-02T15:49:15.966511254Z [Oct  2 15:49:15]     -- Executing [447700900002@from-cellrift:3] Wait("PJSIP/447700900001-00000003", "1") in new stack
+2026-10-02T15:49:15.966630631Z [Oct  2 15:49:15] <--- Transmitting SIP response (504 bytes) to TLS:127.0.0.1:34140 --->
+2026-10-02T15:49:15.966635639Z [Oct  2 15:49:15] SIP/2.0 180 Ringing
+2026-10-02T15:49:15.966638463Z [Oct  2 15:49:15] Via: SIP/2.0/TLS [::]:45855;rport=34140;received=127.0.0.1;branch=z9hG4bK504377354284046766
+2026-10-02T15:49:15.966641427Z [Oct  2 15:49:15] Call-ID: cellrift-416546767300088961@localhost
+2026-10-02T15:49:15.966644341Z [Oct  2 15:49:15] From: <sip:447700900001@ims.local>
+2026-10-02T15:49:15.966647156Z [Oct  2 15:49:15] To: <sip:447700900002@ims.local>;tag=26959378-24b8-4c1e-8eb9-30b64d04feb1
+2026-10-02T15:49:15.966650140Z [Oct  2 15:49:15] CSeq: 1 INVITE
+2026-10-02T15:49:15.966653074Z [Oct  2 15:49:15] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:15.966655949Z [Oct  2 15:49:15] Contact: <sip:127.0.0.1:15061;transport=TLS>
+2026-10-02T15:49:15.966658733Z [Oct  2 15:49:15] Allow: OPTIONS, REGISTER, SUBSCRIBE, NOTIFY, PUBLISH, INVITE, ACK, BYE, CANCEL, UPDATE, PRACK, INFO, MESSAGE, REFER
+2026-10-02T15:49:15.966661507Z [Oct  2 15:49:15] Content-Length:  0
+2026-10-02T15:49:15.966664061Z [Oct  2 15:49:15] 
+2026-10-02T15:49:15.966666394Z [Oct  2 15:49:15] 
+2026-10-02T15:49:16.316002507Z [Oct  2 15:49:16] <--- Transmitting SIP response (819 bytes) to TLS:127.0.0.1:34126 --->
+2026-10-02T15:49:16.316030359Z [Oct  2 15:49:16] SIP/2.0 200 OK
+2026-10-02T15:49:16.316033113Z [Oct  2 15:49:16] Via: SIP/2.0/TLS [::]:39953;rport=34126;received=127.0.0.1;branch=z9hG4bK2877502797475536093
+2026-10-02T15:49:16.316035236Z [Oct  2 15:49:16] Call-ID: cellrift-816039743674851129@localhost
+2026-10-02T15:49:16.316037219Z [Oct  2 15:49:16] From: <sip:447700900001@ims.local>
+2026-10-02T15:49:16.316039302Z [Oct  2 15:49:16] To: <sip:447700900002@ims.local>;tag=2dd190eb-9b76-422f-8a67-8167fb55700f
+2026-10-02T15:49:16.316041766Z [Oct  2 15:49:16] CSeq: 1 INVITE
+2026-10-02T15:49:16.316046483Z [Oct  2 15:49:16] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:16.316049497Z [Oct  2 15:49:16] Allow: OPTIONS, REGISTER, SUBSCRIBE, NOTIFY, PUBLISH, INVITE, ACK, BYE, CANCEL, UPDATE, PRACK, INFO, MESSAGE, REFER
+2026-10-02T15:49:16.316052902Z [Oct  2 15:49:16] Contact: <sip:127.0.0.1:15061;transport=TLS>
+2026-10-02T15:49:16.316056027Z [Oct  2 15:49:16] Supported: 100rel, timer, replaces, norefersub
+2026-10-02T15:49:16.316058821Z [Oct  2 15:49:16] Content-Type: application/sdp
+2026-10-02T15:49:16.316075997Z [Oct  2 15:49:16] Content-Length:   237
+2026-10-02T15:49:16.316078020Z [Oct  2 15:49:16] 
+2026-10-02T15:49:16.316079872Z [Oct  2 15:49:16] v=0
+2026-10-02T15:49:16.316081755Z [Oct  2 15:49:16] o=- 0 2 IN IP4 127.0.0.1
+2026-10-02T15:49:16.316083628Z [Oct  2 15:49:16] s=Asterisk
+2026-10-02T15:49:16.316085501Z [Oct  2 15:49:16] c=IN IP4 127.0.0.1
+2026-10-02T15:49:16.316087344Z [Oct  2 15:49:16] t=0 0
+2026-10-02T15:49:16.316089266Z [Oct  2 15:49:16] m=audio 17326 RTP/AVP 0 8 101
+2026-10-02T15:49:16.316091149Z [Oct  2 15:49:16] a=rtpmap:0 PCMU/8000
+2026-10-02T15:49:16.316092982Z [Oct  2 15:49:16] a=rtpmap:8 PCMA/8000
+2026-10-02T15:49:16.316094805Z [Oct  2 15:49:16] a=rtpmap:101 telephone-event/8000
+2026-10-02T15:49:16.316096667Z [Oct  2 15:49:16] a=fmtp:101 0-16
+2026-10-02T15:49:16.316098480Z [Oct  2 15:49:16] a=ptime:20
+2026-10-02T15:49:16.316100323Z [Oct  2 15:49:16] a=maxptime:140
+2026-10-02T15:49:16.316102166Z [Oct  2 15:49:16] a=recvonly
+2026-10-02T15:49:16.316104018Z [Oct  2 15:49:16] 
+2026-10-02T15:49:16.623897147Z [Oct  2 15:49:16] <--- Transmitting SIP response (805 bytes) to UDP:127.0.0.1:60369 --->
+2026-10-02T15:49:16.623928834Z [Oct  2 15:49:16] SIP/2.0 200 OK
+2026-10-02T15:49:16.623931558Z [Oct  2 15:49:16] Via: SIP/2.0/UDP [::]:60369;rport=60369;received=127.0.0.1;branch=z9hG4bK778677914644256755
+2026-10-02T15:49:16.623933841Z [Oct  2 15:49:16] Call-ID: cellrift-5046045900633407671@localhost
+2026-10-02T15:49:16.623935994Z [Oct  2 15:49:16] From: <sip:447700900001@ims.local>
+2026-10-02T15:49:16.623938128Z [Oct  2 15:49:16] To: <sip:447700900002@ims.local>;tag=4e4970c7-f5e2-4854-90aa-8219a55bd2d6
+2026-10-02T15:49:16.623940521Z [Oct  2 15:49:16] CSeq: 1 INVITE
+2026-10-02T15:49:16.623942414Z [Oct  2 15:49:16] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:16.623944337Z [Oct  2 15:49:16] Allow: OPTIONS, REGISTER, SUBSCRIBE, NOTIFY, PUBLISH, INVITE, ACK, BYE, CANCEL, UPDATE, PRACK, INFO, MESSAGE, REFER
+2026-10-02T15:49:16.623946410Z [Oct  2 15:49:16] Contact: <sip:127.0.0.1:15060>
+2026-10-02T15:49:16.623948423Z [Oct  2 15:49:16] Supported: 100rel, timer, replaces, norefersub
+2026-10-02T15:49:16.623950356Z [Oct  2 15:49:16] Content-Type: application/sdp
+2026-10-02T15:49:16.623952279Z [Oct  2 15:49:16] Content-Length:   237
+2026-10-02T15:49:16.623954161Z [Oct  2 15:49:16] 
+2026-10-02T15:49:16.623956014Z [Oct  2 15:49:16] v=0
+2026-10-02T15:49:16.623957877Z [Oct  2 15:49:16] o=- 0 2 IN IP4 127.0.0.1
+2026-10-02T15:49:16.623959730Z [Oct  2 15:49:16] s=Asterisk
+2026-10-02T15:49:16.623961583Z [Oct  2 15:49:16] c=IN IP4 127.0.0.1
+2026-10-02T15:49:16.623991036Z [Oct  2 15:49:16] t=0 0
+2026-10-02T15:49:16.623994011Z [Oct  2 15:49:16] m=audio 13568 RTP/AVP 0 8 101
+2026-10-02T15:49:16.623996615Z [Oct  2 15:49:16] a=rtpmap:0 PCMU/8000
+2026-10-02T15:49:16.623998988Z [Oct  2 15:49:16] a=rtpmap:8 PCMA/8000
+2026-10-02T15:49:16.624001482Z [Oct  2 15:49:16] a=rtpmap:101 telephone-event/8000
+2026-10-02T15:49:16.624004126Z [Oct  2 15:49:16] a=fmtp:101 0-16
+2026-10-02T15:49:16.624007110Z [Oct  2 15:49:16] a=ptime:20
+2026-10-02T15:49:16.624009604Z [Oct  2 15:49:16] a=maxptime:140
+2026-10-02T15:49:16.624015903Z [Oct  2 15:49:16] a=recvonly
+2026-10-02T15:49:16.624018417Z [Oct  2 15:49:16] 
+2026-10-02T15:49:16.967041822Z [Oct  2 15:49:16]     -- Executing [447700900002@from-cellrift:4] Answer("PJSIP/447700900001-00000003", "") in new stack
+2026-10-02T15:49:16.967552151Z [Oct  2 15:49:16] <--- Transmitting SIP response (818 bytes) to TLS:127.0.0.1:34140 --->
+2026-10-02T15:49:16.967559262Z [Oct  2 15:49:16] SIP/2.0 200 OK
+2026-10-02T15:49:16.967562326Z [Oct  2 15:49:16] Via: SIP/2.0/TLS [::]:45855;rport=34140;received=127.0.0.1;branch=z9hG4bK504377354284046766
+2026-10-02T15:49:16.967564630Z [Oct  2 15:49:16] Call-ID: cellrift-416546767300088961@localhost
+2026-10-02T15:49:16.967566603Z [Oct  2 15:49:16] From: <sip:447700900001@ims.local>
+2026-10-02T15:49:16.967568816Z [Oct  2 15:49:16] To: <sip:447700900002@ims.local>;tag=26959378-24b8-4c1e-8eb9-30b64d04feb1
+2026-10-02T15:49:16.967570889Z [Oct  2 15:49:16] CSeq: 1 INVITE
+2026-10-02T15:49:16.967572732Z [Oct  2 15:49:16] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:16.967574925Z [Oct  2 15:49:16] Allow: OPTIONS, REGISTER, SUBSCRIBE, NOTIFY, PUBLISH, INVITE, ACK, BYE, CANCEL, UPDATE, PRACK, INFO, MESSAGE, REFER
+2026-10-02T15:49:16.967577068Z [Oct  2 15:49:16] Contact: <sip:127.0.0.1:15061;transport=TLS>
+2026-10-02T15:49:16.967579061Z [Oct  2 15:49:16] Supported: 100rel, timer, replaces, norefersub
+2026-10-02T15:49:16.967580944Z [Oct  2 15:49:16] Content-Type: application/sdp
+2026-10-02T15:49:16.967582807Z [Oct  2 15:49:16] Content-Length:   237
+2026-10-02T15:49:16.967584690Z [Oct  2 15:49:16] 
+2026-10-02T15:49:16.967586512Z [Oct  2 15:49:16] v=0
+2026-10-02T15:49:16.967588335Z [Oct  2 15:49:16] o=- 0 2 IN IP4 127.0.0.1
+2026-10-02T15:49:16.967590188Z [Oct  2 15:49:16] s=Asterisk
+2026-10-02T15:49:16.967592031Z [Oct  2 15:49:16] c=IN IP4 127.0.0.1
+2026-10-02T15:49:16.967593873Z [Oct  2 15:49:16] t=0 0
+2026-10-02T15:49:16.967595686Z [Oct  2 15:49:16] m=audio 10924 RTP/AVP 0 8 101
+2026-10-02T15:49:16.967600583Z [Oct  2 15:49:16] a=rtpmap:0 PCMU/8000
+2026-10-02T15:49:16.967603287Z [Oct  2 15:49:16] a=rtpmap:8 PCMA/8000
+2026-10-02T15:49:16.967606382Z [Oct  2 15:49:16] a=rtpmap:101 telephone-event/8000
+2026-10-02T15:49:16.967624279Z [Oct  2 15:49:16] a=fmtp:101 0-16
+2026-10-02T15:49:16.967626332Z [Oct  2 15:49:16] a=ptime:20
+2026-10-02T15:49:16.967628174Z [Oct  2 15:49:16] a=maxptime:140
+2026-10-02T15:49:16.967630047Z [Oct  2 15:49:16] a=recvonly
+2026-10-02T15:49:16.967631890Z [Oct  2 15:49:16] 
+2026-10-02T15:49:16.987970690Z [Oct  2 15:49:16] <--- Received SIP request (397 bytes) from TLS:127.0.0.1:34322 --->
+2026-10-02T15:49:16.988018621Z [Oct  2 15:49:16] BYE sip:447700900002@127.0.0.1:15061 SIP/2.0
+2026-10-02T15:49:16.988022367Z [Oct  2 15:49:16] Via: SIP/2.0/TLS [::]:45855;branch=z9hG4bK8403523968274054574
+2026-10-02T15:49:16.988025201Z [Oct  2 15:49:16] Max-Forwards: 70
+2026-10-02T15:49:16.988027765Z [Oct  2 15:49:16] From: sip:447700900001@ims.local
+2026-10-02T15:49:16.988030138Z [Oct  2 15:49:16] To: sip:447700900002@ims.local;tag=26959378-24b8-4c1e-8eb9-30b64d04feb1
+2026-10-02T15:49:16.988033043Z [Oct  2 15:49:16] Call-ID: cellrift-416546767300088961@localhost
+2026-10-02T15:49:16.988035656Z [Oct  2 15:49:16] CSeq: 2 BYE
+2026-10-02T15:49:16.988038521Z [Oct  2 15:49:16] Content-Length: 0
+2026-10-02T15:49:16.988041105Z [Oct  2 15:49:16] User-Agent: cellrift/0.1.0
+2026-10-02T15:49:16.988043989Z [Oct  2 15:49:16] P-Charging-Vector: icid-value=cellrift-call-tls-001
+2026-10-02T15:49:16.988046633Z [Oct  2 15:49:16] 
+2026-10-02T15:49:16.988049116Z [Oct  2 15:49:16] 
+2026-10-02T15:49:16.988168474Z [Oct  2 15:49:16] <--- Transmitting SIP response (334 bytes) to TLS:127.0.0.1:34322 --->
+2026-10-02T15:49:16.988174222Z [Oct  2 15:49:16] SIP/2.0 200 OK
+2026-10-02T15:49:16.988177177Z [Oct  2 15:49:16] Via: SIP/2.0/TLS [::]:45855;rport=34322;received=127.0.0.1;branch=z9hG4bK8403523968274054574
+2026-10-02T15:49:16.988180141Z [Oct  2 15:49:16] Call-ID: cellrift-416546767300088961@localhost
+2026-10-02T15:49:16.988182915Z [Oct  2 15:49:16] From: <sip:447700900001@ims.local>
+2026-10-02T15:49:16.988185890Z [Oct  2 15:49:16] To: <sip:447700900002@ims.local>;tag=26959378-24b8-4c1e-8eb9-30b64d04feb1
+2026-10-02T15:49:16.988188904Z [Oct  2 15:49:16] CSeq: 2 BYE
+2026-10-02T15:49:16.988191789Z [Oct  2 15:49:16] Server: Asterisk PBX 22.10.1
+2026-10-02T15:49:16.988194653Z [Oct  2 15:49:16] Content-Length:  0
+2026-10-02T15:49:16.988197337Z [Oct  2 15:49:16] 
+2026-10-02T15:49:16.988199740Z [Oct  2 15:49:16] 
+2026-10-02T15:49:16.988514078Z [Oct  2 15:49:16]   == Spawn extension (from-cellrift, 447700900002, 4) exited non-zero on 'PJSIP/447700900001-00000003'
+2026-10-02T15:49:16.988856237Z [Oct  2 15:49:16] ERROR[60]: cdr_csv.c:275 writefile: Unable to open file /var/log/asterisk//cdr-csv//Master.csv : No such file or directory
+2026-10-02T15:49:16.988861725Z [Oct  2 15:49:16] WARNING[60]: cdr_csv.c:308 csv_log: Unable to write CSV record to master '/var/log/asterisk//cdr-csv//Master.csv' : No such file or directory

@@ -1,0 +1,1153 @@
+# Gate proofs: every refusal in the SIP interop harness, fired
+
+Date: 2026-10-01
+Run against commit: f72360b (test/interop/up-sip.sh, test/interop/run-sip-scenario.sh)
+Peer image: andrius/asterisk:22.10.1_debian-trixie@sha256:212326bd3f973a597be9e4747be5d6653802e4950159e95aa7d728e394de2012
+
+A gate that has never fired is untested. Each section below makes one refusal
+fire, with the firing command, the verbatim output and the exit code. Two
+kinds of noise are elided and replaced by a line count: the failure dump that
+run-sip-scenario.sh prints after a refusal (run outputs and container log
+tail), and Asterisk's per-poll "Remote UNIX connection" lines. A refusal line
+is never altered, except that the machine-specific scratch directory it names
+is shown as <scratch>.
+Ports used are 15060/15061 (and 15070 as a deliberate empty port); this
+machine's own Asterisk on 5060/5061 was never targeted.
+
+## U1 up-sip.sh:131 wait_for_transports, fired by a bind conflict on 15060
+
+A UDP socket holds 0.0.0.0:15060 before Asterisk boots. Observations the research left open, now answered: Asterisk still logs "Asterisk Ready." despite the failed bind, and the failed transport is NOT listed by "pjsip show transports" (only transport-tls is). So wait_for_transports is independently sufficient for a missing REQUIRED transport, and it is the gate that fires here, ahead of assert_no_bind_failure. The recorded exit is the exit of up-sip.sh itself.
+
+```sh
+python3 -c "import socket,time; s=socket.socket(socket.AF_INET,socket.SOCK_DGRAM); s.bind((\"0.0.0.0\",15060)); time.sleep(90)" &
+HOLDER=$!; sleep 1
+bash test/interop/up-sip.sh; X=$?
+echo "--- Ready / bind lines in the container log ---"
+docker logs asterisk 2>&1 | grep -E "Asterisk Ready|Transport .* could not be started"
+echo "--- pjsip show transports under the conflict ---"
+docker exec asterisk asterisk -rx "pjsip show transports"
+kill $HOLDER; exit $X
+```
+
+```
+Seeding global EID 'c2:1d:63:dd:cf:3e' from 'wlp2s0f0u2' using 'siocgifhwaddr'
+Parsing /etc/asterisk/asterisk.conf
+Asterisk 22.10.1, Copyright (C) 1999 - 2025, Sangoma Technologies Corporation and others.
+Created by Mark Spencer <markster@digium.com>
+Asterisk comes with ABSOLUTELY NO WARRANTY; type 'core show warranty' for details.
+This is free software, with components licensed under the GNU General Public
+License version 2 and other licenses; you are welcome to redistribute it under
+certain conditions. Type 'core show license' for details.
+=========================================================================
+Running as user 'asterisk'
+Parsing /etc/asterisk/asterisk.conf
+gl_pathc 6
+UUID system initiated
+Unable to find key 'UUID' in family 'pbx'
+PBX UUID: 9c91673d-d45e-4cf3-bc26-959b32deaa63
+Could not find option 'minimum_size' with type 'threadpool' in module 'stasis'
+extract int from [5] in [0, 2147483647] gives [5](0)
+extract int from [50] in [0, 2147483647] gives [50](0)
+extract int from [20] in [0, 2147483647] gives [20](0)
+extract int from [5] in [0, 2147483647] gives [5](0)
+extract int from [5] in [0, 2147483647] gives [5](0)
+extract int from [50] in [0, 2147483647] gives [50](0)
+extract int from [20] in [0, 2147483647] gives [20](0)
+extract int from [5] in [0, 2147483647] gives [5](0)
+Parsing /etc/asterisk/stasis.conf
+Taskprocessor 'taskpool/s:stasis-00000000': Task pushed from taskpool.c:176 (taskpool_taskprocessor_alloc)
+Taskprocessor 'taskpool/s:stasis-00000001': Task pushed from taskpool.c:176 (taskpool_taskprocessor_alloc)
+Taskprocessor 'taskpool/s:stasis-00000002': Task pushed from taskpool.c:176 (taskpool_taskprocessor_alloc)
+Taskprocessor 'taskpool/s:stasis-00000003': Task pushed from taskpool.c:176 (taskpool_taskprocessor_alloc)
+Taskprocessor 'taskpool/s:stasis-00000004': Task pushed from taskpool.c:176 (taskpool_taskprocessor_alloc)
+Resetting translation matrix
+Parsing /etc/asterisk/sorcery.conf
+Taskprocessor 'taskpool/s:sorcery-00000005': Task pushed from taskpool.c:176 (taskpool_taskprocessor_alloc)
+Parsing /etc/asterisk/sorcery.conf
+Creating topic. name: system:all, detail: 
+Topic 'system:all': 0x561bd04298f0 created
+Creating topic. name: endpoint:all, detail: 
+Topic 'endpoint:all': 0x561bd042dae0 created
+Creating topic. name: cache_pattern:0/endpoint:all, detail: 
+Topic 'cache_pattern:0/endpoint:all': 0x561bd0429d50 created
+[Oct  1 14:39:12]  Asterisk PBX Core Initializing
+[Oct  1 14:39:12]  Asterisk Dynamic Loader Starting:
+[Oct  1 14:39:12] NOTICE[1]: loader.c:2568 load_modules: 342 modules will be loaded.
+[Oct  1 14:39:12] WARNING[1]: res_config_pgsql.c:1468 parse_config: PostgreSQL RealTime: No database user found, using 'asterisk' as default.
+[Oct  1 14:39:12] WARNING[1]: res_config_pgsql.c:1480 parse_config: PostgreSQL RealTime: No database password found, using 'asterisk' as default.
+[Oct  1 14:39:12] WARNING[1]: res_config_pgsql.c:1492 parse_config: PostgreSQL RealTime: No database host found, using localhost via socket.
+[Oct  1 14:39:12] WARNING[1]: res_config_pgsql.c:1499 parse_config: PostgreSQL RealTime: No database name found, using 'asterisk' as default.
+[Oct  1 14:39:12] WARNING[1]: res_config_pgsql.c:1512 parse_config: PostgreSQL RealTime: No database port found, using 5432 as default.
+[Oct  1 14:39:12] WARNING[1]: res_config_pgsql.c:1538 parse_config: PostgreSQL RealTime: No database socket found, using '/tmp/.s.PGSQL.5432' as default.
+[Oct  1 14:39:12] ERROR[1]: res_config_pgsql.c:1636 pgsql_reconnect: PostgreSQL RealTime: Failed to connect database asterisk on : 
+[Oct  1 14:39:12] WARNING[1]: res_config_pgsql.c:1574 parse_config: PostgreSQL RealTime: Couldn't establish connection. Check debug.
+[Oct  1 14:39:12]   == PostgreSQL RealTime reloaded.
+[Oct  1 14:39:12] NOTICE[1]: res_config_ldap.c:1881 parse_config: No directory user found, anonymous binding as default.
+[Oct  1 14:39:12] ERROR[1]: res_config_ldap.c:1907 parse_config: No directory URL or host found.
+[Oct  1 14:39:12] ERROR[1]: res_config_ldap.c:1769 load_module: Cannot load LDAP RealTime driver.
+[Oct  1 14:39:12] NOTICE[1]: cdr.c:4656 cdr_toggle_runtime_options: CDR simple logging enabled.
+[Oct  1 14:39:12] NOTICE[1]: indications.c:1100 load_indications: Default country for indication tones: us
+[Oct  1 14:39:12] NOTICE[1]: indications.c:424 ast_set_indication_country: Setting default indication country to 'us'
+[Oct  1 14:39:12]     -- Local IPv4 address determined to be: 192.168.0.224
+[Oct  1 14:39:12]     -- Local IPv6 address determined to be: fd7a:115c:a1e0::41
+[Oct  1 14:39:12] ERROR[1]: res_pjsip/config_transport.c:1006 transport_apply: Transport 'transport-udp' could not be started: Address already in use
+[Oct  1 14:39:12] ERROR[1]: res_sorcery_config.c:422 sorcery_config_internal_load: Could not create an object of type 'transport' with id 'transport-udp' from configuration file 'pjsip.conf'
+[Oct  1 14:39:12]   == 'UDP+IPv4' is not an available SIP transport, disabling resolver support for it
+[Oct  1 14:39:12]   == 'TCP+IPv4' is not an available SIP transport, disabling resolver support for it
+[Oct  1 14:39:12]   == 'TLS+IPv4' is an available SIP transport
+[Oct  1 14:39:12]   == 'UDP+IPv6' is not an available SIP transport, disabling resolver support for it
+[Oct  1 14:39:12]   == 'TCP+IPv6' is not an available SIP transport, disabling resolver support for it
+[Oct  1 14:39:12]   == 'TLS+IPv6' is not an available SIP transport, disabling resolver support for it
+[Oct  1 14:39:12] NOTICE[1]: res_smdi.c:1430 load_module: No SMDI interfaces are available to listen on, not starting SMDI listener.
+[Oct  1 14:39:12] WARNING[1]: res_phoneprov.c:1255 get_defaults: Unable to find a valid server address or name.
+[Oct  1 14:39:12]     -- Files not found in moh for moh class:default
+[Oct  1 14:39:12] WARNING[1]: res_musiconhold.c:2333 load_module: No music on hold classes configured, disabling music on hold.
+[Oct  1 14:39:12]   == libsrtp2 2.7.0 initialized
+[Oct  1 14:39:12]   == RTP Allocating from port range 10000 -> 20000
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM sysdefault
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM sysdefault
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.front
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.rear
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.center_lfe
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.side
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.surround21
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.surround21
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.surround40
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.surround41
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.surround50
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.surround51
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.surround71
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.iec958
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.iec958
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.iec958
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM hdmi
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM hdmi
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.modem
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.modem
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.phoneline
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.phoneline
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM default
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM default
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_id returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM dmix
+Cannot connect to server socket err = No such file or directory
+Cannot connect to server request channel
+jack server is not running or cannot be started
+JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock
+JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock
+[Oct  1 14:39:12]   == Binding IAX2 to default address 0.0.0.0:4569
+[Oct  1 14:39:12]   == 10 helper threads started
+[Oct  1 14:39:12]   == IAX Ready and Listening
+[Oct  1 14:39:12]     -- Loaded provisioning template 'default'
+[Oct  1 14:39:12] NOTICE[1]: confbridge/conf_config_parser.c:2601 verify_default_profiles: Adding default_menu menu to app_confbridge
+[Oct  1 14:39:12] WARNING[1]: cel_pgsql.c:476 process_my_load_module: CEL pgsql config file missing global section.
+[Oct  1 14:39:12] NOTICE[1]: cdrel_custom/config.c:1079 load_database_config_file: cdr_sqlite3_custom.conf: Loaded 0 configs
+[Oct  1 14:39:12] NOTICE[1]: cdrel_custom/config.c:1352 load_text_file_config_file: cel_custom.conf: Loaded 0 configs
+[Oct  1 14:39:12] NOTICE[1]: cdrel_custom/config.c:1352 load_text_file_config_file: cdr_custom.conf: Loaded 0 configs
+[Oct  1 14:39:12] WARNING[1]: config.c:2255 process_text_line: parse error: No category context for line 64 of /etc/asterisk/cel_sqlite3_custom.conf
+[Oct  1 14:39:12] ERROR[1]: cdrel_custom/config.c:1055 load_database_config_file: Unable to load cel_sqlite3_custom.conf. Not logging CELs to custom database
+[Oct  1 14:39:12] NOTICE[1]: cdr_pgsql.c:541 config_module: cdr_pgsql configuration contains no global section, skipping module load.
+[Oct  1 14:39:12]     -- Security Logging Enabled
+[Oct  1 14:39:12]   == UNISTIM Listening on 0.0.0.0:5000
+[Oct  1 14:39:12] ERROR[1]: pbx_dundi.c:5255 load_module: Unable to bind to 0.0.0.0:4520 : Address already in use
+[Oct  1 14:39:12] WARNING[1]: ael/pval.c:2451 check_pval_item: Warning: file /etc/asterisk/extensions.ael, line 196-196: macro call to ael-dundi-e164 cannot be found in the AEL code!
+[Oct  1 14:39:12] WARNING[1]: ael/pval.c:2451 check_pval_item: Warning: file /etc/asterisk/extensions.ael, line 209-209: macro call to ael-dundi-e164 cannot be found in the AEL code!
+[Oct  1 14:39:12] WARNING[1]: ael/pval.c:2451 check_pval_item: Warning: file /etc/asterisk/extensions.ael, line 328-328: macro call to ael-std-exten-ael cannot be found in the AEL code!
+[Oct  1 14:39:12]   == Setting global variable 'CONSOLE-AEL' to '"Console/dsp"'
+[Oct  1 14:39:12]   == Setting global variable 'OUTBOUND-TRUNK' to '"Zap/g2"'
+[Oct  1 14:39:12]   == Setting global variable 'OUTBOUND-TRUNKMSD' to '1'
+[Oct  1 14:39:12]     -- Including switch 'DUNDi/e164' in context 'ael-dundi-e164-switch'
+[Oct  1 14:39:12]     -- Registered handler for 'Spandsp' (Spandsp FAX Driver)
+[Oct  1 14:39:12] WARNING[1]: loader.c:2572 load_modules: Some non-required modules failed to load.
+[Oct  1 14:39:12] WARNING[1]: loader.c:2666 load_modules: Module 'res_adsi' has been loaded but may be removed in a future release.
+[Oct  1 14:39:12] WARNING[1]: loader.c:2666 load_modules: Module 'app_getcpeid' has been loaded but may be removed in a future release.
+[Oct  1 14:39:12] WARNING[1]: loader.c:2666 load_modules: Module 'app_adsiprog' has been loaded but may be removed in a future release.
+[Oct  1 14:39:12] ERROR[1]: loader.c:2687 load_modules: Error loading module 'format_ogg_vorbis.so': libvorbisenc.so.2: cannot open shared object file: No such file or directory
+[Oct  1 14:39:12] ERROR[1]: loader.c:2687 load_modules: cdr_sqlite3_custom declined to load.
+[Oct  1 14:39:12] ERROR[1]: loader.c:2687 load_modules: cel_custom declined to load.
+[Oct  1 14:39:12] ERROR[1]: loader.c:2687 load_modules: cdr_custom declined to load.
+[Oct  1 14:39:12] ERROR[1]: loader.c:2687 load_modules: cel_sqlite3_custom declined to load.
+[Oct  1 14:39:12] ERROR[1]: loader.c:2687 load_modules: cdr_pgsql declined to load.
+[Oct  1 14:39:12] ERROR[1]: loader.c:2687 load_modules: pbx_dundi declined to load.
+[Oct  1 14:39:12] WARNING[40]: pbx_config.c:2003 startup_event_cb: users.conf is deprecated and will be removed in a future version of Asterisk
+[Oct  1 14:39:12] Asterisk Ready.
+SIP RIG REFUSED: transports never showed 0.0.0.0:15060 and 0.0.0.0:15061 in 'pjsip show transports'
+--- Ready / bind lines in the container log ---
+[Oct  1 14:39:12] ERROR[1]: res_pjsip/config_transport.c:1006 transport_apply: Transport 'transport-udp' could not be started: Address already in use
+[Oct  1 14:39:12] Asterisk Ready.
+--- pjsip show transports under the conflict ---
+
+Transport:  <TransportId........>  <Type>  <cos>  <tos>  <BindAddress....................>
+==========================================================================================
+
+Transport:  transport-tls             tls      0      0  0.0.0.0:15061
+
+Objects found: 1
+[... 72 "Remote UNIX connection" CLI-poll lines elided ...]
+exit=1
+```
+
+
+## U2 up-sip.sh:108 assert_no_bind_failure, fired by a bind conflict on a third transport
+
+Because a failed transport drops out of the transport list (U1), assert_no_bind_failure cannot be reached by colliding on 15060 or 15061: wait_for_transports refuses first. It is reached when a transport OTHER than the two required ones fails: both required addresses are listed, wait_for_transports passes, and only the log shows the failure. The probe config adds [transport-extra] on 15062, which a UDP socket holds. The probe config is a scratch file inside the repo, deleted afterwards.
+
+```sh
+python3 -c "import socket,time; s=socket.socket(socket.AF_INET,socket.SOCK_DGRAM); s.bind((\"0.0.0.0\",15062)); time.sleep(60)" &
+HOLDER=$!; sleep 1
+PJSIP_CONF=test/interop/asterisk/.probe-pjsip.conf bash test/interop/up-sip.sh; X=$?
+echo "--- pjsip show transports (both required addresses ARE listed) ---"
+docker exec asterisk asterisk -rx "pjsip show transports"
+echo "--- Ready line ---"
+docker logs asterisk 2>&1 | grep "Asterisk Ready"
+kill $HOLDER; exit $X
+```
+
+```
+[Oct  1 14:39:45] ERROR[1]: res_pjsip/config_transport.c:1006 transport_apply: Transport 'transport-extra' could not be started: Address already in use
+SIP RIG REFUSED: a transport failed to bind (port collision on 15060/15061?). The peer still logs readiness in this state, so its startup message is not a readiness signal, and scenarios would hit whatever else holds the port.
+--- pjsip show transports (both required addresses ARE listed) ---
+
+Transport:  <TransportId........>  <Type>  <cos>  <tos>  <BindAddress....................>
+==========================================================================================
+
+Transport:  transport-tls             tls      0      0  0.0.0.0:15061
+Transport:  transport-udp             udp      0      0  0.0.0.0:15060
+
+Objects found: 2
+
+--- Ready line ---
+[Oct  1 14:39:45] Asterisk Ready.
+exit=1
+```
+
+
+## U3 up-sip.sh:131 wait_for_transports, fired by a TLS transport that cannot start (missing certificate file)
+
+cert_file points at a path that does not exist in the container. PJSIP_CONF is mounted as $PWD/$PJSIP_CONF, so the probe config is a scratch file inside the repo (test/interop/asterisk/.probe-pjsip.conf), deleted afterwards. The container log carries Asterisk own complaint about the certificate. Here the READY check, not the bind check, refuses, which agrees with U1: a transport that failed to start is absent from the list.
+
+```sh
+PJSIP_CONF=test/interop/asterisk/.probe-pjsip.conf bash test/interop/up-sip.sh; X=$?
+echo "--- container log: certificate / TLS transport complaints ---"
+docker logs asterisk 2>&1 | grep -iE "absent|cert|could not be started"
+echo "--- pjsip show transports ---"
+docker exec asterisk asterisk -rx "pjsip show transports"
+exit $X
+```
+
+```
+Seeding global EID 'c2:1d:63:dd:cf:3e' from 'wlp2s0f0u2' using 'siocgifhwaddr'
+Parsing /etc/asterisk/asterisk.conf
+Asterisk 22.10.1, Copyright (C) 1999 - 2025, Sangoma Technologies Corporation and others.
+Created by Mark Spencer <markster@digium.com>
+Asterisk comes with ABSOLUTELY NO WARRANTY; type 'core show warranty' for details.
+This is free software, with components licensed under the GNU General Public
+License version 2 and other licenses; you are welcome to redistribute it under
+certain conditions. Type 'core show license' for details.
+=========================================================================
+Running as user 'asterisk'
+Parsing /etc/asterisk/asterisk.conf
+gl_pathc 6
+UUID system initiated
+Unable to find key 'UUID' in family 'pbx'
+PBX UUID: 059db74a-e023-46ff-b52c-57f0a0cdff24
+Could not find option 'minimum_size' with type 'threadpool' in module 'stasis'
+extract int from [5] in [0, 2147483647] gives [5](0)
+extract int from [50] in [0, 2147483647] gives [50](0)
+extract int from [20] in [0, 2147483647] gives [20](0)
+extract int from [5] in [0, 2147483647] gives [5](0)
+extract int from [5] in [0, 2147483647] gives [5](0)
+extract int from [50] in [0, 2147483647] gives [50](0)
+extract int from [20] in [0, 2147483647] gives [20](0)
+extract int from [5] in [0, 2147483647] gives [5](0)
+Parsing /etc/asterisk/stasis.conf
+Taskprocessor 'taskpool/s:stasis-00000000': Task pushed from taskpool.c:176 (taskpool_taskprocessor_alloc)
+Taskprocessor 'taskpool/s:stasis-00000001': Task pushed from taskpool.c:176 (taskpool_taskprocessor_alloc)
+Taskprocessor 'taskpool/s:stasis-00000002': Task pushed from taskpool.c:176 (taskpool_taskprocessor_alloc)
+Taskprocessor 'taskpool/s:stasis-00000003': Task pushed from taskpool.c:176 (taskpool_taskprocessor_alloc)
+Taskprocessor 'taskpool/s:stasis-00000004': Task pushed from taskpool.c:176 (taskpool_taskprocessor_alloc)
+Resetting translation matrix
+Parsing /etc/asterisk/sorcery.conf
+Taskprocessor 'taskpool/s:sorcery-00000005': Task pushed from taskpool.c:176 (taskpool_taskprocessor_alloc)
+Parsing /etc/asterisk/sorcery.conf
+Creating topic. name: system:all, detail: 
+Topic 'system:all': 0x55941a36bb10 created
+Creating topic. name: endpoint:all, detail: 
+Topic 'endpoint:all': 0x55941a6db5d0 created
+Creating topic. name: cache_pattern:0/endpoint:all, detail: 
+Topic 'cache_pattern:0/endpoint:all': 0x55941a36bf70 created
+[Oct  1 14:39:57]  Asterisk PBX Core Initializing
+[Oct  1 14:39:57]  Asterisk Dynamic Loader Starting:
+[Oct  1 14:39:57] NOTICE[1]: loader.c:2568 load_modules: 342 modules will be loaded.
+[Oct  1 14:39:57] WARNING[1]: res_config_pgsql.c:1468 parse_config: PostgreSQL RealTime: No database user found, using 'asterisk' as default.
+[Oct  1 14:39:57] WARNING[1]: res_config_pgsql.c:1480 parse_config: PostgreSQL RealTime: No database password found, using 'asterisk' as default.
+[Oct  1 14:39:57] WARNING[1]: res_config_pgsql.c:1492 parse_config: PostgreSQL RealTime: No database host found, using localhost via socket.
+[Oct  1 14:39:57] WARNING[1]: res_config_pgsql.c:1499 parse_config: PostgreSQL RealTime: No database name found, using 'asterisk' as default.
+[Oct  1 14:39:57] WARNING[1]: res_config_pgsql.c:1512 parse_config: PostgreSQL RealTime: No database port found, using 5432 as default.
+[Oct  1 14:39:57] WARNING[1]: res_config_pgsql.c:1538 parse_config: PostgreSQL RealTime: No database socket found, using '/tmp/.s.PGSQL.5432' as default.
+[Oct  1 14:39:57] ERROR[1]: res_config_pgsql.c:1636 pgsql_reconnect: PostgreSQL RealTime: Failed to connect database asterisk on : 
+[Oct  1 14:39:57] WARNING[1]: res_config_pgsql.c:1574 parse_config: PostgreSQL RealTime: Couldn't establish connection. Check debug.
+[Oct  1 14:39:57]   == PostgreSQL RealTime reloaded.
+[Oct  1 14:39:57] NOTICE[1]: res_config_ldap.c:1881 parse_config: No directory user found, anonymous binding as default.
+[Oct  1 14:39:57] ERROR[1]: res_config_ldap.c:1907 parse_config: No directory URL or host found.
+[Oct  1 14:39:57] ERROR[1]: res_config_ldap.c:1769 load_module: Cannot load LDAP RealTime driver.
+[Oct  1 14:39:57] NOTICE[1]: cdr.c:4656 cdr_toggle_runtime_options: CDR simple logging enabled.
+[Oct  1 14:39:57] NOTICE[1]: indications.c:1100 load_indications: Default country for indication tones: us
+[Oct  1 14:39:57] NOTICE[1]: indications.c:424 ast_set_indication_country: Setting default indication country to 'us'
+[Oct  1 14:39:57]     -- Local IPv4 address determined to be: 192.168.0.224
+[Oct  1 14:39:57]     -- Local IPv6 address determined to be: fd7a:115c:a1e0::41
+[Oct  1 14:39:57] ERROR[1]: res_pjsip/config_transport.c:1046 transport_tls_file_handler: Transport: transport-tls: cert_file /etc/asterisk/keys/absent.crt is either missing or not readable
+[Oct  1 14:39:57] ERROR[1]: config_options.c:798 aco_process_var: Error parsing cert_file=/etc/asterisk/keys/absent.crt at line 38 of 
+[Oct  1 14:39:57] ERROR[1]: res_sorcery_config.c:422 sorcery_config_internal_load: Could not create an object of type 'transport' with id 'transport-tls' from configuration file 'pjsip.conf'
+[Oct  1 14:39:57]   == 'UDP+IPv4' is an available SIP transport
+[Oct  1 14:39:57]   == 'TCP+IPv4' is not an available SIP transport, disabling resolver support for it
+[Oct  1 14:39:57]   == 'TLS+IPv4' is not an available SIP transport, disabling resolver support for it
+[Oct  1 14:39:57]   == 'UDP+IPv6' is not an available SIP transport, disabling resolver support for it
+[Oct  1 14:39:57]   == 'TCP+IPv6' is not an available SIP transport, disabling resolver support for it
+[Oct  1 14:39:57]   == 'TLS+IPv6' is not an available SIP transport, disabling resolver support for it
+[Oct  1 14:39:57] NOTICE[1]: res_smdi.c:1430 load_module: No SMDI interfaces are available to listen on, not starting SMDI listener.
+[Oct  1 14:39:57] WARNING[1]: res_phoneprov.c:1255 get_defaults: Unable to find a valid server address or name.
+[Oct  1 14:39:57]     -- Files not found in moh for moh class:default
+[Oct  1 14:39:57] WARNING[1]: res_musiconhold.c:2333 load_module: No music on hold classes configured, disabling music on hold.
+[Oct  1 14:39:57]   == libsrtp2 2.7.0 initialized
+[Oct  1 14:39:57]   == RTP Allocating from port range 10000 -> 20000
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM sysdefault
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM sysdefault
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.front
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.rear
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.center_lfe
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.side
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.surround21
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.surround21
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.surround40
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.surround41
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.surround50
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.surround51
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.surround71
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.iec958
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.iec958
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.iec958
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM hdmi
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM hdmi
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.modem
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.modem
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.phoneline
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.phoneline
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM default
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM default
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_id returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM dmix
+Cannot connect to server socket err = No such file or directory
+Cannot connect to server request channel
+jack server is not running or cannot be started
+JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock
+JackShmReadWritePtr::~JackShmReadWritePtr - Init not done for -1, skipping unlock
+[Oct  1 14:39:57]   == Binding IAX2 to default address 0.0.0.0:4569
+[Oct  1 14:39:57]   == 10 helper threads started
+[Oct  1 14:39:57]   == IAX Ready and Listening
+[Oct  1 14:39:57]     -- Loaded provisioning template 'default'
+[Oct  1 14:39:57] NOTICE[1]: confbridge/conf_config_parser.c:2601 verify_default_profiles: Adding default_menu menu to app_confbridge
+[Oct  1 14:39:57] WARNING[1]: cel_pgsql.c:476 process_my_load_module: CEL pgsql config file missing global section.
+[Oct  1 14:39:57] NOTICE[1]: cdrel_custom/config.c:1079 load_database_config_file: cdr_sqlite3_custom.conf: Loaded 0 configs
+[Oct  1 14:39:57] NOTICE[1]: cdrel_custom/config.c:1352 load_text_file_config_file: cel_custom.conf: Loaded 0 configs
+[Oct  1 14:39:57] NOTICE[1]: cdrel_custom/config.c:1352 load_text_file_config_file: cdr_custom.conf: Loaded 0 configs
+[Oct  1 14:39:57] WARNING[1]: config.c:2255 process_text_line: parse error: No category context for line 64 of /etc/asterisk/cel_sqlite3_custom.conf
+[Oct  1 14:39:57] ERROR[1]: cdrel_custom/config.c:1055 load_database_config_file: Unable to load cel_sqlite3_custom.conf. Not logging CELs to custom database
+[Oct  1 14:39:57] NOTICE[1]: cdr_pgsql.c:541 config_module: cdr_pgsql configuration contains no global section, skipping module load.
+[Oct  1 14:39:57]     -- Security Logging Enabled
+[Oct  1 14:39:57]   == UNISTIM Listening on 0.0.0.0:5000
+[Oct  1 14:39:57] ERROR[1]: pbx_dundi.c:5255 load_module: Unable to bind to 0.0.0.0:4520 : Address already in use
+[Oct  1 14:39:57] WARNING[1]: ael/pval.c:2451 check_pval_item: Warning: file /etc/asterisk/extensions.ael, line 196-196: macro call to ael-dundi-e164 cannot be found in the AEL code!
+[Oct  1 14:39:57] WARNING[1]: ael/pval.c:2451 check_pval_item: Warning: file /etc/asterisk/extensions.ael, line 209-209: macro call to ael-dundi-e164 cannot be found in the AEL code!
+[Oct  1 14:39:57] WARNING[1]: ael/pval.c:2451 check_pval_item: Warning: file /etc/asterisk/extensions.ael, line 328-328: macro call to ael-std-exten-ael cannot be found in the AEL code!
+[Oct  1 14:39:57]   == Setting global variable 'CONSOLE-AEL' to '"Console/dsp"'
+[Oct  1 14:39:57]   == Setting global variable 'OUTBOUND-TRUNK' to '"Zap/g2"'
+[Oct  1 14:39:57]   == Setting global variable 'OUTBOUND-TRUNKMSD' to '1'
+[Oct  1 14:39:57]     -- Including switch 'DUNDi/e164' in context 'ael-dundi-e164-switch'
+[Oct  1 14:39:57]     -- Registered handler for 'Spandsp' (Spandsp FAX Driver)
+[Oct  1 14:39:57] WARNING[1]: loader.c:2572 load_modules: Some non-required modules failed to load.
+[Oct  1 14:39:57] WARNING[1]: loader.c:2666 load_modules: Module 'res_adsi' has been loaded but may be removed in a future release.
+[Oct  1 14:39:57] WARNING[1]: loader.c:2666 load_modules: Module 'app_getcpeid' has been loaded but may be removed in a future release.
+[Oct  1 14:39:57] WARNING[1]: loader.c:2666 load_modules: Module 'app_adsiprog' has been loaded but may be removed in a future release.
+[Oct  1 14:39:57] ERROR[1]: loader.c:2687 load_modules: Error loading module 'format_ogg_vorbis.so': libvorbisenc.so.2: cannot open shared object file: No such file or directory
+[Oct  1 14:39:57] ERROR[1]: loader.c:2687 load_modules: cdr_sqlite3_custom declined to load.
+[Oct  1 14:39:57] ERROR[1]: loader.c:2687 load_modules: cel_custom declined to load.
+[Oct  1 14:39:57] ERROR[1]: loader.c:2687 load_modules: cdr_custom declined to load.
+[Oct  1 14:39:57] ERROR[1]: loader.c:2687 load_modules: cel_sqlite3_custom declined to load.
+[Oct  1 14:39:57] ERROR[1]: loader.c:2687 load_modules: cdr_pgsql declined to load.
+[Oct  1 14:39:57] ERROR[1]: loader.c:2687 load_modules: pbx_dundi declined to load.
+[Oct  1 14:39:57] WARNING[42]: pbx_config.c:2003 startup_event_cb: users.conf is deprecated and will be removed in a future version of Asterisk
+[Oct  1 14:39:57] Asterisk Ready.
+SIP RIG REFUSED: transports never showed 0.0.0.0:15060 and 0.0.0.0:15061 in 'pjsip show transports'
+--- container log: certificate / TLS transport complaints ---
+certain conditions. Type 'core show license' for details.
+[Oct  1 14:39:57] ERROR[1]: res_pjsip/config_transport.c:1046 transport_tls_file_handler: Transport: transport-tls: cert_file /etc/asterisk/keys/absent.crt is either missing or not readable
+[Oct  1 14:39:57] ERROR[1]: config_options.c:798 aco_process_var: Error parsing cert_file=/etc/asterisk/keys/absent.crt at line 38 of 
+--- pjsip show transports ---
+
+Transport:  <TransportId........>  <Type>  <cos>  <tos>  <BindAddress....................>
+==========================================================================================
+
+Transport:  transport-udp             udp      0      0  0.0.0.0:15060
+
+Objects found: 1
+[... 72 "Remote UNIX connection" CLI-poll lines elided ...]
+exit=1
+```
+
+
+## U4 up-sip.sh:144 wait_for_endpoints, fired by the endpoint-less reject config with EXPECT_ENDPOINTS unset
+
+pjsip-reject.conf has both transports and no endpoints. EXPECT_ENDPOINTS is deliberately NOT set. An empty endpoint list beside a bound transport is what separates "the peer is misconfigured" from "the peer did not start": the transports gate passed here, so Asterisk is up and listening.
+
+```sh
+PJSIP_CONF=test/interop/asterisk/pjsip-reject.conf bash test/interop/up-sip.sh; X=$?
+echo "--- pjsip show endpoints ---"
+docker exec asterisk asterisk -rx "pjsip show endpoints"
+echo "--- pjsip show transports ---"
+docker exec asterisk asterisk -rx "pjsip show transports"
+exit $X
+```
+
+```
+SIP RIG REFUSED: endpoints 447700900123 and 447700900001 are absent from 'pjsip show endpoints'
+--- pjsip show endpoints ---
+No objects found.
+
+--- pjsip show transports ---
+
+Transport:  <TransportId........>  <Type>  <cos>  <tos>  <BindAddress....................>
+==========================================================================================
+
+Transport:  transport-tls             tls      0      0  0.0.0.0:15061
+Transport:  transport-udp             udp      0      0  0.0.0.0:15060
+
+Objects found: 2
+exit=1
+```
+
+
+## U5 up-sip.sh:75 certificate SAN self-check (generate_certs)
+
+A copy of up-sip.sh with the SAN rewritten to DNS:wrong.invalid runs in place of the committed script. The copy lives at test/interop/.probe-up-sip-badsan.sh (so its dirname-relative paths resolve) and is deleted afterwards. The diff proves the mutation landed.
+
+```
+68c68
+<   printf 'subjectAltName = IP:127.0.0.1, DNS:localhost\nextendedKeyUsage = serverAuth\nbasicConstraints = CA:FALSE\n' \
+---
+>   printf 'subjectAltName = DNS:wrong.invalid\nextendedKeyUsage = serverAuth\nbasicConstraints = CA:FALSE\n' \
+```
+
+```sh
+bash test/interop/.probe-up-sip-badsan.sh; X=$?
+echo "containers running after refusal: $(docker ps -a --filter name=asterisk -q | wc -l)"
+exit $X
+```
+
+```
+SIP RIG REFUSED: the server certificate has no IP:127.0.0.1 SAN, so it would not verify against a 127.0.0.1 target
+containers running after refusal: 0
+exit=1
+```
+
+
+## U6 up-sip.sh:155 SIP logger confirmation (enable_sip_logger)
+
+A copy with "docker stop asterisk" inserted before the enable_sip_logger call, so the logger command cannot succeed. Why this gate matters: without the logger on, the peer log carries no "Received SIP request" lines, and gate_peer_received (the gate that proves bytes reached the intended peer) would then refuse on every run for a reason that has nothing to do with the peer. A silent "pjsip set logger on" failure would turn the rig most important gate into a permanent false alarm.
+
+```
+161a162
+> docker stop asterisk >/dev/null
+```
+
+```sh
+bash test/interop/.probe-up-sip-nologger.sh
+```
+
+```
+SIP RIG REFUSED: the peer did not confirm its SIP logger is on (got: Error response from daemon: container c9519b7712bcddceb20c48a1fdc7402305ecddc1a2b2fe2612a1b0057591df5e is not running)
+exit=1
+```
+
+
+## Post-probe control (after the up-sip.sh gates)
+
+```sh
+bash test/interop/up-sip.sh && bash test/interop/run-sip-scenario.sh; X=$?; exit $X
+```
+
+```
+sip interop harness ready: asterisk on udp/15060 and tls/15061, certs in /tmp/cellrift-sip-certs, sip logger on
+cumulative (both passes of every scenario, informational only):
+from UDP: 10
+from TLS: 4
+OK: asterisk answered register_impaired, basic_call (udp/15060) and basic_call_tls with certificate verification ON (tls/15061); the peer's own log confirms it received each scenario's requests
+exit=0
+```
+
+
+## A1 run-sip-scenario.sh:91 gate_peer_is_ours
+
+A container named asterisk that is NOT the pinned image (alpine, no network) stands in for "something else called asterisk".
+
+```sh
+docker run -d --name asterisk --network none alpine:3 sleep 300 >/dev/null
+bash test/interop/run-sip-scenario.sh; X=$?
+docker rm -f asterisk >/dev/null
+exit $X
+```
+
+```
+Unable to find image 'alpine:3' locally
+3: Pulling from library/alpine
+e2de96513ba9: Pulling fs layer
+e2de96513ba9: Verifying Checksum
+e2de96513ba9: Download complete
+e2de96513ba9: Pull complete
+Digest: sha256:294b683cb724975bec92580e1e685676bd4b50bda910ddb8c51d4cabeaec77e6
+Status: Downloaded newer image for alpine:3
+SIP RIG REFUSED: the running 'asterisk' container is not the pinned image this harness booted (got: alpine:3), so nothing graded here would be about the intended peer
+[... 1 lines of failure diagnostics (cellrift outputs and asterisk log tail) elided ...]
+exit=1
+```
+
+
+## A2 run-sip-scenario.sh:133 gate_no_adversarial_scenario, marker-absent branch
+
+register_deregister.yaml carries MOCK-ONLY and no PROVEN AGAINST marker and is not adversarial, so only the marker condition is true. This is the harness half of the label check.
+
+```sh
+UDP_SCENARIOS=scenarios/ims/register_deregister.yaml bash test/interop/run-sip-scenario.sh
+```
+
+```
+SIP RIG REFUSED: scenarios/ims/register_deregister.yaml carries no '# PROVEN AGAINST: Asterisk (non-IMS SIP)' marker, so it is not one of the scenarios proven against this peer
+[... 121 lines of failure diagnostics (cellrift outputs and asterisk log tail) elided ...]
+exit=1
+```
+
+## A3 run-sip-scenario.sh:131 gate_no_adversarial_scenario, adversarial-step branch
+
+Scenario used: scenarios/ims/malformed_sip_headers.yaml (one of the two shipped adversarial files, found by the anchored grep below). It ALSO lacks the PROVEN AGAINST marker, so both conditions are true and only evaluation order decides the message: the output below contains "malform:", i.e. the adversarial branch fired, not the A2 marker branch. Route used: the shipped file directly, no marked scratch copy needed. The container received-request count is recorded before and after (lines starting >> are printed by the probe, after the harness dump that is elided); it is unchanged, which is what shows the refusal preceded any transmission (adversarial traffic was never sent).
+
+```sh
+grep -rlE "^[[:space:]]*malform:|^[[:space:]]*action:[[:space:]]*raw" scenarios --include="*.yaml"
+echo ">> received-request lines in container log BEFORE: $(docker logs asterisk 2>&1 | grep -c "Received SIP request")"
+UDP_SCENARIOS=scenarios/ims/malformed_sip_headers.yaml bash test/interop/run-sip-scenario.sh; X=$?
+echo ">> received-request lines in container log AFTER:  $(docker logs asterisk 2>&1 | grep -c "Received SIP request")"
+echo ">> of which are real requests, ACK form: $(docker logs asterisk 2>&1 | grep -c "Received SIP request (.*ACK")"
+exit $X
+```
+
+```
+scenarios/ims/malformed_sip_headers.yaml
+scenarios/diameter/malformed_diameter.yaml
+>> received-request lines in container log BEFORE: 0
+SIP RIG REFUSED: scenarios/ims/malformed_sip_headers.yaml contains a malform: block or an action: raw step; adversarial traffic must never be aimed at a real peer
+>> received-request lines in container log AFTER:  0
+>> of which are real requests, ACK form: 0
+[... 121 lines of failure diagnostics (cellrift outputs and asterisk log tail) elided ...]
+exit=1
+```
+
+
+## A3b run-sip-scenario.sh:129 gate_no_adversarial_scenario, unreadable scenario file
+
+The same function has a third refusal for a scenario path that cannot be read. Fired with a path that does not exist.
+
+```sh
+UDP_SCENARIOS=scenarios/ims/does-not-exist.yaml bash test/interop/run-sip-scenario.sh
+```
+
+```
+SIP RIG REFUSED: scenario file scenarios/ims/does-not-exist.yaml is not readable; there is nothing to aim at the peer
+[... 121 lines of failure diagnostics (cellrift outputs and asterisk log tail) elided ...]
+exit=1
+```
+
+
+## A4 run-sip-scenario.sh:139 check_ca_present (missing CA)
+
+```sh
+CA_CRT=/nonexistent/ca.crt bash test/interop/run-sip-scenario.sh
+```
+
+```
+SIP RIG REFUSED: CA file /nonexistent/ca.crt is missing or empty; up-sip.sh was not run or wrote elsewhere, and the TLS leg cannot verify anything
+[... 121 lines of failure diagnostics (cellrift outputs and asterisk log tail) elided ...]
+exit=1
+```
+
+
+## A5 run-sip-scenario.sh:159 derive_verified_tls_scenario, live-key pre-check (wrong count of lines to substitute)
+
+The source copy rewrites the one live key to "insecure_skip_verify: yes", so the anchored count is 0, not 1. The shipped file is untouched.
+
+```
+48c48
+<     insecure_skip_verify: true
+---
+>     insecure_skip_verify: yes
+```
+
+```sh
+TLS_SCENARIO=$SCRATCH/tlsprobe/zero-live.yaml bash test/interop/run-sip-scenario.sh
+```
+
+```
+SIP RIG REFUSED: expected exactly one live insecure_skip_verify: true line in <scratch>/tlsprobe/zero-live.yaml, found 0; the derivation below would change the wrong number of lines
+[... 121 lines of failure diagnostics (cellrift outputs and asterisk log tail) elided ...]
+exit=1
+```
+
+
+## A6 run-sip-scenario.sh:163 derive_verified_tls_scenario, POST-check (a key surviving INTO the derived file)
+
+Two keys: the "true" line the sed replaces, and a "yes" line it misses. The pre-check (line 159) counts one "true" line and passes; the sed replaces it; the "yes" line survives into the derived file; the anchored post-check at line 162-163 refuses. This is derive_verified_tls_scenario post-check, NOT the gate_tls_verified re-check at line 254-255 (see A7); derive runs first and exits. The surviving line is shown from the derived file, which proves the check is anchored on the key, not a bare word (the file description prose contains the words too).
+
+```
+48a49
+>     insecure_skip_verify: yes
+```
+
+```sh
+TLS_SCENARIO=$SCRATCH/tlsprobe/two-keys.yaml bash test/interop/run-sip-scenario.sh; X=$?
+echo ">> derived file lines carrying the key:"
+grep -n "insecure_skip_verify" /tmp/cellrift-sip/basic_call_tls.verified.yaml | grep -vE "^[0-9]+:#" | sed "s/^/>> /"
+exit $X
+```
+
+```
+SIP RIG REFUSED: the derived TLS scenario still carries a live insecure_skip_verify key
+>> derived file lines carrying the key:
+>> 39:  Opts out of server verification (insecure_skip_verify) for a lab peer with
+>> 49:    insecure_skip_verify: yes
+[... 121 lines of failure diagnostics (cellrift outputs and asterisk log tail) elided ...]
+exit=1
+```
+
+
+## A7 run-sip-scenario.sh:255 gate_tls_verified, live-key re-check after the run (FIRED via a tamper wrapper)
+
+This gate catches a rewrite of the derived file AFTER derivation, so firing it means performing that rewrite. A PATH wrapper stands in for go: it runs the real toolchain (so reports are written and the peer is really contacted), and after the TLS scenario JSON pass it appends "  insecure_skip_verify: true" to the derived scenario file. Derive passed earlier because the file was clean then, so A6 post-check did not fire; the TLS run itself was verified (no warning in its outputs), so the first loop of gate_tls_verified (the warning branch) passes; only the re-check at line 254-255 can refuse. Lines starting >> are printed by the probe after the harness dump.
+
+Wrapper source:
+
+```sh
+#!/bin/sh
+# Test wrapper: run the real toolchain, then, after the verified TLS scenario's
+# JSON pass, append a live insecure_skip_verify key to the derived file.
+"/home/linuxbrew/.linuxbrew/bin/go" "$@"; rc=$?
+for last; do :; done
+case "$last" in
+  */basic_call_tls.verified.yaml)
+    case " $* " in *" --format json "*) printf '  insecure_skip_verify: true\n' >> "$last" ;; esac ;;
+esac
+exit $rc
+```
+
+```sh
+PATH=$SCRATCH/tamper:$PATH bash test/interop/run-sip-scenario.sh; X=$?
+echo ">> derived file (tail) at the moment of refusal:"
+tail -6 /tmp/cellrift-sip/basic_call_tls.verified.yaml | sed "s/^/>> /"
+echo ">> live key lines in derived file: $(grep -cE "^[[:space:]]*insecure_skip_verify:" /tmp/cellrift-sip/basic_call_tls.verified.yaml)"
+echo ">> warning present in TLS outputs (must be 0, so the warning branch did not fire): $(grep -c "NOT verified" /tmp/cellrift-sip/basic_call_tls.stdout /tmp/cellrift-sip/basic_call_tls.json | tr "\n" " ")"
+exit $X
+```
+
+```
+SIP RIG REFUSED: the derived TLS scenario has a live insecure_skip_verify after the run
+>> derived file (tail) at the moment of refusal:
+>>       From: "sip:{{ caller_msisdn }}@ims.local"
+>>       To: "sip:{{ callee_msisdn }}@ims.local"
+>>       P-Charging-Vector: "icid-value={{ icid }}"
+>>     assert:
+>>       - response.status_code == 200
+>>   insecure_skip_verify: true
+>> live key lines in derived file: 1
+>> warning present in TLS outputs (must be 0, so the warning branch did not fire): /tmp/cellrift-sip/basic_call_tls.stdout:0 /tmp/cellrift-sip/basic_call_tls.json:0 
+[... 215 lines of failure diagnostics (cellrift outputs and asterisk log tail) elided ...]
+exit=1
+```
+
+`command -v go` after removing the wrapper (the real toolchain, not the wrapper):
+
+```
+/home/linuxbrew/.linuxbrew/bin/go
+```
+
+
+## A8 run-sip-scenario.sh:165 derive_verified_tls_scenario, missing ca_file in the derived file (FIRED via a CA path containing "&")
+
+The expectation going in was that this refusal could not be reached: line 159
+fixes the substitution count at exactly one, and line 160 is the sed that
+writes "ca_file: $CA_CRT" on that line, so the text should always be present.
+Probing it showed the argument was wrong. The sed replacement is
+`\1ca_file: $CA_CRT` with `|` as the delimiter, and in a sed replacement `&`
+means "the whole matched text". A CA path containing `&` therefore does NOT
+come out verbatim: the matched line is spliced into the middle of it, and the
+literal text "ca_file: $CA_CRT" is absent from the derived file even though
+exactly one line was substituted. check_ca_present (line 139) only requires
+that the file exist and be non-empty, so a real CA in a directory named with
+`&` passes it. The same hole exists for `|` (it ends the sed expression, which
+errors instead) and `\`. The 165 check is therefore doing real work as
+defence in depth, and it is fired below. The derived file after the refusal is
+shown, with the matched text spliced into the path.
+
+```sh
+D="/tmp/cellrift-amp&probe"; mkdir -p "$D"; cp /tmp/cellrift-sip-certs/ca.crt "$D/ca.crt"
+CA_CRT="$D/ca.crt" bash test/interop/run-sip-scenario.sh; X=$?
+echo ">> derived file, the ca_file line as written:"
+grep -n "^    ca_file" /tmp/cellrift-sip/basic_call_tls.verified.yaml | sed "s/^/>> /"
+rm -rf "$D"; exit $X
+```
+
+```
+SIP RIG REFUSED: the derived TLS scenario does not contain ca_file: /tmp/cellrift-amp&probe/ca.crt
+>> derived file, the ca_file line as written:
+>> 48:    ca_file: /tmp/cellrift-amp    insecure_skip_verify: trueprobe/ca.crt
+[... 121 lines of failure diagnostics (cellrift outputs and asterisk log tail) elided ...]
+exit=1
+```
+
+## B1 run-sip-scenario.sh:204 gate_cellrift_ran (stub go that writes nothing)
+
+```sh
+PATH=$SCRATCH/stub:$PATH bash test/interop/run-sip-scenario.sh
+```
+
+```
+SIP RIG REFUSED: cellrift produced no terminal output or no JSON report for register_impaired; that is a build or startup failure, not a result about the peer
+[... 123 lines of failure diagnostics (cellrift outputs and asterisk log tail) elided ...]
+exit=1
+```
+
+`command -v go` after removing the stub:
+
+```
+/home/linuxbrew/.linuxbrew/bin/go
+```
+
+
+## B2 run-sip-scenario.sh:102 gate_transports_bound (run-time transport check)
+
+Routes tried: (1) "module unload res_pjsip.so" in the running container, to drop the transports: Asterisk answers "Unable to unload resource res_pjsip.so", and the list still shows both transports, so that route does not work. (2) pjsip.conf is mounted read-only, so an in-container edit cannot remove a transport. (3) docker stop asterisk between boot and run: gate_peer_is_ours still passes (docker inspect reads the stopped container Config.Image, which is the pinned reference), and gate_transports_bound then cannot read the list (docker exec fails) and refuses. Route 3 is the one recorded. It proves the gate refuses when the transport list does not show both addresses; it does not prove a partially-lost transport, which no route here could produce.
+
+```sh
+docker exec asterisk asterisk -rx "module unload res_pjsip.so"
+docker stop asterisk >/dev/null
+bash test/interop/run-sip-scenario.sh; X=$?
+exit $X
+```
+
+```
+Unable to unload resource res_pjsip.so
+Command 'module unload res_pjsip.so' failed.
+SIP RIG REFUSED: 'pjsip show transports' does not list both 0.0.0.0:15060 and 0.0.0.0:15061; a run now would be graded against an unbound transport
+[... 121 lines of failure diagnostics (cellrift outputs and asterisk log tail) elided ...]
+exit=1
+```
+
+
+## B3 run-sip-scenario.sh:235 gate_peer_received (aimed at a port with no listener)
+
+SIP_UDP_TARGET=127.0.0.1:15070, a free port that is not 5060. The refusal must come from gate_peer_received and not from grade; the per-scenario receipt delta (0) and the container log count (0) are the two figures that matter.
+
+```sh
+ss -lnu | awk "\$5 ~ /:15070\$/" | wc -l
+SIP_UDP_TARGET=127.0.0.1:15070 bash test/interop/run-sip-scenario.sh; X=$?
+echo ">> register_impaired.receipts: $(cat /tmp/cellrift-sip/register_impaired.receipts)"
+echo ">> register_impaired.exit: $(cat /tmp/cellrift-sip/register_impaired.exit)  (the scenario itself failed; grade did not run)"
+echo ">> container log: $(docker logs asterisk 2>&1 | grep -c "Received SIP request") lines matching Received SIP request"
+exit $X
+```
+
+```
+0
+SIP RIG REFUSED: the peer's own log shows no request received over UDP during register_impaired. The target was wrong, the peer was not listening, OR the transport never completed (for TLS, the handshake, e.g. a rejected certificate). See /tmp/cellrift-sip/register_impaired.stdout for which.
+>> register_impaired.receipts: 0
+>> register_impaired.exit: 1  (the scenario itself failed; grade did not run)
+>> container log: 0 lines matching Received SIP request
+[... 163 lines of failure diagnostics (cellrift outputs and asterisk log tail) elided ...]
+exit=1
+```
+
+
+## B4 run-sip-scenario.sh:252 gate_tls_verified, warning branch (fired through the GATE_TLS_WARNING_SOURCE seam)
+
+This branch is structurally preempted in a real run: the warning only appears when verification was skipped, and derive_verified_tls_scenario refuses before such a run can start (A5, A6). So it is fired through a named test seam, GATE_TLS_WARNING_SOURCE, documented in run-sip-scenario.sh in the SCTP_PROC_PATH style, which warns that setting it in a real run defeats the check. The seam is fed the REAL warning text from a genuinely insecure run of the shipped basic_call_tls.yaml against the live peer, not an invented string. The warning wording below is what the gate greps ("NOT verified"); recording it stops a wording change from silently disarming the gate.
+
+```sh
+go run ./cmd/cellrift run --target-host 127.0.0.1:15061 --timeout 5000 scenarios/ims/basic_call_tls.yaml > $SCRATCH/insecure.stdout 2>&1; echo "terminal-run exit=$?"
+cat $SCRATCH/insecure.stdout
+go run ./cmd/cellrift run --target-host 127.0.0.1:15061 --timeout 5000 --format json --output $SCRATCH/insecure.json scenarios/ims/basic_call_tls.yaml; echo "json-run exit=$?"
+echo "--- NOT verified, terminal ---"; grep -n "NOT verified" $SCRATCH/insecure.stdout
+echo "--- NOT verified, JSON ---"; grep -n "NOT verified" $SCRATCH/insecure.json
+```
+
+```
+terminal-run exit=0
+Scenario: VoLTE basic call (SIP/TLS)
+  ✓ [sip] send send_invite (1007ms)
+  ✓ [sip] send send_bye (1ms)
+  WARN: sip: insecure_skip_verify is set — the TLS server certificate is NOT verified; never use this against production infrastructure
+2/2 steps passed in 1009ms
+json-run exit=0
+--- NOT verified, terminal ---
+4:  WARN: sip: insecure_skip_verify is set — the TLS server certificate is NOT verified; never use this against production infrastructure
+--- NOT verified, JSON ---
+6:    "sip: insecure_skip_verify is set — the TLS server certificate is NOT verified; never use this against production infrastructure"
+exit=0
+```
+
+```sh
+GATE_TLS_WARNING_SOURCE=$SCRATCH/insecure.stdout bash test/interop/run-sip-scenario.sh; X=$?
+echo ">> TLS leg outputs of THIS run (verifying): $(grep -c "NOT verified" /tmp/cellrift-sip/basic_call_tls.stdout /tmp/cellrift-sip/basic_call_tls.json | tr "\n" " ")"
+exit $X
+```
+
+```
+SIP RIG REFUSED: the TLS leg ran without certificate verification (<scratch>/insecure.stdout carries the warning); it proves only that the transport works
+>> TLS leg outputs of THIS run (verifying): /tmp/cellrift-sip/basic_call_tls.stdout:0 /tmp/cellrift-sip/basic_call_tls.json:0 
+[... 215 lines of failure diagnostics (cellrift outputs and asterisk log tail) elided ...]
+exit=1
+```
+
+Contrast, the proof that verification was on in the harness run: zero warnings in the verifying leg (the >> line above), non-zero in the insecure run (the two greps earlier in this section). The refusal above named the seam file, not the run outputs.
+
+```sh
+bash test/interop/run-sip-scenario.sh; X=$?
+echo ">> grep -c \"NOT verified\" /tmp/cellrift-sip/basic_call_tls.stdout: $(grep -c "NOT verified" /tmp/cellrift-sip/basic_call_tls.stdout)"
+exit $X
+```
+
+```
+cumulative (both passes of every scenario, informational only):
+from UDP: 20
+from TLS: 12
+OK: asterisk answered register_impaired, basic_call (udp/15060) and basic_call_tls with certificate verification ON (tls/15061); the peer's own log confirms it received each scenario's requests
+>> grep -c "NOT verified" /tmp/cellrift-sip/basic_call_tls.stdout: 0
+exit=0
+```
+
+
+## B5 run-sip-scenario.sh:266 grade, terminal and JSON passes disagree (FIRED via a real-toolchain wrapper)
+
+A wrapper, not a stub: it runs the real go (reports are written, the peer is really contacted, so gate_cellrift_ran and gate_peer_received both pass and control reaches grade) and then overrides only the JSON pass exit code to 1. The record shows the two exit files, the refusal from the disagreement branch, and a non-zero receipt delta proving the run was genuine.
+
+Wrapper source:
+
+```sh
+#!/bin/sh
+# Test wrapper: run the real toolchain, then fail ONLY the JSON pass, so the
+# two passes of one scenario disagree and grade's cross-check fires.
+"/home/linuxbrew/.linuxbrew/bin/go" "$@"; rc=$?
+case " $* " in
+  *" --format json "*) exit 1 ;;
+  *) exit "$rc" ;;
+esac
+```
+
+```sh
+PATH=$SCRATCH/wrap:$PATH bash test/interop/run-sip-scenario.sh; X=$?
+echo ">> register_impaired.exit: $(cat /tmp/cellrift-sip/register_impaired.exit)"
+echo ">> register_impaired.json.exit: $(cat /tmp/cellrift-sip/register_impaired.json.exit)"
+echo ">> register_impaired.receipts (pass 1 delta): $(cat /tmp/cellrift-sip/register_impaired.receipts)"
+echo ">> JSON report written by the real go: $(test -s /tmp/cellrift-sip/register_impaired.json && echo yes)"
+exit $X
+```
+
+```
+SIP RIG REFUSED: the terminal pass of register_impaired exited 0 but the JSON pass exited 1; the two passes disagree
+>> register_impaired.exit: 0
+>> register_impaired.json.exit: 1
+>> register_impaired.receipts (pass 1 delta): 3
+>> JSON report written by the real go: yes
+[... 159 lines of failure diagnostics (cellrift outputs and asterisk log tail) elided ...]
+exit=1
+```
+
+`command -v go` after removing the wrapper:
+
+```
+/home/linuxbrew/.linuxbrew/bin/go
+```
+
+
+## Post-probe control (after the run-sip-scenario.sh gates)
+
+```sh
+bash test/interop/up-sip.sh && bash test/interop/run-sip-scenario.sh; X=$?; exit $X
+```
+
+```
+sip interop harness ready: asterisk on udp/15060 and tls/15061, certs in /tmp/cellrift-sip-certs, sip logger on
+cumulative (both passes of every scenario, informational only):
+from UDP: 10
+from TLS: 4
+OK: asterisk answered register_impaired, basic_call (udp/15060) and basic_call_tls with certificate verification ON (tls/15061); the peer's own log confirms it received each scenario's requests
+exit=0
+```
+
+
+## Probe A: the peer rejects (PJSIP_CONF=pjsip-reject.conf, EXPECT_ENDPOINTS=0)
+
+Asterisk boots with both transports and no endpoints, so every REGISTER From user is unknown and draws 401. EXPECT_ENDPOINTS=0 is legitimate here and only here: this config has no endpoints by design, so wait_for_endpoints would refuse before the peer could reject anything. U4 fires that same gate against the same config by OMITTING the flag, so the flag is not a way past an inconvenient gate; it is the documented distinction between "no endpoints is the bug" (U4) and "no endpoints is the experiment" (here).
+
+```sh
+PJSIP_CONF=test/interop/asterisk/pjsip-reject.conf EXPECT_ENDPOINTS=0 bash test/interop/up-sip.sh
+bash test/interop/run-sip-scenario.sh; X=$?
+echo ">> register_impaired.receipts (delta, pass 1): $(cat /tmp/cellrift-sip/register_impaired.receipts)"
+echo ">> register_impaired.exit: $(cat /tmp/cellrift-sip/register_impaired.exit)"
+echo ">> peer log, requests and responses:"
+docker logs asterisk 2>&1 | grep -E "Received SIP request|Transmitting SIP response|SIP/2.0 401" | head -8 | sed "s/^/>> /"
+echo ">> cellrift terminal output for the scenario:"
+sed "s/^/>> /" /tmp/cellrift-sip/register_impaired.stdout
+echo ">> status code in the JSON report:"
+grep -n -iE "status_code|401" /tmp/cellrift-sip/register_impaired.json | head -6 | sed "s/^/>> /"
+exit $X
+```
+
+```
+sip interop harness ready: asterisk on udp/15060 and tls/15061, certs in /tmp/cellrift-sip-certs, sip logger on
+SIP RIG REFUSED: the real peer did not pass register_impaired (exit 1); this is a result about the peer, not the rig
+>> register_impaired.receipts (delta, pass 1): 3
+>> register_impaired.exit: 1
+>> peer log, requests and responses:
+>> [Oct  1 14:45:28] <--- Received SIP request (364 bytes) from UDP:127.0.0.1:39690 --->
+>> [Oct  1 14:45:28] <--- Transmitting SIP response (492 bytes) to UDP:127.0.0.1:39690 --->
+>> [Oct  1 14:45:28] SIP/2.0 401 Unauthorized
+>> [Oct  1 14:45:28] <--- Received SIP request (364 bytes) from UDP:127.0.0.1:39690 --->
+>> [Oct  1 14:45:28] <--- Transmitting SIP response (492 bytes) to UDP:127.0.0.1:39690 --->
+>> [Oct  1 14:45:28] SIP/2.0 401 Unauthorized
+>> [Oct  1 14:45:28] <--- Received SIP request (365 bytes) from UDP:127.0.0.1:39690 --->
+>> [Oct  1 14:45:28] <--- Transmitting SIP response (494 bytes) to UDP:127.0.0.1:39690 --->
+>> cellrift terminal output for the scenario:
+>> Scenario: SIP REGISTER under injected latency
+>>   ✗ [sip] send register_impaired (646ms) (impaired +645ms)
+>>     Error: SIP 401 Unauthorized (expected 2xx); assertion failed: response.status_code == 200 (actual: 401)
+>>   ✗ [sip] send register_normal (0ms)
+>>     Error: SIP 401 Unauthorized (expected 2xx); assertion failed: response.status_code == 200 (actual: 401)
+>>   ✗ [sip] send register_held_answer (200ms) (impaired +200ms)
+>>     Error: SIP 401 Unauthorized (expected 2xx); assertion failed: response.status_code == 200 (actual: 401)
+>> 0/3 steps passed in 847ms
+>> exit status 1
+>> status code in the JSON report:
+>> 12:      "error": "SIP 401 Unauthorized (expected 2xx); assertion failed: response.status_code == 200 (actual: 401)"
+>> 19:      "error": "SIP 401 Unauthorized (expected 2xx); assertion failed: response.status_code == 200 (actual: 401)"
+>> 27:      "error": "SIP 401 Unauthorized (expected 2xx); assertion failed: response.status_code == 200 (actual: 401)"
+[... 164 lines of failure diagnostics (cellrift outputs and asterisk log tail) elided ...]
+exit=1
+```
+
+Reading the record: the failure came from grade (line 264, "this is a result about the peer, not the rig"), not from a refusal about the rig. The peer received the REGISTER, answered 401 Unauthorized, and Cellrift reported status 401 in both its terminal output and its JSON report. The receipt delta was 3 (all three steps were sent and answered), so gate_peer_received (minimum 1) passed and did not mask the rejection. Exit 1 on the harness is therefore a real peer rejection, correctly attributed.
+
+
+## Probe B: the wrong CA (and its correct-CA pair)
+
+An unrelated CA is generated and the TLS scenario is derived with ca_file pointing at it. The x509 proof comes from the three DIRECT go run legs (terminal, JSON, JUnit), not from the harness leg; the harness leg is recorded separately for what it actually shows.
+
+```sh
+W=$SCRATCH/wrongca
+go run ./cmd/cellrift run --target-host 127.0.0.1:15061 --timeout 5000 $W/basic_call_tls.wrongca.yaml > $W/terminal.txt 2>&1; echo "terminal-run exit=$?"
+cat $W/terminal.txt
+go run ./cmd/cellrift run --target-host 127.0.0.1:15061 --timeout 5000 --format json --output $W/report.json $W/basic_call_tls.wrongca.yaml >/dev/null 2>&1; echo "json-run exit=$?"
+grep -n "x509" $W/report.json
+go run ./cmd/cellrift run --target-host 127.0.0.1:15061 --timeout 5000 --format junit --output $W/report.xml $W/basic_call_tls.wrongca.yaml >/dev/null 2>&1; echo "junit-run exit=$?"
+grep -n "x509" $W/report.xml
+```
+
+```
+terminal-run exit=1
+Scenario: VoLTE basic call (SIP/TLS)
+  ✗ [sip] send send_invite (3ms)
+    Error: send failed: dial tls "127.0.0.1:15061": tls: failed to verify certificate: x509: certificate signed by unknown authority; assertion "response.status_code == 200": "response.status_code" is not present in the response or captured state (use "== null" to assert absence)
+  ✗ [sip] send send_bye (0ms)
+    Error: send failed: dial tls "127.0.0.1:15061": tls: failed to verify certificate: x509: certificate signed by unknown authority; assertion "response.status_code == 200": "response.status_code" is not present in the response or captured state (use "== null" to assert absence)
+0/2 steps passed in 4ms
+exit status 1
+json-run exit=1
+11:      "error": "send failed: dial tls \"127.0.0.1:15061\": tls: failed to verify certificate: x509: certificate signed by unknown authority; assertion \"response.status_code == 200\": \"response.status_code\" is not present in the response or captured state (use \"== null\" to assert absence)"
+18:      "error": "send failed: dial tls \"127.0.0.1:15061\": tls: failed to verify certificate: x509: certificate signed by unknown authority; assertion \"response.status_code == 200\": \"response.status_code\" is not present in the response or captured state (use \"== null\" to assert absence)"
+junit-run exit=1
+5:      <failure message="send failed: dial tls &#34;127.0.0.1:15061&#34;: tls: failed to verify certificate: x509: certificate signed by unknown authority; assertion &#34;response.status_code == 200&#34;: &#34;response.status_code&#34; is not present in the response or captured state (use &#34;== null&#34; to assert absence)">send failed: dial tls &#34;127.0.0.1:15061&#34;: tls: failed to verify certificate: x509: certificate signed by unknown authority; assertion &#34;response.status_code == 200&#34;: &#34;response.status_code&#34; is not present in the response or captured state (use &#34;== null&#34; to assert absence)</failure>
+8:      <failure message="send failed: dial tls &#34;127.0.0.1:15061&#34;: tls: failed to verify certificate: x509: certificate signed by unknown authority; assertion &#34;response.status_code == 200&#34;: &#34;response.status_code&#34; is not present in the response or captured state (use &#34;== null&#34; to assert absence)">send failed: dial tls &#34;127.0.0.1:15061&#34;: tls: failed to verify certificate: x509: certificate signed by unknown authority; assertion &#34;response.status_code == 200&#34;: &#34;response.status_code&#34; is not present in the response or captured state (use &#34;== null&#34; to assert absence)</failure>
+exit=0
+```
+
+Reading the three direct legs above (each exited 1; the trailing "exit=0" belongs to the recording wrapper, whose last command was grep). Terminal, JSON "error" and JUnit failure message ALL carry "x509: certificate signed by unknown authority", and it comes FIRST in the string, ahead of the assertion text.
+
+Before and after, per reporter (the before is the red result recorded from the reporter table test run before the precedence fix was applied):
+- BEFORE, JSON: error held only `assertion ... "response.status_code" is not present ...`; the x509 text was absent (the test asserted `does not contain "x509: certificate is valid for 127.0.0.1"` and `should not contain "is not present"`).
+- BEFORE, JUnit: the same two failures against the <failure message=...> text; x509 absent.
+- AFTER, JSON: the "error" fields at lines 11 and 18 above begin `send failed: dial tls ...: x509: certificate signed by unknown authority; assertion ...`.
+- AFTER, JUnit: the <failure message=...> at lines 5 and 8 above carries the same x509 text. JUnit is the format a CI system reads, so this is the copy whose fix most changes what a red build tells its reader.
+The terminal output already carried the x509 text before the fix (its row passed in the red).
+
+Harness leg: the same wrong CA through run-sip-scenario.sh. The refusal is expected from gate_peer_received, NOT grade and NOT a certificate diagnosis: a failed handshake delivers no SIP request to Asterisk, so the receipt delta for the TLS scenario is 0 and the receipt gate, which runs before grade, refuses first. What this leg shows is that the harness refuses when nothing reached the peer, which is a different claim from "the certificate did not verify"; the x509 diagnosis comes from the direct legs. The refusal message names a transport/handshake failure ("for TLS, the handshake, e.g. a rejected certificate") among its causes, as required.
+
+```sh
+CA_CRT=$SCRATCH/wrongca/ca.crt bash test/interop/run-sip-scenario.sh; X=$?
+echo ">> basic_call_tls.receipts: $(cat /tmp/cellrift-sip/basic_call_tls.receipts)"
+echo ">> basic_call_tls.exit: $(cat /tmp/cellrift-sip/basic_call_tls.exit)"
+echo ">> UDP scenarios before it passed: register_impaired.exit=$(cat /tmp/cellrift-sip/register_impaired.exit) basic_call.exit=$(cat /tmp/cellrift-sip/basic_call.exit)"
+exit $X
+```
+
+```
+SIP RIG REFUSED: the peer's own log shows no request received over TLS during basic_call_tls. The target was wrong, the peer was not listening, OR the transport never completed (for TLS, the handshake, e.g. a rejected certificate). See /tmp/cellrift-sip/basic_call_tls.stdout for which.
+>> basic_call_tls.receipts: 0
+>> basic_call_tls.exit: 1
+>> UDP scenarios before it passed: register_impaired.exit=0 basic_call.exit=0
+[... 219 lines of failure diagnostics (cellrift outputs and asterisk log tail) elided ...]
+exit=1
+```
+
+The pair: the same scenario derived with the CORRECT CA (the per-run CA from up-sip.sh). The harness runs first, because it derives /tmp/cellrift-sip/basic_call_tls.verified.yaml from the CA it is given; the direct run then reads that freshly derived file.
+
+```sh
+bash test/interop/run-sip-scenario.sh >/dev/null 2>&1; echo "harness correct-CA exit=$?"
+grep -n "ca_file" /tmp/cellrift-sip/basic_call_tls.verified.yaml
+go run ./cmd/cellrift run --target-host 127.0.0.1:15061 --timeout 5000 /tmp/cellrift-sip/basic_call_tls.verified.yaml; echo "direct correct-CA exit=$?"
+exit 0
+```
+
+```
+harness correct-CA exit=0
+3:# verification ON, via a ca_file override; THIS FILE as shipped sets
+5:# derives a copy whose insecure_skip_verify line is replaced by a ca_file
+20:#   ca_file:   certs/ca.crt        (verify the server certificate)
+46:    # peer. Remove this and set ca_file to verify; add cert_file + key_file
+48:    ca_file: /tmp/cellrift-sip-certs/ca.crt
+Scenario: VoLTE basic call (SIP/TLS)
+  ✓ [sip] send send_invite (1013ms)
+  ✓ [sip] send send_bye (19ms)
+2/2 steps passed in 1032ms
+direct correct-CA exit=0
+exit=0
+```
+
+## Summary table
+
+Call sites counted mechanically with `grep -n 'refuse "' test/interop/up-sip.sh test/interop/run-sip-scenario.sh`: 20 lines (5 in up-sip.sh, 15 in run-sip-scenario.sh). Rows in this table: 20. Equal.
+
+Every row carries verbatim output and an exit code; every gate was fired.
+
+| Gate | Script:line | Fired by | Verbatim stdout | Exit code |
+| --- | --- | --- | --- | --- |
+| certificate SAN self-check | up-sip.sh:75 | up-sip copy with SAN rewritten to DNS:wrong.invalid (section U5) | `SIP RIG REFUSED: the server certificate has no IP:127.0.0.1 SAN, so it would not verify against a 127.0.0.1 target` | 1 |
+| bind failure in the log (assert_no_bind_failure) | up-sip.sh:108 | a third transport colliding on 15062 (section U2) | `SIP RIG REFUSED: a transport failed to bind (port collision on 15060/15061?). The peer still logs readiness in this state, so its startup message is not a readiness signal, and scenarios would hit whatever else holds the port.` | 1 |
+| required transports not listed (wait_for_transports) | up-sip.sh:131 | a bind conflict on 15060; a missing TLS cert_file (section U1, U3) | `SIP RIG REFUSED: transports never showed 0.0.0.0:15060 and 0.0.0.0:15061 in 'pjsip show transports'` | 1 |
+| endpoints absent (wait_for_endpoints) | up-sip.sh:144 | pjsip-reject.conf with EXPECT_ENDPOINTS unset (section U4) | `SIP RIG REFUSED: endpoints 447700900123 and 447700900001 are absent from 'pjsip show endpoints'` | 1 |
+| SIP logger not confirmed | up-sip.sh:155 | docker stop before enable_sip_logger (section U6) | `SIP RIG REFUSED: the peer did not confirm its SIP logger is on (got: Error response from daemon: container c9519b7712bcddceb20c48a1fdc7402305ecddc1a2b2fe2612a1b0057591df5e is not running)` | 1 |
+| gate_peer_is_ours | run-sip-scenario.sh:91 | a non-pinned container named asterisk (section A1) | `SIP RIG REFUSED: the running 'asterisk' container is not the pinned image this harness booted (got: alpine:3), so nothing graded here would be about the intended peer` | 1 |
+| gate_transports_bound (run time) | run-sip-scenario.sh:102 | docker stop between boot and run (section B2) | `SIP RIG REFUSED: 'pjsip show transports' does not list both 0.0.0.0:15060 and 0.0.0.0:15061; a run now would be graded against an unbound transport` | 1 |
+| scenario file unreadable | run-sip-scenario.sh:129 | UDP_SCENARIOS naming an absent file (section A3b) | `SIP RIG REFUSED: scenario file scenarios/ims/does-not-exist.yaml is not readable; there is nothing to aim at the peer` | 1 |
+| gate_no_adversarial_scenario, adversarial branch | run-sip-scenario.sh:131 | UDP_SCENARIOS=malformed_sip_headers.yaml; peer request count 0 before and after (section A3) | `SIP RIG REFUSED: scenarios/ims/malformed_sip_headers.yaml contains a malform: block or an action: raw step; adversarial traffic must never be aimed at a real peer` | 1 |
+| gate_no_adversarial_scenario, marker-absent branch | run-sip-scenario.sh:133 | UDP_SCENARIOS=register_deregister.yaml (section A2) | `SIP RIG REFUSED: scenarios/ims/register_deregister.yaml carries no '# PROVEN AGAINST: Asterisk (non-IMS SIP)' marker, so it is not one of the scenarios proven against this peer` | 1 |
+| check_ca_present | run-sip-scenario.sh:139 | CA_CRT=/nonexistent/ca.crt (section A4) | `SIP RIG REFUSED: CA file /nonexistent/ca.crt is missing or empty; up-sip.sh was not run or wrote elsewhere, and the TLS leg cannot verify anything` | 1 |
+| derive live-key pre-check | run-sip-scenario.sh:159 | a source copy with zero live keys (section A5) | `SIP RIG REFUSED: expected exactly one live insecure_skip_verify: true line in <scratch>/tlsprobe/zero-live.yaml, found 0; the derivation below would change the wrong number of lines` | 1 |
+| derive live-key post-check | run-sip-scenario.sh:163 | a source copy with a second, un-substituted key (section A6) | `SIP RIG REFUSED: the derived TLS scenario still carries a live insecure_skip_verify key` | 1 |
+| derive missing ca_file | run-sip-scenario.sh:165 | CA_CRT in a directory whose name contains & (section A8) | `SIP RIG REFUSED: the derived TLS scenario does not contain ca_file: /tmp/cellrift-amp&probe/ca.crt` | 1 |
+| gate_cellrift_ran | run-sip-scenario.sh:204 | a stub go that exits 1 (section B1) | `SIP RIG REFUSED: cellrift produced no terminal output or no JSON report for register_impaired; that is a build or startup failure, not a result about the peer` | 1 |
+| gate_peer_received | run-sip-scenario.sh:235 | SIP_UDP_TARGET=127.0.0.1:15070; also the wrong-CA harness leg (Probe B) (section B3) | `SIP RIG REFUSED: the peer's own log shows no request received over UDP during register_impaired. The target was wrong, the peer was not listening, OR the transport never completed (for TLS, the handshake, e.g. a rejected certificate). See /tmp/cellrift-sip/register_impaired.stdout for which.` | 1 |
+| gate_tls_verified, warning branch | run-sip-scenario.sh:252 | GATE_TLS_WARNING_SOURCE seam fed the real warning (section B4) | `SIP RIG REFUSED: the TLS leg ran without certificate verification (<scratch>/insecure.stdout carries the warning); it proves only that the transport works` | 1 |
+| gate_tls_verified, live-key re-check | run-sip-scenario.sh:255 | a tamper wrapper rewriting the derived file after the run (section A7) | `SIP RIG REFUSED: the derived TLS scenario has a live insecure_skip_verify after the run` | 1 |
+| grade, peer did not pass | run-sip-scenario.sh:264 | real Asterisk with no endpoints (a grade failure, 401) (section Probe A) | `SIP RIG REFUSED: the real peer did not pass register_impaired (exit 1); this is a result about the peer, not the rig` | 1 |
+| grade, passes disagree | run-sip-scenario.sh:266 | a wrapper failing only the JSON pass (section B5) | `SIP RIG REFUSED: the terminal pass of register_impaired exited 0 but the JSON pass exited 1; the two passes disagree` | 1 |

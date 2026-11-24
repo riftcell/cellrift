@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="VoLTE basic call (SIP/TLS)" tests="2" failures="2" time="0.001">
+    <testcase name="send_invite" classname="sip.send" time="0.000">
+      <failure message="send failed: dial tls &#34;127.0.0.1:15061&#34;: tls: failed to verify certificate: x509: certificate signed by unknown authority; assertion &#34;response.status_code == 200&#34;: &#34;response.status_code&#34; is not present in the response or captured state (use &#34;== null&#34; to assert absence)">send failed: dial tls &#34;127.0.0.1:15061&#34;: tls: failed to verify certificate: x509: certificate signed by unknown authority; assertion &#34;response.status_code == 200&#34;: &#34;response.status_code&#34; is not present in the response or captured state (use &#34;== null&#34; to assert absence)</failure>
+    </testcase>
+    <testcase name="send_bye" classname="sip.send" time="0.000">
+      <failure message="send failed: dial tls &#34;127.0.0.1:15061&#34;: tls: failed to verify certificate: x509: certificate signed by unknown authority; assertion &#34;response.status_code == 200&#34;: &#34;response.status_code&#34; is not present in the response or captured state (use &#34;== null&#34; to assert absence)">send failed: dial tls &#34;127.0.0.1:15061&#34;: tls: failed to verify certificate: x509: certificate signed by unknown authority; assertion &#34;response.status_code == 200&#34;: &#34;response.status_code&#34; is not present in the response or captured state (use &#34;== null&#34; to assert absence)</failure>
+    </testcase>
+  </testsuite>
+</testsuites>

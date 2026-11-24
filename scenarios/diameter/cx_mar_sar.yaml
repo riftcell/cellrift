@@ -1,0 +1,81 @@
+# ✅ PROVEN AGAINST A REAL PEER — an Open5GS HSS, in CI on every push.
+#
+# The `diameter-interop` job (.github/workflows/interop.yml, via
+# test/interop/run-scenario.sh) runs this exact file against a genuine
+# gradiant/open5gs:2.8.0 HSS over both TCP and real SCTP, and fails the build
+# if MAR or SAR stops being answered 2001.
+#
+# It must run AFTER uar_uaa.yaml: a UAR registers the IMPI/IMPU pair in the
+# HSS's context, and a MAR naming a pair no UAR has registered is answered
+# 5002 DIAMETER_ERROR_IDENTITIES_DONT_MATCH. The peer accepts exactly one
+# identity form (EVIDENCE.md run 6): User-Name is the bare MSISDN and
+# Public-Identity is sip:<MSISDN>@ims.mnc<MNC>.mcc<MCC>.3gppnetwork.org, the
+# domain derived from the provisioned IMSI's own PLMN.
+#
+# SYNTHETIC DATA: all subscriber identifiers use the Ofcom test range
+# (447700900xxx) and fictional .lab.local / .cellrift.local domains.
+# Never use real subscriber MSISDNs or SIP identities in scenario files.
+name: Diameter Cx MAR/SAR
+version: "1.0"
+description: >
+  Standalone Cx Multimedia-Auth-Request/Answer followed by a
+  Server-Assignment-Request/Answer exchange, per 3GPP TS 29.229 §6.1. Shows
+  the nested-Grouped-AVP scenario syntax: SIP-Auth-Data-Item is authored as a
+  nested YAML map under fields: with its SIP-Item-Number and
+  SIP-Authentication-Scheme members, flattened to dotted AVP paths and
+  re-grouped by the Diameter encoder at send time.
+
+protocols:
+  diameter:
+    transport: sctp
+    # Cx traffic comes from an I-CSCF/S-CSCF, a different Diameter node from
+    # the MME that sends S6a — and one peer object per Origin-Host is what
+    # made shared names collide (test/interop/EVIDENCE.md, run 8).
+    origin_host: cx.cellrift.local
+    origin_realm: cellrift.local
+
+variables:
+  subscriber_msisdn: "447700900001"
+  hss_target: "hss.lab.local:3868"
+  # The IMPU a real Open5GS HSS derives for this subscriber:
+  # sip:<MSISDN>@ims.mnc<MNC>.mcc<MCC>.3gppnetwork.org, from the IMSI's own
+  # PLMN, with no "+" on the MSISDN. Anything else — a .local domain, a
+  # leading +, or the IMSI in the user part — is answered
+  # 5002 DIAMETER_ERROR_IDENTITIES_DONT_MATCH (EVIDENCE.md, run 6).
+  public_identity: "sip:447700900001@ims.mnc001.mcc001.3gppnetwork.org"
+  scscf: "sip:scscf.ims.mnc001.mcc001.3gppnetwork.org:5060"
+
+steps:
+  - id: send_mar
+    protocol: diameter
+    action: send
+    target: "{{ hss_target }}"
+    message: MAR
+    fields:
+      User-Name: "{{ subscriber_msisdn }}"
+      Public-Identity: "{{ public_identity }}"
+      Server-Name: "{{ scscf }}"
+      SIP-Number-Auth-Items: 1
+      SIP-Auth-Data-Item:
+        SIP-Item-Number: 1
+        SIP-Authentication-Scheme: "Digest-AKAv1-MD5"
+    capture:
+      result_code: response.Result-Code
+    assert:
+      - result_code == 2001
+
+  - id: send_sar
+    protocol: diameter
+    action: send
+    target: "{{ hss_target }}"
+    message: SAR
+    fields:
+      User-Name: "{{ subscriber_msisdn }}"
+      Public-Identity: "{{ public_identity }}"
+      Server-Name: "{{ scscf }}"
+      Server-Assignment-Type: 1 # REGISTRATION
+      User-Data-Already-Available: 0 # USER_DATA_NOT_AVAILABLE
+    capture:
+      result_code: response.Result-Code
+    assert:
+      - result_code == 2001
