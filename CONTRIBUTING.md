@@ -10,7 +10,7 @@ coordinate attacks against systems you do not own is not. See
 
 ## Prerequisites
 
-- Go 1.26.6 or later (`go version`) — this is a security pin, not an
+- Go 1.26.11 or later (`go version`) — this is a security pin, not an
   arbitrary floor; see `go.mod`'s own comment for the advisories it clears
 
 `make lint` runs [`staticcheck`](https://staticcheck.io/) via `go tool` — no separate install needed; the version is pinned in `go.mod`.

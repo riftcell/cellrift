@@ -4,7 +4,7 @@ stages:
   - docker
 
 variables:
-  GO_VERSION: "1.26.6"   # must be >= the go directive in go.mod
+  GO_VERSION: "1.26.11"  # must be >= the go directive in go.mod
   IMAGE_TAG: cellrift:ci
 
 default:

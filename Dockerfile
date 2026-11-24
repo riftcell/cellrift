@@ -1,9 +1,9 @@
 # Stage 1 — Build
 # Pinned to the exact patch go.mod's security pin requires (see the comment
 # on the `go` directive there, and GO_VERSION in the Makefile). A floating
-# golang:1.26-alpine tag could resolve to 1.26.0–1.26.5, which carry the
-# crypto/tls and crypto/x509 advisories that pin exists to exclude.
-FROM golang:1.26.6-alpine AS builder
+# golang:1.26-alpine tag could resolve to an earlier 1.26.x patch carrying the
+# advisories that pin exists to exclude.
+FROM golang:1.26.11-alpine AS builder
 
 RUN apk add --no-cache git make
 

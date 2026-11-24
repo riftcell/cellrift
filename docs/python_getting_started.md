@@ -17,7 +17,7 @@ first. The package does not bundle the binary.
 ### Install the binary
 
 ```bash
-# From source (requires Go 1.26.6+):
+# From source (requires Go 1.26.11+):
 go install github.com/riftcell/cellrift/cmd/cellrift@latest
 
 # Verify:

@@ -131,12 +131,12 @@ If you need carrier-grade validation, capacity benchmarking, or formal conforman
 
 ## Installation
 
-**Requires Go 1.26.6 or newer.** The version is pinned deliberately: Go
-1.26.0–1.26.5 carry advisories in `crypto/tls` and `crypto/x509` that
-`govulncheck` reports as reachable from Cellrift's TLS transport. With a
+**Requires Go 1.26.11 or newer.** The version is pinned deliberately: earlier
+1.26.x patches carry advisories in `crypto/tls`, `crypto/x509`, `net/http` and
+`net/textproto` that `govulncheck` reports as reachable from Cellrift's code. With a
 default Go setup the toolchain is fetched automatically; if you run with
 `GOTOOLCHAIN=local` on an older Go you will see
-`go.mod requires go >= 1.26.6` — upgrade rather than lowering the pin.
+`go.mod requires go >= 1.26.11` — upgrade rather than lowering the pin.
 
 ### With `go install`
 

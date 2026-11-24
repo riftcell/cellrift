@@ -5,7 +5,7 @@ BUILD_FLAGS := -trimpath -ldflags "-s -w"
 EXAMPLES_DIR := docs/examples
 
 # Matches the Go version pinned in the Dockerfile and CI — keep these in sync.
-GO_VERSION := 1.26.6   # keep in sync with the go directive in go.mod
+GO_VERSION := 1.26.11  # keep in sync with the go directive in go.mod
 
 .PHONY: build test test-sched docker-test lint vet staticcheck vulncheck policy release-check rebuildexamples docker clean
 

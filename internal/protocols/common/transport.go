@@ -324,7 +324,7 @@ func (t *TLSTransport) Receive(timeout time.Duration) ([]byte, net.Addr, error) 
 // Close releases the listener and any open outbound connection. Closing the
 // connection here is what unblocks a goroutine parked in conn.Read — this
 // holds for *tls.Conn too (golang/go#23518 was fixed long before the pinned
-// Go 1.26.6), and is the idiom the SCTP connect-timeout wrapper copies.
+// Go version), and is the idiom the SCTP connect-timeout wrapper copies.
 func (t *TLSTransport) Close() error {
 	conn := t.conns.takeAll()
 	if conn != nil {

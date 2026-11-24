@@ -1,12 +1,12 @@
 module github.com/riftcell/cellrift
 
 // SECURITY PIN — do not lower this without re-running `go tool govulncheck ./...`.
-// Go 1.26.0-1.26.5 carry advisories in crypto/tls, crypto/x509, net,
-// net/textproto and encoding/asn1 that govulncheck reports as reachable from
-// the TLS transport in internal/protocols/common. 1.26.6 is the first patch
-// clearing all of them. CI derives its toolchain from this directive
-// (go-version-file: go.mod), so lowering it silently reintroduces 10 findings.
-go 1.26.6
+// Earlier 1.26.x patches carry advisories in crypto/tls, crypto/x509,
+// net/http and net/textproto that govulncheck reports as reachable from
+// Cellrift's code. 1.26.11 is the first patch clearing all of them. CI
+// derives its toolchain from this directive (go-version-file: go.mod), so
+// lowering it reintroduces findings and fails the build.
+go 1.26.11
 
 require (
 	github.com/ishidawataru/sctp v0.0.0-20251114114122-19ddcbc6aae2

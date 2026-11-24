@@ -164,7 +164,7 @@ func TestTLSTransport_SendAddrMismatch(t *testing.T) {
 }
 
 // TestTLSTransport_CloseUnblocksBlockedReceive guards against golang/go#23518,
-// a real TLS-only footgun (fixed long before the pinned Go 1.26.6) where
+// a real TLS-only footgun (fixed long before the pinned Go version) where
 // tls.Conn.Close did not reliably unblock a stuck Read. Run for TLS
 // specifically — do not infer the result from the TCP test.
 func TestTLSTransport_CloseUnblocksBlockedReceive(t *testing.T) {
